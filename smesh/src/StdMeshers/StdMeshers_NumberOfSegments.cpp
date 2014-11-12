@@ -517,7 +517,7 @@ ostream & StdMeshers_NumberOfSegments::SaveTo(ostream & save)
 istream & StdMeshers_NumberOfSegments::LoadFrom(istream & load)
 {
   bool isOK = true;
-  int a;
+  int a=0;
 
   // read number of segments
   isOK = (load >> a);
@@ -532,7 +532,7 @@ istream & StdMeshers_NumberOfSegments::LoadFrom(istream & load)
   // 2. If the hypothesis is stored in new format
   //    (nb.segments, distr.type, some other params.),
   //    we wait here the ditribution type, which is integer
-  double scale_factor;
+  double scale_factor=0.0;
   isOK = (load >> scale_factor);
   a = (int)scale_factor;
 
@@ -549,7 +549,7 @@ istream & StdMeshers_NumberOfSegments::LoadFrom(istream & load)
     load.clear(ios::badbit | load.rdstate());
 
   // parameters of distribution
-  double b;
+  double b=0.0;
   switch (_distrType)
   {
   case DT_Scale:

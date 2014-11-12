@@ -116,7 +116,7 @@ ostream & StdMeshers_SegmentLengthAroundVertex::SaveTo(ostream & save)
 istream & StdMeshers_SegmentLengthAroundVertex::LoadFrom(istream & load)
 {
   bool isOK = true;
-  double a;
+  double a=0.0;
   isOK = (load >> a);
   if (isOK)
     this->_length = a;

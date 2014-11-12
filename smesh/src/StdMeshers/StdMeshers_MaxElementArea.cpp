@@ -113,7 +113,7 @@ ostream & StdMeshers_MaxElementArea::SaveTo(ostream & save)
 istream & StdMeshers_MaxElementArea::LoadFrom(istream & load)
 {
   bool isOK = true;
-  double a;
+  double a=0.0;
   isOK = (load >> a);
   if (isOK) 
     this->_maxArea = a;

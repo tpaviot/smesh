@@ -157,7 +157,7 @@ ostream & StdMeshers_MaxLength::SaveTo(ostream & save)
 istream & StdMeshers_MaxLength::LoadFrom(istream & load)
 {
   bool isOK = true;
-  double a;
+  double a=0.0;
 
   isOK = (load >> a);
   if (isOK)
@@ -171,7 +171,7 @@ istream & StdMeshers_MaxLength::LoadFrom(istream & load)
   else
     load.clear(ios::badbit | load.rdstate());
 
-  bool pre;
+  double pre=0.0;
   isOK = (load >> pre);
   if ( isOK )
     _preestimation = pre;

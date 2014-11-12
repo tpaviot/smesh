@@ -1179,6 +1179,7 @@ bool SMDS_Mesh::RemoveSubMesh(const SMDS_Mesh * aMesh)
 		{
 			found = true;
 			myChildren.erase(itmsh);
+      break;
 		}
 	}
 

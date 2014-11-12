@@ -94,7 +94,7 @@ istream & NETGENPlugin_Hypothesis_2D::LoadFrom(istream & load)
   NETGENPlugin_Hypothesis::LoadFrom(load);
 
   bool isOK = true;
-  int is;
+  int is=0;
 
   isOK = (load >> is);
   if (isOK)

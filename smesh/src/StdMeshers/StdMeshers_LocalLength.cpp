@@ -146,7 +146,7 @@ ostream & StdMeshers_LocalLength::SaveTo(ostream & save)
 istream & StdMeshers_LocalLength::LoadFrom(istream & load)
 {
   bool isOK = true;
-  double a;
+  double a=0.0;
 
   isOK = (load >> a);
   if (isOK)

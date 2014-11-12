@@ -6366,7 +6366,7 @@ void SMESH_MeshEditor::InsertNodesIntoLink(const SMDS_MeshElement*     theFace,
     }
     // decide how to split a quadrangle: compare possible variants
     // and choose which of splits to be a quadrangle
-    int i1, i2, iSplit, nbSplits = nbLinkNodes - 1, iBestQuad;
+    int i1, i2, iSplit, nbSplits = nbLinkNodes - 1, iBestQuad=0;
     if ( nbFaceNodes == 3 ) {
       iBestQuad = nbSplits;
       i4 = i3;

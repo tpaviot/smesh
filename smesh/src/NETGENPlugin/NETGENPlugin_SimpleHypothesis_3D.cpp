@@ -106,7 +106,7 @@ istream & NETGENPlugin_SimpleHypothesis_3D::LoadFrom(istream & load)
   NETGENPlugin_SimpleHypothesis_2D::LoadFrom(load);
 
   bool isOK = true;
-  double val;
+  double val=0.0;
 
   isOK = (load >> val);
   if (isOK)

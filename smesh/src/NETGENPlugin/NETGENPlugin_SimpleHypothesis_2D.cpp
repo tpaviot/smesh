@@ -140,7 +140,7 @@ ostream & NETGENPlugin_SimpleHypothesis_2D::SaveTo(ostream & save)
 istream & NETGENPlugin_SimpleHypothesis_2D::LoadFrom(istream & load)
 {
   bool isOK = true;
-  double val;
+  double val=0.0;
 
   isOK = (load >> val);
   if (isOK)
