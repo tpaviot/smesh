@@ -1,0 +1,17 @@
+language: cpp
+compiler:
+  - gcc
+  - clang
+before_install:
+# following ppa contains oce-0.16.0
+   - sudo apt-get install gfortran
+   - sudo add-apt-repository "deb http://ppa.launchpad.net/freecad-maintainers/oce-release/ubuntu precise main" -y
+   - sudo apt-get update -q
+   - sudo apt-get install liboce-ocaf-dev oce-draw
+before_script:
+script: ./.travis.build.sh
+after_script:
+branches:
+  only:
+    - master
+    - /^review/
