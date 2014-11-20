@@ -1,9 +1,6 @@
 # SMESH cmake build file
-IF(WIN32)
-  PROJECT(SMESH CXX)
-ELSE(WIN32)
-  PROJECT(SMESH Fortran CXX)
-ENDIF(WIN32)
+PROJECT(SMESH Fortran CXX)
+
 SET(SMESH_VERSION_MAJOR 5)
 SET(SMESH_VERSION_MINOR 1)
 SET(SMESH_VERSION_PATCH 2)
@@ -36,13 +33,12 @@ LINK_DIRECTORIES(${OCE_LIB_PATH})
 #################
 # Release build #
 #################
-IF (NOT MSVC)
-  IF( NOT DEFINED ${PROJECT_NAME}_BUILD_TYPE )
-    SET( ${PROJECT_NAME}_BUILD_TYPE "Release" CACHE STRING "Build type" ) # By default set release build
-  ENDIF( NOT DEFINED ${PROJECT_NAME}_BUILD_TYPE )
-  SET( CMAKE_BUILD_TYPE ${${PROJECT_NAME}_BUILD_TYPE} CACHE INTERNAL "Build type,
+IF( NOT DEFINED ${PROJECT_NAME}_BUILD_TYPE )
+  SET( ${PROJECT_NAME}_BUILD_TYPE "Release" CACHE STRING "Build type" ) # By default set release build
+ENDIF( NOT DEFINED ${PROJECT_NAME}_BUILD_TYPE )
+SET( CMAKE_BUILD_TYPE ${${PROJECT_NAME}_BUILD_TYPE} CACHE INTERNAL "Build type,
     immutable" FORCE )
-ENDIF(NOT MSVC)
+
 
 ##############################
 # Boost headers are required #
@@ -78,7 +74,12 @@ ELSE(UNIX)
   IF(WIN32)
     ######### Windows ###########
     MESSAGE("-- Windows system detected")
-    ADD_DEFINITIONS(-DWNT -DWIN32 -D_WINDOWS -DCSFDB -DHAVE_CONFIG_H)
+    ADD_DEFINITIONS(-DWNT -DWIN32 -D_WINDOWS -DCSFDB -DHAVE_CONFIG_H
+                    -DSMDS_EXPORTS -DSMESH_EXPORTS
+                    -DSMESH_EXPORTS -DSMESHDS_EXPORTS -DMESHDRIVERUNV_EXPORTS
+                    -DMESHDRIVERSTL_EXPORTS -DMESHDRIVERDAT_EXPORTS
+                    -DSTDMESHERS_EXPORTS -DSMESHCONTROLS_EXPORTS
+                    -DMESHDRIVER_EXPORTS -DMEFISTO2D_EXPORTS)
   ELSE(WIN32)
     MESSAGE("Unknown platform")
   ENDIF(WIN32)
@@ -87,7 +88,6 @@ ENDIF(UNIX)
 ##########################
 # SMESH lib source files #
 ##########################
-IF(WIN32)
 FILE(GLOB SMESH_LIB_SOURCE_FILES src/SMDS/SMDS*.cpp
                                  src/Driver/*.cpp
                                  src/DriverSTL/DriverSTL*.cpp
@@ -95,18 +95,8 @@ FILE(GLOB SMESH_LIB_SOURCE_FILES src/SMDS/SMDS*.cpp
                                  src/DriverUNV/DriverUNV*.cpp src/DriverUNV/UNV24*.cpp
                                  src/SMESHDS/*.cpp
                                  src/SMESH/*.cpp src/Controls/*.cpp
-                                 src/StdMeshers/*.cpp
-                                 src/MEFISTO2/aptrte.cpp src/MEFISTO2/MEFISTO2F.def)
-ELSE(WIN32)
-FILE(GLOB SMESH_LIB_SOURCE_FILES src/SMDS/SMDS*.cpp
-                                 src/Driver/*.cpp
-                                 src/DriverSTL/DriverSTL*.cpp
-                                 src/DriverDAT/DriverDAT*.cpp
-                                 src/DriverUNV/DriverUNV*.cpp src/DriverUNV/UNV24*.cpp
-                                 src/SMESHDS/*.cpp
-                                 src/SMESH/*.cpp src/Controls/*.cpp
-                                 src/StdMeshers/*.cpp src/MEFISTO2/*.cpp src/MEFISTO2/trte.f)
-ENDIF(WIN32)
+                                 src/StdMeshers/*.cpp src/MEFISTO2/*.cpp
+                                 src/MEFISTO2/trte.f)
 INCLUDE_DIRECTORIES(src/SMDS src/Driver src/DriverSTL src/DriverDAT
                     src/DriverUNV src/SMESHDS src/SMESH src/StdMeshers)
 ADD_LIBRARY(SMESH ${SMESH_LIB_SOURCE_FILES})
@@ -120,9 +110,6 @@ IF(UNIX)
         SOVERSION ${${PROJECT_NAME}_ABI_SOVERSION}
         VERSION ${${PROJECT_NAME}_ABI_VERSION})
 ENDIF(UNIX)
-IF(WIN32)
-  TARGET_LINK_LIBRARIES(SMESH MEFISTO2 MEFISTO2F)
-ENDIF(WIN32)
 
 ################################################
 # Define output path for generated libraries:  #
@@ -174,14 +161,12 @@ SET( CMAKE_INSTALL_PREFIX "${${PROJECT_NAME}_INSTALL_PREFIX}" CACHE INTERNAL "Pr
 ###########
 # INSTALL #
 ###########
-IF(UNIX)
-    # Libraries are installed by default to /usr/local/lib
-    INSTALL(TARGETS SMESH DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
-    # Headers are installed by default in /usr/local/include/smesh
-    INSTALL(DIRECTORY inc/
-            DESTINATION ${CMAKE_INSTALL_PREFIX}/include/smesh
-            FILES_MATCHING PATTERN "*.*")
-ENDIF(UNIX)
+# Libraries are installed by default to /usr/local/lib
+INSTALL(TARGETS SMESH DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+# Headers are installed by default in /usr/local/include/smesh
+INSTALL(DIRECTORY inc/
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/include/smesh
+        FILES_MATCHING PATTERN "*.*")
 
 ########################
 # Packaging with CPack #
