@@ -1,0 +1,26 @@
+package:
+  name: smesh # lower case name of package, may contain '-' but no spaces
+  version: 5.1.2.4-dev
+
+source:
+  git_url: https://github.com/tpaviot/smesh.git
+
+build:
+  # The build number should be incremented for new builds of the same version
+  number: 0     # (defaults to 0)
+  binary_relocation: true # (defaults to true)
+
+requirements:
+  build:
+    - gcc # gfortran
+    - opencascade_community_edition
+
+#  # Packages required to run the package. These are the dependencies that
+#  # will be installed automatically whenever the package is installed.
+  run:
+    - opencascade_community_edition
+
+about:
+  home: https://github.com/tpaviot/smesh
+  summary: finite element generation for OpenCasCADE
+  license: LGPL
