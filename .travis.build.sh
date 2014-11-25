@@ -6,9 +6,7 @@ ncpus=4
 echo "Timestamp" && date
 mkdir cmake-build
 cd cmake-build
-cmake -DOCE_INCLUDE_PATH=/usr/include/oce \
-      -DOCE_LIB_PATH=/usr/lib \
-      ..
+cmake ..
 echo ""
 echo "Timestamp" && date
 # make for py3
