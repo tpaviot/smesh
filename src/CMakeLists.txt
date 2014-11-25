@@ -84,6 +84,8 @@ set(SMESH_SRCS
     SMESH/SMESH_OctreeNode.cpp
     SMESH/SMESH_MeshVSLink.cpp
     SMESH/SMESH_Exception.cpp
+    Controls/SMESH_Controls.cpp
+    Controls/SMESHControls.cpp
 )
 set(SMESHDS_SRCS
     SMESHDS/SMESHDS_GroupBase.cpp
@@ -96,10 +98,6 @@ set(SMESHDS_SRCS
     SMESHDS/SMESHDS_Document.cpp
     SMESHDS/SMESHDS_Command.cpp
 )
-
-#    Controls/SMESHControls.cpp
-#    Controls/SMESH_Controls.cpp
-
 set(NETGENPlugin_SRCS
     NETGENPlugin/NETGENPlugin_NETGEN_3D.cpp
     NETGENPlugin/NETGENPlugin_SimpleHypothesis_2D.cpp
@@ -113,7 +111,7 @@ set(NETGENPlugin_SRCS
 )
 set(StdMeshers_SRCS
     #MEFISTO2/trte.for
-    #MEFISTO2/aptrte.cpp
+    MEFISTO2/aptrte.cpp
     MEFISTO2/trte.f
     StdMeshers/StdMeshers_SegmentLengthAroundVertex.cpp
     StdMeshers/StdMeshers_MaxLength.cpp
