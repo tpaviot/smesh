@@ -216,12 +216,6 @@ if(WIN32 AND NOT DEFINED CMAKE_INSTALL_PREFIX)
     set(CMAKE_INSTALL_PREFIX "c:/${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}")
 endif()
 
-#set(${PROJECT_NAME}_INSTALL_PREFIX ${${PROJECT_NAME}_INSTALL_PREFIX} CACHE
-#  PATH "Install prefix prepended to target to create install location")
-#set(CMAKE_INSTALL_PREFIX "${${PROJECT_NAME}_INSTALL_PREFIX}" CACHE INTERNAL "Prefix
-#  prepended to install directories if target destination is not absolute,
-#  immutable" FORCE)
-
 ###########
 # INSTALL #
 ###########
