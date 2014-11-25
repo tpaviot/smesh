@@ -4,14 +4,32 @@
 Description
 -----------
 
-A complete OpenCascade based MESH framework.Note this is not the original SALOME SMESH project but an effort to create a standalone mesh framework based on the existing one from SALOME project.
+A complete OpenCascade based MESH framework. Note this is not the original SALOME SMESH project but an effort to create a standalone mesh framework based on the existing one from SALOME project. This is a fork of the salomesmesh project available at:
+http://sourceforge.net/projects/salomesmesh/ (Original project by Fotis Soutis). This fork is intended for a use in the pythonocc project.
 
-This is a fork of the salomesmesh project available at:
-http://sourceforge.net/projects/salomesmesh/
+We use the following online resources:
+  * Sources
+       https://github.com/tpaviot/smesh
+  * Bug tracker
+       https://github.com/tpaviot/smesh/issues
+  * Mailing list
+       http://groups.google.com/group/smesh-dev/about
+  * Travic-CI
+       https://travis-ci.org/tpaviot/smesh
 
-Original project by Fotis Soutis.
+Just ask @tpaviot (tpaviot@gmail.com) for a request regarding write access to the repository.
 
-This fork is intended for a use in the pythonocc project.
+How to create a local copy of the repository?
+---------------------------------------------
+
+    git clone git://github.com/tpaviot/smesh.git
+
+
+How to stay up to date with latest developements?
+-------------------------------------------------
+
+    cd smesh
+    git pull
 
 Build - Install
 ---------------
@@ -22,17 +40,14 @@ Requirements
 ------------
   * a c++ and a fortran compiler 
 
-  * cmake 2.6 or higher
+  * cmake 2.8 or higher
 
   * oce 0.16
 
 Build
 -----
 
-  $ mkdir cmake-build
-
-  $ cd cmake-build
-
-  $ make
-
-  $ make install
+    $ mkdir cmake-build
+    $ cd cmake-build
+    $ make
+    $ make install
