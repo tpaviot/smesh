@@ -5222,7 +5222,7 @@ void SMESH_MeshEditor::MergeNodes (TListOfListOfNodes & theGroupsOfNodes)
             // --------------------------------------------> 2 tetrahedrons
             const int *ind1 = hexa.GetFaceNodesIndices( iQuadFace[ 0 ]); // indices of quad1 nodes
             const int *ind2 = hexa.GetFaceNodesIndices( iQuadFace[ 1 ]);
-            int i0, i1d, i2, i3d, i0t, i2t; // d-daigonal, t-top
+            int i0=0, i1d=0, i2=0, i3d=0, i0t=0, i2t=0; // d-daigonal, t-top
             if (curNodes[ind1[ 0 ]] == curNodes[ind2[ 0 ]] &&
                 curNodes[ind1[ 2 ]] == curNodes[ind2[ 2 ]]) {
               // stuck with 0-2 diagonal
