@@ -1,9 +1,10 @@
 package:
   name: smesh # lower case name of package, may contain '-' but no spaces
-  version: 5.1.2.4-dev
+  version: 5.1.2.4
 
 source:
   git_url: https://github.com/tpaviot/smesh.git
+  git_tag: 5.1.2.4
 
 build:
   # The build number should be incremented for new builds of the same version

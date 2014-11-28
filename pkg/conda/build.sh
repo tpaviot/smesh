@@ -15,7 +15,7 @@ cmake -DOCE_INCLUDE_PATH=$PREFIX/include/oce \
       -DCMAKE_BUILD_TYPE:STRING=Release \
       -DOCE_LIB_PATH=$PREFIX/lib \
       -DOCE_INSTALL_PACKAGE_LIB_DIR=$PREFIX/lib \
-      -DSMESH_INSTALL_PREFIX=$PREFIX \
+      -DCMAKE_INSTALL_PREFIX=$PREFIX \
       ..
 echo ""
 echo "Timestamp" && date

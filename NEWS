@@ -1,5 +1,30 @@
+Version 5.1.2.4 - November 2014
+
+* cmake improvements
+  - Separates main config from library.
+  - Adds detection of boost and OCE, falls back to user supplied paths or inte
+    boost headers.
+  - Upps minimum cmake required to 2.8.
+  - Implements use of GNUInstallDirs module to properly install libraries on
+    multilib systems.
+  - Documentation can be built with "make doc", does not currently install.
+  - Add option MONOLITHIC_BUILD to make one SMESH library, disable to get orig
+    library set.
+  - Remove SMESH_ prefixes variables for built type and install prefix in favor
+    of default cmake ones.
+
+* cppcheck fixes
+
+* conda build script for MacOSX
+
+Users who contributed to this release:
+  Jelle Feringa, Thomas Paviot, Richard Shaw
+
 Version 5.1.2.3 - November 2014
 
 * Support for latest oce release (0.16.0)
 
 * MinGW fixes
+
+Users who contributed to this release:
+  Thomas Paviot
