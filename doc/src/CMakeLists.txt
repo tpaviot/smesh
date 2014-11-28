@@ -8,3 +8,5 @@ if(DOXYGEN_FOUND)
         COMMENT "Generating API documentation with Doxygen" VERBATIM
     )
 endif(DOXYGEN_FOUND)
+
+install(DIRECTORY ${CMAKE_BINARY_DIR}/doc/html DESTINATION share/doc/smesh OPTIONAL)

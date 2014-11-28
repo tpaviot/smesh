@@ -23,7 +23,7 @@ include_directories(inc)
 #################
 # Setup options #
 #################
-option(MONOLITIC_BUILD "Build one monolitic smesh library." ON)
+option(MONOLITHIC_BUILD "Build one monolithic smesh library." ON)
 
 
 ################################
@@ -83,10 +83,10 @@ endif()
 ############################
 if(${CMAKE_SIZEOF_VOID_P} MATCHES "8") # It is 64bit, 32 bit systems returns 4
     add_definitions(-D_OCC64)
-    message("-- Build 64bit")
+    message(STATUS "Build 64bit")
     set(BIT 64)
 else()
-    message("-- Build 32bit")
+    message(STATUS "Build 32bit")
     set(BIT 32)
 endif()
 

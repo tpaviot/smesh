@@ -154,7 +154,8 @@ set(StdMeshers_SRCS
     StdMeshers/StdMeshers_Hexa_3D.cpp
 )
 
-if(MONOLITIC_BUILD)
+if(MONOLITHIC_BUILD)
+    set(SMESH_LIBRARIES SMESH)
     add_library(SMESH
         ${Driver_SRCS}
         ${DriverDAT_SRCS}
@@ -165,10 +166,18 @@ if(MONOLITIC_BUILD)
         ${SMESHDS_SRCS}
         ${StdMeshers_SRCS})
     target_link_libraries(SMESH ${OCE_LIBRARIES})
+    set_target_properties(SMESH PROPERTIES
+        SOVERSION ${${PROJECT_NAME}_ABI_SOVERSION}
+        VERSION ${${PROJECT_NAME}_ABI_VERSION})
 else()
-    foreach(_lib Driver;DriverDAT;DriverSTL;DriverUNV;SMDS;SMESH;SMESHDS;StdMeshers)
+    set(SMESH_LIBRARIES Driver;DriverDAT;DriverSTL;DriverUNV;SMDS;SMESH;SMESHDS;StdMeshers)
+
+    foreach(_lib ${SMESH_LIBRARIES})
         add_library(${_lib} ${${_lib}_SRCS})
         target_link_libraries(${_lib} ${OCE_LIBRARIES})
+        set_target_properties(${_lib} PROPERTIES
+            SOVERSION ${${PROJECT_NAME}_ABI_SOVERSION}
+            VERSION ${${PROJECT_NAME}_ABI_VERSION})
     endforeach()
     target_link_libraries(DriverDAT SMDS)
     target_link_libraries(DriverSTL SMDS Driver)
@@ -182,9 +191,6 @@ if(UNIX)
     if(${CMAKE_Fortran_COMPILER} MATCHES "f77")
         target_link_libraries(SMESH f2c)
     endif()
-    set_target_properties(SMESH PROPERTIES
-        SOVERSION ${${PROJECT_NAME}_ABI_SOVERSION}
-        VERSION ${${PROJECT_NAME}_ABI_VERSION})
 endif()
 
 ################################################
@@ -226,7 +232,6 @@ endif()
 # INSTALL #
 ###########
 include(GNUInstallDirs)
-install(TARGETS SMESH DESTINATION ${CMAKE_INSTALL_LIBDIR})
-install(DIRECTORY inc/
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/smesh
-    FILES_MATCHING PATTERN "*.*")
+install(TARGETS ${SMESH_LIBRARIES} DESTINATION ${CMAKE_INSTALL_LIBDIR})
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/inc/
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/smesh)
