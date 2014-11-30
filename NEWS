@@ -1,3 +1,16 @@
+Version 5.1.2.5 - November 2014
+
+* fixed a regression in 5.1.2.4
+
+* cmake improvements:
+  - Fix spelling of monolithic build option
+  - Add install target for documentation.
+  - Make sure ALL libraries get installed when not building the monolithic library.
+  - Install bundled boost to include/smesh if Boost not found by cmake
+
+Users who contributed to this release:
+  Thomas Paviot, Richard Shaw
+
 Version 5.1.2.4 - November 2014
 
 * cmake improvements
