@@ -24,10 +24,10 @@
 // Author    : Michael Sazonov (OCN)
 // Date      : 28/03/2006
 // Project   : SALOME
-// $Header: /home/server/cvs/NETGENPLUGIN/NETGENPLUGIN_SRC/src/NETGENPlugin/NETGENPlugin_Hypothesis_2D.cxx,v 1.4.2.1 2008/11/27 14:29:44 abd Exp $
+// $Header$
 //=============================================================================
 //
-#include <NETGENPlugin_Hypothesis_2D.hxx>
+#include "NETGENPlugin_Hypothesis_2D.hxx"
 #include <utilities.h>
 
 using namespace std;
@@ -94,7 +94,7 @@ istream & NETGENPlugin_Hypothesis_2D::LoadFrom(istream & load)
   NETGENPlugin_Hypothesis::LoadFrom(load);
 
   bool isOK = true;
-  int is=0;
+  int is;
 
   isOK = (load >> is);
   if (isOK)

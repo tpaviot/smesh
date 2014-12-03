@@ -925,7 +925,7 @@ bool SMESH_Pattern::Load (SMESH_Mesh*        theMesh,
       // mesh is projected onto a line, e.g.
       return setErrorCode( ERR_LOADF_CANT_PROJECT );
   }
-  double ratio = dU / dV, maxratio = 3, scale=0.;
+  double ratio = dU / dV, maxratio = 3, scale;
   int iCoord = 0;
   if ( ratio > maxratio ) {
     scale = ratio / maxratio;

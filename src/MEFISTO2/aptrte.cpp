@@ -28,6 +28,11 @@
 #include "aptrte.h"
 #include "utilities.h"
 
+#ifndef MEFISTO_VERBOSE
+#undef MESSAGE
+#define MESSAGE(msg)
+#endif
+
 using namespace std;
 
 extern "C"

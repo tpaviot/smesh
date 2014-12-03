@@ -208,8 +208,8 @@ ostream & NETGENPlugin_Hypothesis::SaveTo(ostream & save)
 istream & NETGENPlugin_Hypothesis::LoadFrom(istream & load)
 {
   bool isOK = true;
-  int is=0;
-  double val=0.0;
+  int is;
+  double val;
 
   isOK = (load >> val);
   if (isOK)

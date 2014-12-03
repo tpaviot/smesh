@@ -23,7 +23,6 @@
 //  File   : StdMeshers_ProjectionSource1D.cxx
 //  Author : Edward AGAPOV
 //  Module : SMESH
-//  $Header: /home/server/cvs/SMESH/SMESH_SRC/src/StdMeshers/StdMeshers_ProjectionSource1D.cxx,v 1.2.2.1 2008/11/27 13:03:50 abd Exp $
 //
 #include "StdMeshers_ProjectionSource1D.hxx"
 
@@ -73,13 +72,13 @@ StdMeshers_ProjectionSource1D::~StdMeshers_ProjectionSource1D()
 //=============================================================================
 
 void StdMeshers_ProjectionSource1D::SetSourceEdge(const TopoDS_Shape& edge)
-  throw ( SMESH_Exception )
+  throw ( SALOME_Exception )
 {
   if ( edge.IsNull() )
-    throw SMESH_Exception(LOCALIZED("Null edge is not allowed"));
+    throw SALOME_Exception(LOCALIZED("Null edge is not allowed"));
 
   if ( edge.ShapeType() != TopAbs_EDGE && edge.ShapeType() != TopAbs_COMPOUND )
-    throw SMESH_Exception(LOCALIZED("Wrong shape type"));
+    throw SALOME_Exception(LOCALIZED("Wrong shape type"));
 
   if ( !_sourceEdge.IsSame( edge ) )
   {
@@ -98,15 +97,15 @@ void StdMeshers_ProjectionSource1D::SetSourceEdge(const TopoDS_Shape& edge)
 
 void StdMeshers_ProjectionSource1D::SetVertexAssociation(const TopoDS_Shape& sourceVertex,
                                                          const TopoDS_Shape& targetVertex)
-  throw ( SMESH_Exception )
+  throw ( SALOME_Exception )
 {
   if ( sourceVertex.IsNull() != targetVertex.IsNull() )
-    throw SMESH_Exception(LOCALIZED("Two or none vertices must be provided"));
+    throw SALOME_Exception(LOCALIZED("Two or none vertices must be provided"));
 
   if ( !sourceVertex.IsNull() ) {
     if ( sourceVertex.ShapeType() != TopAbs_VERTEX ||
          targetVertex.ShapeType() != TopAbs_VERTEX )
-      throw SMESH_Exception(LOCALIZED("Wrong shape type"));
+      throw SALOME_Exception(LOCALIZED("Wrong shape type"));
   }
 
   if ( !_sourceVertex.IsSame( sourceVertex ) ||
@@ -242,3 +241,4 @@ bool StdMeshers_ProjectionSource1D::SetParametersByDefaults(const TDefaults&  /*
 {
   return false;
 }
+

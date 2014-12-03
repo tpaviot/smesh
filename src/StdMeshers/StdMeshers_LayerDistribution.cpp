@@ -23,7 +23,6 @@
 //  File   : StdMeshers_LayerDistribution.cxx
 //  Author : Edward AGAPOV
 //  Module : SMESH
-//  $Header: /home/server/cvs/SMESH/SMESH_SRC/src/StdMeshers/StdMeshers_LayerDistribution.cxx,v 1.2.2.1 2008/11/27 13:03:49 abd Exp $
 //
 #include "StdMeshers_LayerDistribution.hxx"
 
@@ -70,11 +69,11 @@ StdMeshers_LayerDistribution::~StdMeshers_LayerDistribution()
 //=============================================================================
 
 void StdMeshers_LayerDistribution::SetLayerDistribution(SMESH_Hypothesis* hyp1D)
-  throw ( SMESH_Exception )
+  throw ( SALOME_Exception )
 {
   if ( myHyp != hyp1D ) {
     if ( myHyp && hyp1D->GetDim() != 1 )
-      throw SMESH_Exception(LOCALIZED("1D hypothesis is expected"));
+      throw SALOME_Exception(LOCALIZED("1D hypothesis is expected"));
     myHyp = hyp1D;
   }
   std::ostringstream os;
@@ -145,7 +144,6 @@ bool StdMeshers_LayerDistribution::SetParametersByMesh(const SMESH_Mesh*   ,
 {
   return false;
 }
-
 //================================================================================
 /*!
  * \brief Initialize my parameter values by default parameters.

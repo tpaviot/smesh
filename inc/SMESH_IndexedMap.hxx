@@ -226,7 +226,7 @@ template <class TheKeyType> class SMESH_IndexedMap
     pNode = (IndexedMapNode *) myData1[iK1];
     while (pNode)
     {
-      if (IsEqual (pNode->Key1(), theKey1))
+      if (SMESH_IsEqual (pNode->Key1(), theKey1))
         return pNode->Key2();
       pNode = (IndexedMapNode *) pNode->Next();
     }
@@ -249,7 +249,7 @@ template <class TheKeyType> class SMESH_IndexedMap
     pNode1 = (IndexedMapNode *) myData1[iK1];
     while (pNode1) 
     {
-      if (IsEqual(pNode1->Key1(), theKey1)) 
+      if (SMESH_IsEqual(pNode1->Key1(), theKey1))
         return Standard_True;
       pNode1 = (IndexedMapNode *) pNode1->Next();
     }

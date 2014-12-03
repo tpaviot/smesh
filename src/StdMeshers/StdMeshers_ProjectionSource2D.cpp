@@ -23,8 +23,7 @@
 //  File   : StdMeshers_ProjectionSource2D.cxx
 //  Author : Edward AGAPOV
 //  Module : SMESH
-//  $Header: /home/server/cvs/SMESH/SMESH_SRC/src/StdMeshers/StdMeshers_ProjectionSource2D.cxx,v 1.2.2.1 2008/11/27 13:03:50 abd Exp $
-//
+
 #include "StdMeshers_ProjectionSource2D.hxx"
 
 #include "SMESH_Mesh.hxx"
@@ -72,13 +71,13 @@ StdMeshers_ProjectionSource2D::~StdMeshers_ProjectionSource2D()
 //=============================================================================
 
 void StdMeshers_ProjectionSource2D::SetSourceFace(const TopoDS_Shape& Face)
-  throw ( SMESH_Exception )
+  throw ( SALOME_Exception )
 {
   if ( Face.IsNull() )
-    throw SMESH_Exception(LOCALIZED("Null Face is not allowed"));
+    throw SALOME_Exception(LOCALIZED("Null Face is not allowed"));
 
   if ( Face.ShapeType() != TopAbs_FACE && Face.ShapeType() != TopAbs_COMPOUND )
-    throw SMESH_Exception(LOCALIZED("Wrong shape type"));
+    throw SALOME_Exception(LOCALIZED("Wrong shape type"));
 
   if ( !_sourceFace.IsSame( Face ) )
   {
@@ -100,19 +99,19 @@ void StdMeshers_ProjectionSource2D::SetVertexAssociation(const TopoDS_Shape& sou
                                                          const TopoDS_Shape& sourceVertex2,
                                                          const TopoDS_Shape& targetVertex1,
                                                          const TopoDS_Shape& targetVertex2)
-  throw ( SMESH_Exception )
+  throw ( SALOME_Exception )
 {
   if ( sourceVertex1.IsNull() != targetVertex1.IsNull() ||
        sourceVertex2.IsNull() != targetVertex2.IsNull() ||
        sourceVertex1.IsNull() != targetVertex2.IsNull() )
-    throw SMESH_Exception(LOCALIZED("Two or none pairs of vertices must be provided"));
+    throw SALOME_Exception(LOCALIZED("Two or none pairs of vertices must be provided"));
 
   if ( !sourceVertex1.IsNull() ) {
     if ( sourceVertex1.ShapeType() != TopAbs_VERTEX ||
          sourceVertex2.ShapeType() != TopAbs_VERTEX ||
          targetVertex1.ShapeType() != TopAbs_VERTEX ||
          targetVertex2.ShapeType() != TopAbs_VERTEX )
-      throw SMESH_Exception(LOCALIZED("Wrong shape type"));
+      throw SALOME_Exception(LOCALIZED("Wrong shape type"));
   }
 
   if ( !_sourceVertex1.IsSame( sourceVertex1 ) ||
@@ -137,9 +136,10 @@ void StdMeshers_ProjectionSource2D::SetVertexAssociation(const TopoDS_Shape& sou
 
 void StdMeshers_ProjectionSource2D::SetSourceMesh(SMESH_Mesh* mesh)
 {
-  if ( _sourceMesh != mesh )
+  if ( _sourceMesh != mesh ) {
     _sourceMesh = mesh;
     NotifySubMeshesHypothesisModification();
+  }
 }
 
 //=============================================================================
@@ -161,14 +161,14 @@ TopoDS_Shape StdMeshers_ProjectionSource2D::GetSourceFace() const
 //=============================================================================
 
 TopoDS_Vertex StdMeshers_ProjectionSource2D::GetSourceVertex(int i) const
-  throw ( SMESH_Exception )
+  throw ( SALOME_Exception )
 {
   if ( i == 1 )
     return _sourceVertex1;
   else if ( i == 2 )
     return _sourceVertex2;
   else
-    throw SMESH_Exception(LOCALIZED("Wrong vertex index"));
+    throw SALOME_Exception(LOCALIZED("Wrong vertex index"));
 }
 
 //=============================================================================
@@ -179,14 +179,14 @@ TopoDS_Vertex StdMeshers_ProjectionSource2D::GetSourceVertex(int i) const
 //=============================================================================
 
 TopoDS_Vertex StdMeshers_ProjectionSource2D::GetTargetVertex(int i) const
-  throw ( SMESH_Exception )
+  throw ( SALOME_Exception )
 {
   if ( i == 1 )
     return _targetVertex1;
   else if ( i == 2 )
     return _targetVertex2;
   else
-    throw SMESH_Exception(LOCALIZED("Wrong vertex index"));
+    throw SALOME_Exception(LOCALIZED("Wrong vertex index"));
 }
 
 //=============================================================================
@@ -309,3 +309,4 @@ bool StdMeshers_ProjectionSource2D::SetParametersByDefaults(const TDefaults&  /*
 {
   return false;
 }
+

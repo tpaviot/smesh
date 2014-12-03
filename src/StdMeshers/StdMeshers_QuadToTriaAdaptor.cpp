@@ -48,7 +48,6 @@ typedef NCollection_Array1<TColStd_SequenceOfInteger> StdMeshers_Array1OfSequenc
 typedef SMESH_Array1<TColStd_SequenceOfInteger> StdMeshers_Array1OfSequenceOfInteger;
 #endif
 
-
 //=======================================================================
 //function : StdMeshers_QuadToTriaAdaptor
 //purpose  : 
