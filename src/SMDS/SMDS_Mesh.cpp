@@ -2387,6 +2387,7 @@ void SMDS_Mesh::addChildrenWithNodes(set<const SMDS_MeshElement*>& setOfChildren
                                 addChildrenWithNodes(setOfChildren, ite->next(), nodes);
                 }
         }
+      default: break;
     }
 }
 
@@ -2487,6 +2488,8 @@ void SMDS_Mesh::RemoveElement(const SMDS_MeshElement *        elem,
       myVolumes.Remove(static_cast<SMDS_MeshVolume*>
                       (const_cast<SMDS_MeshElement*>(*it)));
       myInfo.RemoveVolume(*it);
+      break;
+    default:
       break;
     }
     //MESSAGE( "SMDS: RM elem " << (*it)->GetID() );

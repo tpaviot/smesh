@@ -2459,6 +2459,8 @@ GetElementsId( const SMDS_Mesh* theMesh,
     FillSequence<const SMDS_MeshElement*>(theMesh->facesIterator(),thePredicate,theSequence);
     FillSequence<const SMDS_MeshElement*>(theMesh->volumesIterator(),thePredicate,theSequence);
     break;
+  default:
+    break;
   }
 }
 

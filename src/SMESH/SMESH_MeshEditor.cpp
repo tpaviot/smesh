@@ -225,6 +225,8 @@ SMESH_MeshEditor::AddElement(const vector<const SMDS_MeshNode*> & node,
                                             node[12],node[13],node[14],node[15],
                                             node[16],node[17],node[18],node[19] );
     }
+  default:
+    break;
   }
   return e;
 }
@@ -8338,7 +8340,7 @@ SMESH_MeshEditor::SewSideElements (TIDSortedElemSet&    theSide1,
     }
 
     // check similarity of elements of the sides
-    if ((aResult == SEW_OK) && (( face[0] && !face[1] ) || ( !face[0] && face[1] )) {
+    if ((aResult == SEW_OK) && (( face[0] && !face[1] ) || ( !face[0] && face[1] ))) {
       MESSAGE("Correspondent face not found on side " << ( face[0] ? 1 : 0 ));
       if ( nReplaceMap.size() == 2 ) { // faces on input nodes not found
         aResult = ( face[0] ? SEW_BAD_SIDE2_NODES : SEW_BAD_SIDE1_NODES );

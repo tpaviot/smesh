@@ -347,6 +347,8 @@ Driver_Mesh::Status DriverUNV_R_SMDS_Mesh::Perform()
 		  }
 		  aVolumeGroup->Add(aElement);
 		  break;
+        default:
+          break;
 		}
 	      } 
 	    }
