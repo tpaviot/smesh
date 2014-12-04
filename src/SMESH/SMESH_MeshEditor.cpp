@@ -4950,8 +4950,8 @@ SMESH_MeshEditor::Transform (TIDSortedElemSet & theElems,
 
   PGroupIDs newGroupIDs;
 
-  if ( theMakeGroups && theCopy ||
-       theMakeGroups && theTargetMesh )
+  if ( (theMakeGroups && theCopy) ||
+       (theMakeGroups && theTargetMesh) )
     newGroupIDs = generateGroups( srcNodes, srcElems, groupPostfix, theTargetMesh );
 
   return newGroupIDs;
@@ -8338,7 +8338,7 @@ SMESH_MeshEditor::SewSideElements (TIDSortedElemSet&    theSide1,
     }
 
     // check similarity of elements of the sides
-    if (aResult == SEW_OK && ( face[0] && !face[1] ) || ( !face[0] && face[1] )) {
+    if ((aResult == SEW_OK) && (( face[0] && !face[1] ) || ( !face[0] && face[1] )) {
       MESSAGE("Correspondent face not found on side " << ( face[0] ? 1 : 0 ));
       if ( nReplaceMap.size() == 2 ) { // faces on input nodes not found
         aResult = ( face[0] ? SEW_BAD_SIDE2_NODES : SEW_BAD_SIDE1_NODES );

@@ -2415,10 +2415,10 @@ void SMDS_Mesh::RemoveElement(const SMDS_MeshElement *        elem,
 {
   // get finite elements built on elem
   set<const SMDS_MeshElement*> * s1;
-  if (elem->GetType() == SMDSAbs_0DElement ||
-      elem->GetType() == SMDSAbs_Edge && !hasConstructionEdges() ||
-      elem->GetType() == SMDSAbs_Face && !hasConstructionFaces() ||
-      elem->GetType() == SMDSAbs_Volume)
+  if ((elem->GetType() == SMDSAbs_0DElement) ||
+      (elem->GetType() == SMDSAbs_Edge && !hasConstructionEdges()) ||
+      (elem->GetType() == SMDSAbs_Face && !hasConstructionFaces()) ||
+      (elem->GetType() == SMDSAbs_Volume))
   {
     s1 = new set<const SMDS_MeshElement*>();
     s1->insert(elem);

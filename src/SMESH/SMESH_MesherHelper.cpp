@@ -1633,7 +1633,7 @@ namespace { // Structures used by FixQuadraticElements()
     // propagate from rectangle to neighbour faces
     if ( link->MediumPos() >= pos ) {
       int nbLinkFaces = link->_faces.size();
-      if ( nbLinkFaces == 4 || nbLinkFaces < 4 && link->OnBoundary()) {
+      if ( nbLinkFaces == 4 || (nbLinkFaces < 4 && link->OnBoundary())) {
         // hexahedral mesh or boundary quadrangles - goto a continous face
         if ( const QFace* f = link->GetContinuesFace( this ))
           return f->GetLinkChain( *chLink, chain, pos, error );
