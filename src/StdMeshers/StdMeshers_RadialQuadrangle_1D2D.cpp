@@ -415,11 +415,12 @@ bool StdMeshers_RadialQuadrangle_1D2D::Compute(SMESH_Mesh&         aMesh,
     }
     bool linEdgeComputed = false;
     if( SMESH_subMesh* sm1 = aMesh.GetSubMesh(LinEdge1) ) {
-      if( !sm1->IsEmpty() )
+      if( !sm1->IsEmpty() ) {
         if( isEdgeCompitaballyMeshed( LinEdge1, aMesh.GetSubMesh(F) ))
           linEdgeComputed = true;
         else
           return error("Invalid set of hypotheses");
+      }
     }
 
     bool ok = _gen->Compute( aMesh, CircEdge );
@@ -558,20 +559,20 @@ bool StdMeshers_RadialQuadrangle_1D2D::Compute(SMESH_Mesh&         aMesh,
 
     bool linEdge1Computed = false;
     if ( SMESH_subMesh* sm1 = aMesh.GetSubMesh(LinEdge1))
-      if( !sm1->IsEmpty() )
+      if( !sm1->IsEmpty() ) {
         if( isEdgeCompitaballyMeshed( LinEdge1, aMesh.GetSubMesh(F) ))
           linEdge1Computed = true;
         else
           return error("Invalid set of hypotheses");
-
+      }
     bool linEdge2Computed = false;
     if ( SMESH_subMesh* sm2 = aMesh.GetSubMesh(LinEdge2))
-      if( !sm2->IsEmpty() )
+      if( !sm2->IsEmpty() ) {
         if( isEdgeCompitaballyMeshed( LinEdge2, aMesh.GetSubMesh(F)  ))
           linEdge2Computed = true;
         else
           return error("Invalid set of hypotheses");
-
+      }
     bool ok = _gen->Compute( aMesh, CircEdge );
     if( !ok ) return false;
     map< double, const SMDS_MeshNode* > theNodes;

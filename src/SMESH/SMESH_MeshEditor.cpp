@@ -138,31 +138,31 @@ SMESH_MeshEditor::AddElement(const vector<const SMDS_MeshNode*> & node,
   SMESHDS_Mesh* mesh = GetMeshDS();
   switch ( type ) {
   case SMDSAbs_Edge:
-    if ( nbnode == 2 )
+    if ( nbnode == 2 ) {
       if ( ID ) e = mesh->AddEdgeWithID(node[0], node[1], ID);
-      else      e = mesh->AddEdge      (node[0], node[1] );
-    else if ( nbnode == 3 )
+      else      e = mesh->AddEdge      (node[0], node[1] );}
+    else if ( nbnode == 3 ) {
       if ( ID ) e = mesh->AddEdgeWithID(node[0], node[1], node[2], ID);
-      else      e = mesh->AddEdge      (node[0], node[1], node[2] );
+      else      e = mesh->AddEdge      (node[0], node[1], node[2] );}
     break;
   case SMDSAbs_Face:
     if ( !isPoly ) {
-      if      (nbnode == 3)
+      if      (nbnode == 3) {
         if ( ID ) e = mesh->AddFaceWithID(node[0], node[1], node[2], ID);
-        else      e = mesh->AddFace      (node[0], node[1], node[2] );
-      else if (nbnode == 4) 
+        else      e = mesh->AddFace      (node[0], node[1], node[2] );}
+      else if (nbnode == 4) {
         if ( ID ) e = mesh->AddFaceWithID(node[0], node[1], node[2], node[3], ID);
-        else      e = mesh->AddFace      (node[0], node[1], node[2], node[3] );
-      else if (nbnode == 6)
+        else      e = mesh->AddFace      (node[0], node[1], node[2], node[3] );}
+      else if (nbnode == 6) {
         if ( ID ) e = mesh->AddFaceWithID(node[0], node[1], node[2], node[3],
                                           node[4], node[5], ID);
         else      e = mesh->AddFace      (node[0], node[1], node[2], node[3],
-                                          node[4], node[5] );
-      else if (nbnode == 8)
+                                          node[4], node[5] );}
+      else if (nbnode == 8) {
         if ( ID ) e = mesh->AddFaceWithID(node[0], node[1], node[2], node[3],
                                           node[4], node[5], node[6], node[7], ID);
         else      e = mesh->AddFace      (node[0], node[1], node[2], node[3],
-                                          node[4], node[5], node[6], node[7] );
+                                          node[4], node[5], node[6], node[7] );}
     } else {
       if ( ID ) e = mesh->AddPolygonalFaceWithID(node, ID);
       else      e = mesh->AddPolygonalFace      (node    );
@@ -213,7 +213,7 @@ SMESH_MeshEditor::AddElement(const vector<const SMDS_MeshNode*> & node,
                                             node[4], node[5], node[6], node[7],
                                             node[8], node[9], node[10],node[11],
                                             node[12],node[13],node[14] );
-      else if (nbnode == 20)
+      else if (nbnode == 20) {
         if ( ID ) e = mesh->AddVolumeWithID(node[0], node[1], node[2], node[3],
                                             node[4], node[5], node[6], node[7],
                                             node[8], node[9], node[10],node[11],
@@ -223,7 +223,7 @@ SMESH_MeshEditor::AddElement(const vector<const SMDS_MeshNode*> & node,
                                             node[4], node[5], node[6], node[7],
                                             node[8], node[9], node[10],node[11],
                                             node[12],node[13],node[14],node[15],
-                                            node[16],node[17],node[18],node[19] );
+                                            node[16],node[17],node[18],node[19] );}
     }
   default:
     break;
@@ -527,12 +527,12 @@ bool SMESH_MeshEditor::InverseDiag (const SMDS_MeshElement * theTria1,
     // find indices of 1,2 and of A,B in theTria1
     int iA = 0, iB = 0, i1 = 0, i2 = 0;
     for ( i = 0; i < 6; i++ ) {
-      if ( sameInd [ i ] == 0 )
+      if ( sameInd [ i ] == 0 ) {
         if ( i < 3 ) i1 = i;
-        else         i2 = i;
-      else if (i < 3)
+        else         i2 = i;}
+      else if (i < 3) {
         if ( iA ) iB = i;
-        else      iA = i;
+        else      iA = i;}
     }
     // nodes 1 and 2 should not be the same
     if ( aNodes[ i1 ] == aNodes[ i2 ] )
@@ -625,7 +625,7 @@ static bool findTriangles(const SMDS_MeshNode *    theNode1,
   it = theNode2->GetInverseElementIterator(SMDSAbs_Face);
   while (it->more()) {
     const SMDS_MeshElement* elem = it->next();
-    if ( emap.find( elem ) != emap.end() )
+    if ( emap.find( elem ) != emap.end() ) {
       if ( theTria1 ) {
         // theTria1 must be element with minimum ID
         if( theTria1->GetID() < elem->GetID() ) {
@@ -640,6 +640,7 @@ static bool findTriangles(const SMDS_MeshNode *    theNode1,
       else {
         theTria1 = elem;
       }
+    }
   }
   return ( theTria1 && theTria2 );
 }
@@ -1404,7 +1405,7 @@ double getAngle(const SMDS_MeshElement * tr1,
     int i = 0, iDiag = -1;
     while ( it->more()) {
       const SMDS_MeshElement *n = it->next();
-      if ( n == n1 || n == n2 )
+      if ( n == n1 || n == n2 ) {
         if ( iDiag < 0)
           iDiag = i;
         else {
@@ -1414,6 +1415,7 @@ double getAngle(const SMDS_MeshElement * tr1,
             nFirst[ t ] = n;
           break;
         }
+      }
       i++;
     }
   }
@@ -4874,11 +4876,11 @@ SMESH_MeshEditor::Transform (TIDSortedElemSet & theElems,
 
     // Regular elements
     int* i = index[ FORWARD ];
-    if ( needReverse && nbNodes > 2) // reverse mirrored faces and volumes
-      if ( elemType == SMDSAbs_Face )
+    if ( needReverse && nbNodes > 2) {// reverse mirrored faces and volumes
+      if ( elemType == SMDSAbs_Face ) 
         i = index[ REV_FACE ];
       else
-        i = index[ nbNodes - 4 ];
+        i = index[ nbNodes - 4 ];}
 
     if(elem->IsQuadratic()) {
       static int anIds[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19};
@@ -5574,12 +5576,12 @@ bool SMESH_MeshEditor::isOut( const SMDS_MeshElement* element, const gp_Pnt& poi
   vector< gp_XYZ > xyz;
 
   SMDS_ElemIteratorPtr nodeIt = element->nodesIterator();
-  if ( element->IsQuadratic() )
+  if ( element->IsQuadratic() ) {
     if (const SMDS_QuadraticFaceOfNodes* f=dynamic_cast<const SMDS_QuadraticFaceOfNodes*>(element))
       nodeIt = f->interlacedNodesElemIterator();
     else if (const SMDS_QuadraticEdge*  e =dynamic_cast<const SMDS_QuadraticEdge*>(element))
       nodeIt = e->interlacedNodesElemIterator();
-
+  }
   while ( nodeIt->more() )
     xyz.push_back( TNodeXYZ( cast2Node( nodeIt->next() )));
 
