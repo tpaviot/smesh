@@ -1,9 +1,5 @@
 #! /bin/bash
 
-
-# GFORTRAN AND LIBQUADMATH ARE LOCAL LIBRARIES!!!
-
-
 set -e
 
 ncpus=4
@@ -11,10 +7,8 @@ ncpus=4
 echo "Timestamp" && date
 mkdir cmake-build
 cd cmake-build
-cmake -DOCE_INCLUDE_PATH=$PREFIX/include/oce \
-      -DCMAKE_BUILD_TYPE:STRING=Release \
-      -DOCE_LIB_PATH=$PREFIX/lib \
-      -DOCE_INSTALL_PACKAGE_LIB_DIR=$PREFIX/lib \
+cmake -DCMAKE_BUILD_TYPE:STRING=Release \
+      -DOCE_DIR=$PREFIX/lib \
       -DCMAKE_INSTALL_PREFIX=$PREFIX \
       ..
 echo ""
