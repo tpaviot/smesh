@@ -589,7 +589,7 @@ namespace {
       return;
     }
     default:
-      break;
+      return;
     } // switch by SubMeshState
   }
 

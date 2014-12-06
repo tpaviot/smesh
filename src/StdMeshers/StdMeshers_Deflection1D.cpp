@@ -22,7 +22,6 @@
 //  SMESH StdMeshers_Deflection1D : implementaion of SMESH idl descriptions
 //  File   : StdMeshers_Deflection1D.cxx
 //  Module : SMESH
-//  $Header: /home/server/cvs/SMESH/SMESH_SRC/src/StdMeshers/StdMeshers_Deflection1D.cxx,v 1.7.2.1 2008/11/27 13:03:49 abd Exp $
 //
 #include "StdMeshers_Deflection1D.hxx"
 #include "utilities.h"
@@ -76,11 +75,11 @@ StdMeshers_Deflection1D::~StdMeshers_Deflection1D()
 //=============================================================================
 
 void StdMeshers_Deflection1D::SetDeflection(double value)
-     throw(SMESH_Exception)
+     throw(SALOME_Exception)
 {
   if (_value != value) {
     if (value <= 0.)
-      throw SMESH_Exception(LOCALIZED("Value must be positive"));
+      throw SALOME_Exception(LOCALIZED("Value must be positive"));
 
     NotifySubMeshesHypothesisModification();
 
@@ -234,4 +233,3 @@ bool StdMeshers_Deflection1D::SetParametersByDefaults(const TDefaults&  /*dflts*
 {
   return false;
 }
-

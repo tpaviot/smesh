@@ -84,7 +84,6 @@ bool SMDS_MeshGroup::RemoveSubGroup(const SMDS_MeshGroup * theGroup)
 		{
 			found = true;
 			myChildren.erase(itgroup);
-            break;
 		}
 	}
 

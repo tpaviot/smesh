@@ -2,10 +2,10 @@
 project(SMESH CXX Fortran)
 cmake_minimum_required(VERSION 2.8)
 
-set(SMESH_VERSION_MAJOR 5)
-set(SMESH_VERSION_MINOR 1)
-set(SMESH_VERSION_PATCH 2)
-set(SMESH_VERSION_TWEAK 6-dev)
+set(SMESH_VERSION_MAJOR 6)
+set(SMESH_VERSION_MINOR 5)
+set(SMESH_VERSION_PATCH 3)
+set(SMESH_VERSION_TWEAK 1-dev)
 
 
 #####################

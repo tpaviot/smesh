@@ -39,6 +39,7 @@
 #include "StdMeshers_LengthFromEdges.hxx"
 #include "StdMeshers_QuadranglePreference.hxx"
 
+#include <Precision.hxx>
 #include <Standard_ErrorHandler.hxx>
 #include <Standard_Failure.hxx>
 
@@ -46,6 +47,7 @@
 
 #include <list>
 #include <vector>
+#include <limits>
 
 /*
   Netgen include files
@@ -59,7 +61,7 @@ namespace nglib {
 //#include <meshtype.hpp>
 namespace netgen {
   extern int OCCGenerateMesh (OCCGeometry&, Mesh*&, int, int, char*);
-  extern MeshingParameters mparam;
+  /*extern*/ MeshingParameters mparam;
 }
 
 using namespace std;
@@ -78,7 +80,7 @@ NETGENPlugin_NETGEN_2D_ONLY::NETGENPlugin_NETGEN_2D_ONLY(int hypId, int studyId,
 {
   MESSAGE("NETGENPlugin_NETGEN_2D_ONLY::NETGENPlugin_NETGEN_2D_ONLY");
   _name = "NETGEN_2D_ONLY";
-
+  
   _shapeType = (1 << TopAbs_FACE);// 1 bit /shape type
 
   _compatibleHypothesis.push_back("MaxElementArea");
@@ -364,7 +366,7 @@ bool NETGENPlugin_NETGEN_2D_ONLY::Compute(SMESH_Mesh&         aMesh,
   // Generate surface mesh
   // -------------------------
 
-  char *optstr;
+  char *optstr = 0;
   int startWith = MESHCONST_MESHSURFACE;
   int endWith   = MESHCONST_OPTSURFACE;
   int err = 1;
@@ -441,4 +443,90 @@ bool NETGENPlugin_NETGEN_2D_ONLY::Compute(SMESH_Mesh&         aMesh,
   NETGENPlugin_Mesher::RemoveTmpFiles();
 
   return !err;
+}
+
+
+//=============================================================================
+/*!
+ *
+ */
+//=============================================================================
+
+bool NETGENPlugin_NETGEN_2D_ONLY::Evaluate(SMESH_Mesh& aMesh,
+                                           const TopoDS_Shape& aShape,
+                                           MapShapeNbElems& aResMap)
+{
+  TopoDS_Face F = TopoDS::Face(aShape);
+  if(F.IsNull())
+    return false;
+
+  // collect info from edges
+  int nb0d = 0, nb1d = 0;
+  bool IsQuadratic = false;
+  bool IsFirst = true;
+  double fullLen = 0.0;
+  TopTools_MapOfShape tmpMap;
+  for (TopExp_Explorer exp(F, TopAbs_EDGE); exp.More(); exp.Next()) {
+    TopoDS_Edge E = TopoDS::Edge(exp.Current());
+    if( tmpMap.Contains(E) )
+      continue;
+    tmpMap.Add(E);
+    SMESH_subMesh *aSubMesh = aMesh.GetSubMesh(exp.Current());
+    MapShapeNbElemsItr anIt = aResMap.find(aSubMesh);
+    if( anIt==aResMap.end() ) {
+      SMESH_subMesh *sm = aMesh.GetSubMesh(F);
+      SMESH_ComputeErrorPtr& smError = sm->GetComputeError();
+      smError.reset( new SMESH_ComputeError(COMPERR_ALGO_FAILED,"Submesh can not be evaluated",this));
+      return false;
+    }
+    std::vector<int> aVec = (*anIt).second;
+    nb0d += aVec[SMDSEntity_Node];
+    nb1d += Max(aVec[SMDSEntity_Edge],aVec[SMDSEntity_Quad_Edge]);
+    double aLen = SMESH_Algo::EdgeLength(E);
+    fullLen += aLen;
+    if(IsFirst) {
+      IsQuadratic = (aVec[SMDSEntity_Quad_Edge] > aVec[SMDSEntity_Edge]);
+      IsFirst = false;
+    }
+  }
+  tmpMap.Clear();
+
+  // compute edge length
+  double ELen = 0;
+  if (_hypLengthFromEdges || !_hypLengthFromEdges && !_hypMaxElementArea) {
+    if ( nb1d > 0 )
+      ELen = fullLen / nb1d;
+  }
+  if ( _hypMaxElementArea ) {
+    double maxArea = _hypMaxElementArea->GetMaxArea();
+    ELen = sqrt(2. * maxArea/sqrt(3.0));
+  }
+  GProp_GProps G;
+  BRepGProp::SurfaceProperties(F,G);
+  double anArea = G.Mass();
+
+  const int hugeNb = numeric_limits<int>::max()/10;
+  if ( anArea / hugeNb > ELen*ELen )
+  {
+    SMESH_subMesh *sm = aMesh.GetSubMesh(F);
+    SMESH_ComputeErrorPtr& smError = sm->GetComputeError();
+    smError.reset( new SMESH_ComputeError(COMPERR_ALGO_FAILED,"Submesh can not be evaluated.\nToo small element length",this));
+    return false;
+  }
+  int nbFaces = (int) ( anArea / ( ELen*ELen*sqrt(3.) / 4 ) );
+  int nbNodes = (int) ( ( nbFaces*3 - (nb1d-1)*2 ) / 6 + 1 );
+  std::vector<int> aVec(SMDSEntity_Last);
+  for(int i=SMDSEntity_Node; i<SMDSEntity_Last; i++) aVec[i]=0;
+  if( IsQuadratic ) {
+    aVec[SMDSEntity_Node] = nbNodes;
+    aVec[SMDSEntity_Quad_Triangle] = nbFaces;
+  }
+  else {
+    aVec[SMDSEntity_Node] = nbNodes;
+    aVec[SMDSEntity_Triangle] = nbFaces;
+  }
+  SMESH_subMesh *sm = aMesh.GetSubMesh(F);
+  aResMap.insert(std::make_pair(sm,aVec));
+
+  return true;
 }

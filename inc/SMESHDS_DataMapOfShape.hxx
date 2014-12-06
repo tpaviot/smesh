@@ -32,7 +32,7 @@
  * This method needed for instance NCollection_DataMap with TopoDS_Shape as key
  */
 
-inline Standard_Boolean IsEqual(const TopoDS_Shape& S1,
+inline Standard_Boolean SMESH_IsEqual(const TopoDS_Shape& S1,
                                 const TopoDS_Shape& S2)
 {
   return S1.IsSame(S2);

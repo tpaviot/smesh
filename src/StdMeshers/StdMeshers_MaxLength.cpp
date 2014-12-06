@@ -74,10 +74,10 @@ StdMeshers_MaxLength::~StdMeshers_MaxLength()
  */
 //=============================================================================
 
-void StdMeshers_MaxLength::SetLength(double length) throw(SMESH_Exception)
+void StdMeshers_MaxLength::SetLength(double length) throw(SALOME_Exception)
 {
   if (length <= 0)
-    throw SMESH_Exception(LOCALIZED("length must be positive"));
+    throw SALOME_Exception(LOCALIZED("length must be positive"));
   if ( _length != length ) {
     _length = length;
     NotifySubMeshesHypothesisModification();
@@ -157,7 +157,7 @@ ostream & StdMeshers_MaxLength::SaveTo(ostream & save)
 istream & StdMeshers_MaxLength::LoadFrom(istream & load)
 {
   bool isOK = true;
-  double a=0.0;
+  double a;
 
   isOK = (load >> a);
   if (isOK)
@@ -171,7 +171,7 @@ istream & StdMeshers_MaxLength::LoadFrom(istream & load)
   else
     load.clear(ios::badbit | load.rdstate());
 
-  double pre=0.0;
+  bool pre;
   isOK = (load >> pre);
   if ( isOK )
     _preestimation = pre;

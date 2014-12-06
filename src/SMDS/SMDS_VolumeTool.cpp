@@ -368,6 +368,8 @@ static int QuadHexa_nbN [] = { 8, 8, 8, 8, 8, 8 };
 // ========================================================
 // to perform some calculations without linkage to CASCADE
 // ========================================================
+namespace
+{
 struct XYZ {
   double x;
   double y;
@@ -376,24 +378,25 @@ struct XYZ {
   XYZ( double X, double Y, double Z ) { x = X; y = Y; z = Z; }
   XYZ( const XYZ& other )             { x = other.x; y = other.y; z = other.z; }
   XYZ( const SMDS_MeshNode* n )       { x = n->X(); y = n->Y(); z = n->Z(); }
-  XYZ operator-( const XYZ& other );
-  XYZ Crossed( const XYZ& other );
-  double Dot( const XYZ& other );
-  double Magnitude();
+  inline XYZ operator-( const XYZ& other );
+  inline XYZ Crossed( const XYZ& other );
+  inline double Dot( const XYZ& other );
+  inline double Magnitude();
 };
-XYZ XYZ::operator-( const XYZ& Right ) {
+inline XYZ XYZ::operator-( const XYZ& Right ) {
   return XYZ(x - Right.x, y - Right.y, z - Right.z);
 }
-XYZ XYZ::Crossed( const XYZ& Right ) {
+inline XYZ XYZ::Crossed( const XYZ& Right ) {
   return XYZ (y * Right.z - z * Right.y,
               z * Right.x - x * Right.z,
               x * Right.y - y * Right.x);
 }
-double XYZ::Dot( const XYZ& Other ) {
+inline double XYZ::Dot( const XYZ& Other ) {
   return(x * Other.x + y * Other.y + z * Other.z);
 }
-double XYZ::Magnitude() {
+inline double XYZ::Magnitude() {
   return sqrt (x * x + y * y + z * z);
+}
 }
 
 //=======================================================================
@@ -835,6 +838,32 @@ bool SMDS_VolumeTool::GetBaryCenter(double & X, double & Y, double & Z) const
   Z /= myVolumeNbNodes;
 
   return true;
+}
+
+//================================================================================
+/*!
+ * \brief Classify a point
+ *  \param tol - thickness of faces
+ */
+//================================================================================
+
+bool SMDS_VolumeTool::IsOut(double X, double Y, double Z, double tol)
+{
+  // LIMITATION: for convex volumes only
+  XYZ p( X,Y,Z );
+  for ( int iF = 0; iF < myNbFaces; ++iF )
+  {
+    XYZ faceNormal;
+    if ( !GetFaceNormal( iF, faceNormal.x, faceNormal.y, faceNormal.z ))
+      continue;
+    if ( !IsFaceExternal( iF ))
+      faceNormal = XYZ() - faceNormal; // reverse
+
+    XYZ face2p( p - XYZ( myFaceNodes[0] ));
+    if ( face2p.Dot( faceNormal ) > tol )
+      return true;
+  }
+  return false;
 }
 
 //=======================================================================

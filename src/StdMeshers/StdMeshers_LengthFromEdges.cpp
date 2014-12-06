@@ -24,7 +24,6 @@
 //           Moved here from SMESH_LengthFromEdges.cxx
 //  Author : Paul RASCLE, EDF
 //  Module : SMESH
-//  $Header: /home/server/cvs/SMESH/SMESH_SRC/src/StdMeshers/StdMeshers_LengthFromEdges.cxx,v 1.8.2.1 2008/11/27 13:03:49 abd Exp $
 //
 #include "StdMeshers_LengthFromEdges.hxx"
 
@@ -63,11 +62,11 @@ StdMeshers_LengthFromEdges::~StdMeshers_LengthFromEdges()
 //=============================================================================
 
 void StdMeshers_LengthFromEdges::SetMode(int mode)
-  throw (SMESH_Exception)
+  throw (SALOME_Exception)
 {
   int oldMode = _mode;
   if (mode <= 0) 
-    throw SMESH_Exception(LOCALIZED("mode must be positive"));
+    throw SALOME_Exception(LOCALIZED("mode must be positive"));
   _mode = mode;
   if (oldMode != _mode)
     NotifySubMeshesHypothesisModification();
@@ -105,7 +104,7 @@ ostream & StdMeshers_LengthFromEdges::SaveTo(ostream & save)
 istream & StdMeshers_LengthFromEdges::LoadFrom(istream & load)
 {
   bool isOK = true;
-  int a=0;
+  int a;
   isOK = (load >> a);
   if (isOK) 
     this->_mode = a;
@@ -152,7 +151,6 @@ bool StdMeshers_LengthFromEdges::SetParametersByMesh(const SMESH_Mesh* /*theMesh
 {
   return false;
 }
-
 //================================================================================
 /*!
  * \brief Initialize my parameter values by default parameters.
@@ -165,4 +163,3 @@ bool StdMeshers_LengthFromEdges::SetParametersByDefaults(const TDefaults&  /*dfl
 {
   return true;
 }
-

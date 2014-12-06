@@ -1,5 +1,7 @@
 
+[![License](https://binstar.org/jf/smesh/badges/license.svg)](https://github.com/tpaviot/smesh/blob/master/LICENCE.lgpl.txt)
 [![Build Status](https://travis-ci.org/tpaviot/smesh.png?branch=master)](https://travis-ci.org/tpaviot/smesh)
+[![Conda installer](https://binstar.org/jf/smesh/badges/installer/conda.svg)](https://binstar.org/jf/smesh/)
 
 Description
 -----------

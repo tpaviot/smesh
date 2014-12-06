@@ -24,7 +24,6 @@
 //           Moved here from SMESH_MaxElementVolume.cxx
 //  Author : Paul RASCLE, EDF
 //  Module : SMESH
-//  $Header: /home/server/cvs/SMESH/SMESH_SRC/src/StdMeshers/StdMeshers_MaxElementVolume.cxx,v 1.8.2.1 2008/11/27 13:03:50 abd Exp $
 //
 #include "StdMeshers_MaxElementVolume.hxx"
 
@@ -73,11 +72,11 @@ StdMeshers_MaxElementVolume::~StdMeshers_MaxElementVolume()
 //=============================================================================
 
 void StdMeshers_MaxElementVolume::SetMaxVolume(double maxVolume)
-  throw (SMESH_Exception)
+  throw (SALOME_Exception)
 {
   double oldVolume = _maxVolume;
   if (maxVolume <= 0) 
-    throw SMESH_Exception(LOCALIZED("maxVolume must be positive"));
+    throw SALOME_Exception(LOCALIZED("maxVolume must be positive"));
   _maxVolume = maxVolume;
   if (_maxVolume != oldVolume)
     NotifySubMeshesHypothesisModification();
@@ -115,7 +114,7 @@ ostream & StdMeshers_MaxElementVolume::SaveTo(ostream & save)
 istream & StdMeshers_MaxElementVolume::LoadFrom(istream & load)
 {
   bool isOK = true;
-  double a=0.0;
+  double a;
   isOK = (load >> a);
   if (isOK)
     this->_maxVolume = a;
@@ -197,7 +196,6 @@ bool StdMeshers_MaxElementVolume::SetParametersByMesh(const SMESH_Mesh*   theMes
   }
   return _maxVolume > 0;
 }
-
 //================================================================================
 /*!
  * \brief Initialize my parameter values by default parameters.
@@ -210,3 +208,4 @@ bool StdMeshers_MaxElementVolume::SetParametersByDefaults(const TDefaults&  dflt
 {
   return ( _maxVolume = dflts._elemLength*dflts._elemLength*dflts._elemLength );
 }
+

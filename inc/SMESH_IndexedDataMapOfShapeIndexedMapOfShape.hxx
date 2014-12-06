@@ -30,11 +30,7 @@
 
 #include "SMESHDS_DataMapOfShape.hxx"
 
-#ifndef __BORLANDC__
-#include <NCollection_DefineIndexedMap.hxx>
-#else
 #include <SMESH_DefineIndexedMap.hxx>
-#endif
 
 #include <TopoDS_Shape.hxx>
 
@@ -42,13 +38,7 @@
 
 DEFINE_BASECOLLECTION (SMESH_BaseCollectionShape, TopoDS_Shape)
 
-#ifndef __BORLANDC__
-DEFINE_INDEXEDMAP (SMESH_IndexedMapOfShape, SMESH_BaseCollectionShape, TopoDS_Shape)
-#else
 SMESH_DEFINE_INDEXEDMAP (SMESH_IndexedMapOfShape, SMESH_BaseCollectionShape, TopoDS_Shape)
-#endif
-
-
 
 #endif 
 
