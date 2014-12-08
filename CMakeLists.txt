@@ -102,7 +102,7 @@ else(UNIX)
     ######### Windows ###########
     message(STATUS "Windows system detected")
     add_definitions(-DWNT -DWIN32 -D_WINDOWS -DCSFDB -DHAVE_CONFIG_H
-                    -DSMDS_EXPORTS -DSMESH_EXPORTS
+                    -DSMDS_EXPORTS -DSMESHimpl_EXPORTS
                     -DSMESH_EXPORTS -DSMESHDS_EXPORTS -DMESHDRIVERUNV_EXPORTS
                     -DMESHDRIVERSTL_EXPORTS -DMESHDRIVERDAT_EXPORTS
                     -DSTDMESHERS_EXPORTS -DSMESHCONTROLS_EXPORTS
