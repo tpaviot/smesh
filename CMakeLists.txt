@@ -5,13 +5,13 @@ cmake_minimum_required(VERSION 2.8)
 set(SMESH_VERSION_MAJOR 6)
 set(SMESH_VERSION_MINOR 5)
 set(SMESH_VERSION_PATCH 3)
-set(SMESH_VERSION_TWEAK 1-dev)
+set(SMESH_VERSION_TWEAK 1)
 
 
 #####################
 # Set ABI SOVERSION #
 #####################
-set(SMESH_ABI_SOVERSION 1)
+set(SMESH_ABI_SOVERSION 2)
 set(SMESH_ABI_VERSION ${SMESH_ABI_SOVERSION}.0.0)
 
 set(CMAKE_BUILD_TYPE "Release") # By default, build in release mode
