@@ -1,3 +1,10 @@
+Version 6.5.3.1 - December 2014
+
+* ported up to 6.5.3
+
+Users who contributed to this release:
+  Thomas Paviot, integrating patch from Fotios Sioutis
+
 Version 5.1.2.5 - November 2014
 
 * fixed a regression in 5.1.2.4
