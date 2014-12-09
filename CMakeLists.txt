@@ -24,7 +24,14 @@ include_directories(inc)
 # Setup options #
 #################
 option(MONOLITHIC_BUILD "Build one monolithic smesh library." ON)
-
+option(NETGEN_SUPPORT "Enable NETGEN support" OFF)
+if(NETGEN_SUPPORT)
+  find_package(ZLIB REQUIRED)
+  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/netgen-5.3.1/nglib)
+  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/netgen-5.3.1/libsrc/occ)
+  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/netgen-5.3.1/libsrc/meshing)
+  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/netgen-5.3.1/libsrc/include)
+endif()
 
 ################################
 # OCE include and lib location #
@@ -94,23 +101,16 @@ endif()
 ######################################################
 # Configure Build settings according to the platform #
 ######################################################
-if(UNIX)
-    # Same settings are used for both MacOSX and Unix/Linux
-    add_definitions(-DHAVE_CONFIG_H -DLIN -DCSFDB -DOCC_CONVERT_SIGNALS)
-else(UNIX)
-  if(WIN32)
-    ######### Windows ###########
-    message(STATUS "Windows system detected")
-    add_definitions(-DWNT -DWIN32 -D_WINDOWS -DCSFDB -DHAVE_CONFIG_H
-                    -DSMDS_EXPORTS -DSMESHimpl_EXPORTS
-                    -DSMESH_EXPORTS -DSMESHDS_EXPORTS -DMESHDRIVERUNV_EXPORTS
-                    -DMESHDRIVERSTL_EXPORTS -DMESHDRIVERDAT_EXPORTS
-                    -DSTDMESHERS_EXPORTS -DSMESHCONTROLS_EXPORTS
-                    -DMESHDRIVER_EXPORTS -DMEFISTO2D_EXPORTS)
-  else(WIN32)
-    message("Unknown platform")
-  endif(WIN32)
-endif(UNIX)
+if(WIN32)
+  ######### Windows ###########
+  message(STATUS "Windows system detected")
+  add_definitions(-DWNT -DWIN32 -D_WINDOWS
+                  -DSMDS_EXPORTS -DSMESHimpl_EXPORTS
+                  -DSMESH_EXPORTS -DSMESHDS_EXPORTS -DMESHDRIVERUNV_EXPORTS
+                  -DMESHDRIVERSTL_EXPORTS -DMESHDRIVERDAT_EXPORTS
+                  -DSTDMESHERS_EXPORTS -DSMESHCONTROLS_EXPORTS
+                  -DMESHDRIVER_EXPORTS -DMEFISTO2D_EXPORTS)
+endif(WIN32)
 
 
 #################
