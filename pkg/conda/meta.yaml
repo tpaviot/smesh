@@ -4,7 +4,7 @@ package:
 
 source:
   git_url: https://github.com/tpaviot/smesh.git
-  git_tag: SMESH-6.5.3.1
+  git_tag: 6.5.3.1
 
 build:
   # The build number should be incremented for new builds of the same version
