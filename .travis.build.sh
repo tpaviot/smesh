@@ -6,7 +6,7 @@ ncpus=4
 echo "Timestamp" && date
 mkdir cmake-build
 cd cmake-build
-cmake ..
+cmake -DNETGEN_SUPPORT=ON ..
 echo ""
 echo "Timestamp" && date
 # make for py3
