@@ -228,8 +228,8 @@ static TError AddSegmentsToMesh(netgen::Mesh&                    ngMesh,
       // Add the segment
       Segment seg;
 
-      seg.p1 = ngMesh.GetNP();          // ng node id
-      seg.p2 = seg.p1 + 1;              // ng node id
+      seg.pnums[0] = ngMesh.GetNP();          // ng node id
+      seg.pnums[1] = seg.pnums[0] + 1;              // ng node id
       seg.edgenr = ngMesh.GetNSeg() + 1;// segment id
       seg.si = faceID;                  // = geom.fmap.FindIndex (face);
 
@@ -271,7 +271,7 @@ static TError AddSegmentsToMesh(netgen::Mesh&                    ngMesh,
 //            << "\tp1 edge: " << seg.epgeominfo[ 1 ].edgenr << endl;
     }
     Segment& seg = ngMesh.LineSegment( ngMesh.GetNSeg() );
-    seg.p2 = firstPointID;
+    seg.pnums[1] = firstPointID;
   }
 
   ngMesh.CalcSurfacesOfNode();  
@@ -406,7 +406,7 @@ bool NETGENPlugin_NETGEN_2D_ONLY::Compute(SMESH_Mesh&         aMesh,
   for ( int i = nbInputNodes + 1; i <= nbNodes; ++i )
   {
     const MeshPoint& ngPoint = ngMesh->Point(i);
-    SMDS_MeshNode * node = meshDS->AddNode(ngPoint.X(), ngPoint.Y(), ngPoint.Z());
+    SMDS_MeshNode * node = meshDS->AddNode(ngPoint[0], ngPoint[1], ngPoint[2]);
     nodeVec[ i-1 ] = node;
   }
 
