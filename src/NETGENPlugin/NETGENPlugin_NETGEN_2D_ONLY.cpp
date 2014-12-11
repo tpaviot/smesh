@@ -55,13 +55,15 @@
 namespace nglib {
 #include <nglib.h>
 }
-#define OCCGEOMETRY
+#ifndef OCCGEOMETRY
+  #define OCCGEOMETRY
+#endif
 #include <occgeom.hpp>
 #include <meshing.hpp>
 //#include <meshtype.hpp>
 namespace netgen {
-  extern int OCCGenerateMesh (OCCGeometry&, Mesh*&, int, int, char*);
-  /*extern*/ MeshingParameters mparam;
+  extern int OCCGenerateMesh (OCCGeometry&, Mesh*&, MeshingParameters &, int, int);
+  /*extern*/ MeshingParameters mparams;
 }
 
 using namespace std;
@@ -375,7 +377,7 @@ bool NETGENPlugin_NETGEN_2D_ONLY::Compute(SMESH_Mesh&         aMesh,
 #if (OCC_VERSION_MAJOR << 16 | OCC_VERSION_MINOR << 8 | OCC_VERSION_MAINTENANCE) > 0x060100
     OCC_CATCH_SIGNALS;
 #endif
-    err = netgen::OCCGenerateMesh(occgeo, ngMesh, startWith, endWith, optstr);
+    err = netgen::OCCGenerateMesh(occgeo, ngMesh, mparams, startWith, endWith); 
   }
   catch (Standard_Failure& ex) {
     string comment = ex.DynamicType()->Name();
