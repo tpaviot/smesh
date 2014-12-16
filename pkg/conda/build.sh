@@ -8,6 +8,7 @@ echo "Timestamp" && date
 mkdir cmake-build
 cd cmake-build
 cmake -DCMAKE_BUILD_TYPE:STRING=Release \
+      -DNETGEN_SUPPORT=ON \
       -DOCE_DIR=$PREFIX/lib \
       -DCMAKE_INSTALL_PREFIX=$PREFIX \
       ..
