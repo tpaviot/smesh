@@ -14,8 +14,15 @@ set(SMESH_VERSION_TWEAK 2-dev)
 set(SMESH_ABI_SOVERSION 2)
 set(SMESH_ABI_VERSION ${SMESH_ABI_SOVERSION}.0.0)
 
-set(CMAKE_BUILD_TYPE "Release") # By default, build in release mode
-set(BUILD_SHARED_LIBS ON)
+############################
+# Default to release build #
+############################
+if(NOT CMAKE_BUILD_TYPE )
+  set(CMAKE_BUILD_TYPE "Release")
+endif()
+message(STATUS "Build type will be ${CMAKE_BUILD_TYPE}")
+
+option(BUILD_SHARED_LIBS "Builds shared libraries if enabled." ON)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(inc)
 
@@ -24,14 +31,34 @@ include_directories(inc)
 # Setup options #
 #################
 option(MONOLITHIC_BUILD "Build one monolithic smesh library." ON)
-option(NETGEN_SUPPORT "Enable NETGEN support" OFF)
-if(NETGEN_SUPPORT)
-  find_package(ZLIB REQUIRED)
-  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/netgen-5.3.1/nglib)
-  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/netgen-5.3.1/libsrc/occ)
-  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/netgen-5.3.1/libsrc/meshing)
-  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/netgen-5.3.1/libsrc/include)
+option(NETGEN_PLUGIN "Build the NETGEN plugin." OFF)
+option(NETGEN_INTERNAL "Use internal NETGEN sources." OFF)
+
+#######################
+# Setup Netgen plugin #
+#######################
+if(NETGEN_PLUGIN)
+    if(NETGEN_INTERNAL)
+        find_package(ZLIB REQUIRED)
+        include_directories(${CMAKE_SOURCE_DIR}/netgen-5.3.1/nglib
+                            ${CMAKE_SOURCE_DIR}/netgen-5.3.1/libsrc/occ
+                            ${CMAKE_SOURCE_DIR}/netgen-5.3.1/libsrc/meshing
+                            ${CMAKE_SOURCE_DIR}/netgen-5.3.1/libsrc/include)
+    else()
+        find_library(NETGEN_LIBRARY nglib)
+        find_path(NETGEN_INCLUDE_DIR nglib.h
+            PATH_SUFFIXES netgen-mesher)
+        message(STATUS "NETGEN library: ${NETGEN_LIBRARY}")
+        message(STATUS "NETGEN include: ${NETGEN_INCLUDE_DIR}")
+        if(NETGEN_LIBRARY AND NETGEN_INCLUDE_DIR)
+            include_directories(${NETGEN_INCLUDE_DIR}
+                                ${NETGEN_INCLUDE_DIR}/private/include)
+        else()
+            message(ERROR "NETGEN library or include directory not found.")
+        endif()
+    endif()
 endif()
+
 
 ################################
 # OCE include and lib location #
@@ -54,15 +81,6 @@ else()
     include_directories(${OCE_INCLUDE_PATH})
     LINK_DIRECTORIES(${OCE_LIB_PATH})
 endif()
-
-
-############################
-# Default to release build #
-############################
-if(NOT DEFINED CMAKE_BUILD_TYPE )
-  set(CMAKE_BUILD_TYPE "Release")
-endif()
-message(STATUS "Built type will be ${CMAKE_BUILD_TYPE}")
 
 
 ##############################

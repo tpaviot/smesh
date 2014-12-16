@@ -100,17 +100,22 @@ set(SMESHDS_SRCS
     SMESHDS/SMESHDS_Script.cpp
     SMESHDS/SMESHDS_SubMesh.cpp
 )
-set(NETGENPlugin_SRCS
-    NETGENPlugin/NETGENPlugin_Hypothesis.cpp
-    NETGENPlugin/NETGENPlugin_Hypothesis_2D.cpp
-    NETGENPlugin/NETGENPlugin_Mesher.cpp
-    NETGENPlugin/NETGENPlugin_NETGEN_2D.cpp
-    NETGENPlugin/NETGENPlugin_NETGEN_2D3D.cpp
-    NETGENPlugin/NETGENPlugin_NETGEN_2D_ONLY.cpp
-    NETGENPlugin/NETGENPlugin_NETGEN_3D.cpp
-    NETGENPlugin/NETGENPlugin_SimpleHypothesis_2D.cpp
-    NETGENPlugin/NETGENPlugin_SimpleHypothesis_3D.cpp
-)
+
+if(NETGEN_PLUGIN)
+    set(NETGENPlugin_SRCS
+        NETGENPlugin/NETGENPlugin_Hypothesis.cpp
+        NETGENPlugin/NETGENPlugin_Hypothesis_2D.cpp
+        NETGENPlugin/NETGENPlugin_Mesher.cpp
+        NETGENPlugin/NETGENPlugin_NETGEN_2D.cpp
+        NETGENPlugin/NETGENPlugin_NETGEN_2D3D.cpp
+        NETGENPlugin/NETGENPlugin_NETGEN_2D_ONLY.cpp
+        NETGENPlugin/NETGENPlugin_NETGEN_3D.cpp
+        NETGENPlugin/NETGENPlugin_SimpleHypothesis_2D.cpp
+        NETGENPlugin/NETGENPlugin_SimpleHypothesis_3D.cpp)
+else()
+    set(NETGENPlugin_SRCS "")
+endif()
+
 set(StdMeshers_SRCS
     #MEFISTO2/trte.for
     MEFISTO2/aptrte.cpp
@@ -160,193 +165,195 @@ set(StdMeshers_SRCS
     StdMeshers/StdMeshers_TrianglePreference.cpp
     StdMeshers/StdMeshers_UseExisting_1D2D.cpp
 )
-set(NETGEN_SRCS
-  ../netgen-5.3.1/libsrc/csg/algprim.cpp
-  ../netgen-5.3.1/libsrc/csg/brick.cpp
-  ../netgen-5.3.1/libsrc/csg/bspline2d.cpp
-  ../netgen-5.3.1/libsrc/csg/csgeom.cpp
-  ../netgen-5.3.1/libsrc/csg/csgparser.cpp
-  #../netgen-5.3.1/libsrc/csg/csgpkg.cpp
-  ../netgen-5.3.1/libsrc/csg/curve2d.cpp
-  ../netgen-5.3.1/libsrc/csg/edgeflw.cpp
-  ../netgen-5.3.1/libsrc/csg/explicitcurve2d.cpp
-  ../netgen-5.3.1/libsrc/csg/extrusion.cpp
-  ../netgen-5.3.1/libsrc/csg/gencyl.cpp
-  ../netgen-5.3.1/libsrc/csg/genmesh.cpp
-  ../netgen-5.3.1/libsrc/csg/identify.cpp
-  ../netgen-5.3.1/libsrc/csg/manifold.cpp
-  ../netgen-5.3.1/libsrc/csg/meshsurf.cpp
-  ../netgen-5.3.1/libsrc/csg/polyhedra.cpp
-  ../netgen-5.3.1/libsrc/csg/revolution.cpp
-  ../netgen-5.3.1/libsrc/csg/singularref.cpp
-  ../netgen-5.3.1/libsrc/csg/solid.cpp
-  ../netgen-5.3.1/libsrc/csg/specpoin.cpp
-  ../netgen-5.3.1/libsrc/csg/spline3d.cpp
-  ../netgen-5.3.1/libsrc/csg/surface.cpp
-  ../netgen-5.3.1/libsrc/csg/triapprox.cpp
-  #../netgen-5.3.1/libsrc/csg/vscsg.cpp
-  ../netgen-5.3.1/libsrc/geom2d/genmesh2d.cpp
-  ../netgen-5.3.1/libsrc/geom2d/geom2dmesh.cpp
-  #../netgen-5.3.1/libsrc/geom2d/geom2dpkg.cpp
-  ../netgen-5.3.1/libsrc/geom2d/geometry2d.cpp
-  #../netgen-5.3.1/libsrc/geom2d/vsgeom2d.cpp
-  ../netgen-5.3.1/libsrc/general/array.cpp
-  ../netgen-5.3.1/libsrc/general/bitarray.cpp
-  ../netgen-5.3.1/libsrc/general/dynamicmem.cpp
-  ../netgen-5.3.1/libsrc/general/flags.cpp
-  ../netgen-5.3.1/libsrc/general/gzstream.cpp
-  ../netgen-5.3.1/libsrc/general/hashtabl.cpp
-  ../netgen-5.3.1/libsrc/general/mpi_interface.cpp
-  ../netgen-5.3.1/libsrc/general/mystring.cpp
-  ../netgen-5.3.1/libsrc/general/ngexception.cpp
-  ../netgen-5.3.1/libsrc/general/optmem.cpp
-  ../netgen-5.3.1/libsrc/general/parthreads.cpp
-  ../netgen-5.3.1/libsrc/general/profiler.cpp
-  ../netgen-5.3.1/libsrc/general/seti.cpp
-  ../netgen-5.3.1/libsrc/general/sort.cpp
-  ../netgen-5.3.1/libsrc/general/spbita2d.cpp
-  ../netgen-5.3.1/libsrc/general/symbolta.cpp
-  ../netgen-5.3.1/libsrc/general/table.cpp
-  ../netgen-5.3.1/libsrc/gprim/adtree.cpp
-  ../netgen-5.3.1/libsrc/gprim/geom2d.cpp
-  ../netgen-5.3.1/libsrc/gprim/geom3d.cpp
-  ../netgen-5.3.1/libsrc/gprim/geomfuncs.cpp
-  ../netgen-5.3.1/libsrc/gprim/geomtest3d.cpp
-  ../netgen-5.3.1/libsrc/gprim/spline.cpp
-  ../netgen-5.3.1/libsrc/gprim/splinegeometry.cpp
-  ../netgen-5.3.1/libsrc/gprim/transform3d.cpp
-  ../netgen-5.3.1/libsrc/linalg/bfgs.cpp
-  ../netgen-5.3.1/libsrc/linalg/densemat.cpp
-  ../netgen-5.3.1/libsrc/linalg/linopt.cpp
-  ../netgen-5.3.1/libsrc/linalg/linsearch.cpp
-  ../netgen-5.3.1/libsrc/linalg/polynomial.cpp
-  ../netgen-5.3.1/libsrc/interface/nginterface.cpp
-  ../netgen-5.3.1/libsrc/interface/nginterface_v2.cpp
-  ../netgen-5.3.1/libsrc/interface/read_fnf_mesh.cpp
-  ../netgen-5.3.1/libsrc/interface/readtetmesh.cpp
-  ../netgen-5.3.1/libsrc/interface/readuser.cpp
-  ../netgen-5.3.1/libsrc/interface/writeabaqus.cpp
-  ../netgen-5.3.1/libsrc/interface/writediffpack.cpp
-  ../netgen-5.3.1/libsrc/interface/writedolfin.cpp
-  ../netgen-5.3.1/libsrc/interface/writeelmer.cpp
-  ../netgen-5.3.1/libsrc/interface/writefeap.cpp
-  ../netgen-5.3.1/libsrc/interface/writefluent.cpp
-  ../netgen-5.3.1/libsrc/interface/writegmsh.cpp
-  ../netgen-5.3.1/libsrc/interface/writegmsh2.cpp
-  ../netgen-5.3.1/libsrc/interface/writejcm.cpp
-  ../netgen-5.3.1/libsrc/interface/writeOpenFOAM15x.cpp
-  ../netgen-5.3.1/libsrc/interface/writepermas.cpp
-  ../netgen-5.3.1/libsrc/interface/writetecplot.cpp
-  ../netgen-5.3.1/libsrc/interface/writetet.cpp
-  ../netgen-5.3.1/libsrc/interface/writetochnog.cpp
-  ../netgen-5.3.1/libsrc/interface/writeuser.cpp
-  ../netgen-5.3.1/libsrc/interface/wuchemnitz.cpp
-  ../netgen-5.3.1/libsrc/meshing/adfront2.cpp
-  ../netgen-5.3.1/libsrc/meshing/adfront3.cpp
-  ../netgen-5.3.1/libsrc/meshing/basegeom.cpp
-  ../netgen-5.3.1/libsrc/meshing/bcfunctions.cpp
-  ../netgen-5.3.1/libsrc/meshing/bisect.cpp
-  ../netgen-5.3.1/libsrc/meshing/boundarylayer.cpp
-  ../netgen-5.3.1/libsrc/meshing/clusters.cpp
-  ../netgen-5.3.1/libsrc/meshing/curvedelems.cpp
-  ../netgen-5.3.1/libsrc/meshing/delaunay.cpp
-  ../netgen-5.3.1/libsrc/meshing/delaunay2d.cpp
-  ../netgen-5.3.1/libsrc/meshing/geomsearch.cpp
-  ../netgen-5.3.1/libsrc/meshing/global.cpp
-  ../netgen-5.3.1/libsrc/meshing/hprefinement.cpp
-  ../netgen-5.3.1/libsrc/meshing/improve2.cpp
-  ../netgen-5.3.1/libsrc/meshing/improve2gen.cpp
-  ../netgen-5.3.1/libsrc/meshing/improve3.cpp
-  ../netgen-5.3.1/libsrc/meshing/localh.cpp
-  ../netgen-5.3.1/libsrc/meshing/meshclass.cpp
-  ../netgen-5.3.1/libsrc/meshing/meshfunc.cpp
-  ../netgen-5.3.1/libsrc/meshing/meshfunc2d.cpp
-  ../netgen-5.3.1/libsrc/meshing/meshing2.cpp
-  ../netgen-5.3.1/libsrc/meshing/meshing3.cpp
-  ../netgen-5.3.1/libsrc/meshing/meshtool.cpp
-  ../netgen-5.3.1/libsrc/meshing/meshtype.cpp
-  ../netgen-5.3.1/libsrc/meshing/msghandler.cpp
-  ../netgen-5.3.1/libsrc/meshing/netrule2.cpp
-  ../netgen-5.3.1/libsrc/meshing/netrule3.cpp
-  ../netgen-5.3.1/libsrc/meshing/parallelmesh.cpp
-  ../netgen-5.3.1/libsrc/meshing/paralleltop.cpp
-  ../netgen-5.3.1/libsrc/meshing/parser2.cpp
-  ../netgen-5.3.1/libsrc/meshing/parser3.cpp
-  ../netgen-5.3.1/libsrc/meshing/prism2rls.cpp
-  ../netgen-5.3.1/libsrc/meshing/pyramid2rls.cpp
-  ../netgen-5.3.1/libsrc/meshing/pyramidrls.cpp
-  ../netgen-5.3.1/libsrc/meshing/quadrls.cpp
-  ../netgen-5.3.1/libsrc/meshing/refine.cpp
-  ../netgen-5.3.1/libsrc/meshing/ruler2.cpp
-  ../netgen-5.3.1/libsrc/meshing/ruler3.cpp
-  ../netgen-5.3.1/libsrc/meshing/secondorder.cpp
-  ../netgen-5.3.1/libsrc/meshing/smoothing2.5.cpp
-  ../netgen-5.3.1/libsrc/meshing/smoothing2.cpp
-  ../netgen-5.3.1/libsrc/meshing/smoothing3.cpp
-  ../netgen-5.3.1/libsrc/meshing/specials.cpp
-  ../netgen-5.3.1/libsrc/meshing/tetrarls.cpp
-  ../netgen-5.3.1/libsrc/meshing/topology.cpp
-  ../netgen-5.3.1/libsrc/meshing/triarls.cpp
-  ../netgen-5.3.1/libsrc/meshing/validate.cpp
-  ../netgen-5.3.1/libsrc/meshing/zrefine.cpp
-  ../netgen-5.3.1/libsrc/occ/occconstruction.cpp
-  ../netgen-5.3.1/libsrc/occ/occgenmesh.cpp
-  ../netgen-5.3.1/libsrc/occ/occgeom.cpp
-  ../netgen-5.3.1/libsrc/occ/occmeshsurf.cpp
-  #../netgen-5.3.1/libsrc/occ/occpkg.cpp
-  #../netgen-5.3.1/libsrc/occ/vsocc.cpp
-  ../netgen-5.3.1/libsrc/occ/Partition_Inter2d.cxx
-  ../netgen-5.3.1/libsrc/occ/Partition_Inter3d.cxx
-  ../netgen-5.3.1/libsrc/occ/Partition_Loop.cxx
-  ../netgen-5.3.1/libsrc/occ/Partition_Loop2d.cxx
-  ../netgen-5.3.1/libsrc/occ/Partition_Loop3d.cxx
-  ../netgen-5.3.1/libsrc/occ/Partition_Spliter.cxx
-  ../netgen-5.3.1/libsrc/stlgeom/meshstlsurface.cpp
-  ../netgen-5.3.1/libsrc/stlgeom/stlgeom.cpp
-  ../netgen-5.3.1/libsrc/stlgeom/stlgeomchart.cpp
-  ../netgen-5.3.1/libsrc/stlgeom/stlgeommesh.cpp
-  ../netgen-5.3.1/libsrc/stlgeom/stlline.cpp
-  #../netgen-5.3.1/libsrc/stlgeom/stlpkg.cpp
-  ../netgen-5.3.1/libsrc/stlgeom/stltool.cpp
-  ../netgen-5.3.1/libsrc/stlgeom/stltopology.cpp
-  #../netgen-5.3.1/libsrc/stlgeom/vsstl.cpp
-  ## NGLIB
-  ../netgen-5.3.1/nglib/nglib.cpp
-)
+
+if(NETGEN_PLUGIN AND NETGEN_INTERNAL)
+    set(NETGEN_SRCS
+      ../netgen-5.3.1/libsrc/csg/algprim.cpp
+      ../netgen-5.3.1/libsrc/csg/brick.cpp
+      ../netgen-5.3.1/libsrc/csg/bspline2d.cpp
+      ../netgen-5.3.1/libsrc/csg/csgeom.cpp
+      ../netgen-5.3.1/libsrc/csg/csgparser.cpp
+      #../netgen-5.3.1/libsrc/csg/csgpkg.cpp
+      ../netgen-5.3.1/libsrc/csg/curve2d.cpp
+      ../netgen-5.3.1/libsrc/csg/edgeflw.cpp
+      ../netgen-5.3.1/libsrc/csg/explicitcurve2d.cpp
+      ../netgen-5.3.1/libsrc/csg/extrusion.cpp
+      ../netgen-5.3.1/libsrc/csg/gencyl.cpp
+      ../netgen-5.3.1/libsrc/csg/genmesh.cpp
+      ../netgen-5.3.1/libsrc/csg/identify.cpp
+      ../netgen-5.3.1/libsrc/csg/manifold.cpp
+      ../netgen-5.3.1/libsrc/csg/meshsurf.cpp
+      ../netgen-5.3.1/libsrc/csg/polyhedra.cpp
+      ../netgen-5.3.1/libsrc/csg/revolution.cpp
+      ../netgen-5.3.1/libsrc/csg/singularref.cpp
+      ../netgen-5.3.1/libsrc/csg/solid.cpp
+      ../netgen-5.3.1/libsrc/csg/specpoin.cpp
+      ../netgen-5.3.1/libsrc/csg/spline3d.cpp
+      ../netgen-5.3.1/libsrc/csg/surface.cpp
+      ../netgen-5.3.1/libsrc/csg/triapprox.cpp
+      #../netgen-5.3.1/libsrc/csg/vscsg.cpp
+      ../netgen-5.3.1/libsrc/geom2d/genmesh2d.cpp
+      ../netgen-5.3.1/libsrc/geom2d/geom2dmesh.cpp
+      #../netgen-5.3.1/libsrc/geom2d/geom2dpkg.cpp
+      ../netgen-5.3.1/libsrc/geom2d/geometry2d.cpp
+      #../netgen-5.3.1/libsrc/geom2d/vsgeom2d.cpp
+      ../netgen-5.3.1/libsrc/general/array.cpp
+      ../netgen-5.3.1/libsrc/general/bitarray.cpp
+      ../netgen-5.3.1/libsrc/general/dynamicmem.cpp
+      ../netgen-5.3.1/libsrc/general/flags.cpp
+      ../netgen-5.3.1/libsrc/general/gzstream.cpp
+      ../netgen-5.3.1/libsrc/general/hashtabl.cpp
+      ../netgen-5.3.1/libsrc/general/mpi_interface.cpp
+      ../netgen-5.3.1/libsrc/general/mystring.cpp
+      ../netgen-5.3.1/libsrc/general/ngexception.cpp
+      ../netgen-5.3.1/libsrc/general/optmem.cpp
+      ../netgen-5.3.1/libsrc/general/parthreads.cpp
+      ../netgen-5.3.1/libsrc/general/profiler.cpp
+      ../netgen-5.3.1/libsrc/general/seti.cpp
+      ../netgen-5.3.1/libsrc/general/sort.cpp
+      ../netgen-5.3.1/libsrc/general/spbita2d.cpp
+      ../netgen-5.3.1/libsrc/general/symbolta.cpp
+      ../netgen-5.3.1/libsrc/general/table.cpp
+      ../netgen-5.3.1/libsrc/gprim/adtree.cpp
+      ../netgen-5.3.1/libsrc/gprim/geom2d.cpp
+      ../netgen-5.3.1/libsrc/gprim/geom3d.cpp
+      ../netgen-5.3.1/libsrc/gprim/geomfuncs.cpp
+      ../netgen-5.3.1/libsrc/gprim/geomtest3d.cpp
+      ../netgen-5.3.1/libsrc/gprim/spline.cpp
+      ../netgen-5.3.1/libsrc/gprim/splinegeometry.cpp
+      ../netgen-5.3.1/libsrc/gprim/transform3d.cpp
+      ../netgen-5.3.1/libsrc/linalg/bfgs.cpp
+      ../netgen-5.3.1/libsrc/linalg/densemat.cpp
+      ../netgen-5.3.1/libsrc/linalg/linopt.cpp
+      ../netgen-5.3.1/libsrc/linalg/linsearch.cpp
+      ../netgen-5.3.1/libsrc/linalg/polynomial.cpp
+      ../netgen-5.3.1/libsrc/interface/nginterface.cpp
+      ../netgen-5.3.1/libsrc/interface/nginterface_v2.cpp
+      ../netgen-5.3.1/libsrc/interface/read_fnf_mesh.cpp
+      ../netgen-5.3.1/libsrc/interface/readtetmesh.cpp
+      ../netgen-5.3.1/libsrc/interface/readuser.cpp
+      ../netgen-5.3.1/libsrc/interface/writeabaqus.cpp
+      ../netgen-5.3.1/libsrc/interface/writediffpack.cpp
+      ../netgen-5.3.1/libsrc/interface/writedolfin.cpp
+      ../netgen-5.3.1/libsrc/interface/writeelmer.cpp
+      ../netgen-5.3.1/libsrc/interface/writefeap.cpp
+      ../netgen-5.3.1/libsrc/interface/writefluent.cpp
+      ../netgen-5.3.1/libsrc/interface/writegmsh.cpp
+      ../netgen-5.3.1/libsrc/interface/writegmsh2.cpp
+      ../netgen-5.3.1/libsrc/interface/writejcm.cpp
+      ../netgen-5.3.1/libsrc/interface/writeOpenFOAM15x.cpp
+      ../netgen-5.3.1/libsrc/interface/writepermas.cpp
+      ../netgen-5.3.1/libsrc/interface/writetecplot.cpp
+      ../netgen-5.3.1/libsrc/interface/writetet.cpp
+      ../netgen-5.3.1/libsrc/interface/writetochnog.cpp
+      ../netgen-5.3.1/libsrc/interface/writeuser.cpp
+      ../netgen-5.3.1/libsrc/interface/wuchemnitz.cpp
+      ../netgen-5.3.1/libsrc/meshing/adfront2.cpp
+      ../netgen-5.3.1/libsrc/meshing/adfront3.cpp
+      ../netgen-5.3.1/libsrc/meshing/basegeom.cpp
+      ../netgen-5.3.1/libsrc/meshing/bcfunctions.cpp
+      ../netgen-5.3.1/libsrc/meshing/bisect.cpp
+      ../netgen-5.3.1/libsrc/meshing/boundarylayer.cpp
+      ../netgen-5.3.1/libsrc/meshing/clusters.cpp
+      ../netgen-5.3.1/libsrc/meshing/curvedelems.cpp
+      ../netgen-5.3.1/libsrc/meshing/delaunay.cpp
+      ../netgen-5.3.1/libsrc/meshing/delaunay2d.cpp
+      ../netgen-5.3.1/libsrc/meshing/geomsearch.cpp
+      ../netgen-5.3.1/libsrc/meshing/global.cpp
+      ../netgen-5.3.1/libsrc/meshing/hprefinement.cpp
+      ../netgen-5.3.1/libsrc/meshing/improve2.cpp
+      ../netgen-5.3.1/libsrc/meshing/improve2gen.cpp
+      ../netgen-5.3.1/libsrc/meshing/improve3.cpp
+      ../netgen-5.3.1/libsrc/meshing/localh.cpp
+      ../netgen-5.3.1/libsrc/meshing/meshclass.cpp
+      ../netgen-5.3.1/libsrc/meshing/meshfunc.cpp
+      ../netgen-5.3.1/libsrc/meshing/meshfunc2d.cpp
+      ../netgen-5.3.1/libsrc/meshing/meshing2.cpp
+      ../netgen-5.3.1/libsrc/meshing/meshing3.cpp
+      ../netgen-5.3.1/libsrc/meshing/meshtool.cpp
+      ../netgen-5.3.1/libsrc/meshing/meshtype.cpp
+      ../netgen-5.3.1/libsrc/meshing/msghandler.cpp
+      ../netgen-5.3.1/libsrc/meshing/netrule2.cpp
+      ../netgen-5.3.1/libsrc/meshing/netrule3.cpp
+      ../netgen-5.3.1/libsrc/meshing/parallelmesh.cpp
+      ../netgen-5.3.1/libsrc/meshing/paralleltop.cpp
+      ../netgen-5.3.1/libsrc/meshing/parser2.cpp
+      ../netgen-5.3.1/libsrc/meshing/parser3.cpp
+      ../netgen-5.3.1/libsrc/meshing/prism2rls.cpp
+      ../netgen-5.3.1/libsrc/meshing/pyramid2rls.cpp
+      ../netgen-5.3.1/libsrc/meshing/pyramidrls.cpp
+      ../netgen-5.3.1/libsrc/meshing/quadrls.cpp
+      ../netgen-5.3.1/libsrc/meshing/refine.cpp
+      ../netgen-5.3.1/libsrc/meshing/ruler2.cpp
+      ../netgen-5.3.1/libsrc/meshing/ruler3.cpp
+      ../netgen-5.3.1/libsrc/meshing/secondorder.cpp
+      ../netgen-5.3.1/libsrc/meshing/smoothing2.5.cpp
+      ../netgen-5.3.1/libsrc/meshing/smoothing2.cpp
+      ../netgen-5.3.1/libsrc/meshing/smoothing3.cpp
+      ../netgen-5.3.1/libsrc/meshing/specials.cpp
+      ../netgen-5.3.1/libsrc/meshing/tetrarls.cpp
+      ../netgen-5.3.1/libsrc/meshing/topology.cpp
+      ../netgen-5.3.1/libsrc/meshing/triarls.cpp
+      ../netgen-5.3.1/libsrc/meshing/validate.cpp
+      ../netgen-5.3.1/libsrc/meshing/zrefine.cpp
+      ../netgen-5.3.1/libsrc/occ/occconstruction.cpp
+      ../netgen-5.3.1/libsrc/occ/occgenmesh.cpp
+      ../netgen-5.3.1/libsrc/occ/occgeom.cpp
+      ../netgen-5.3.1/libsrc/occ/occmeshsurf.cpp
+      #../netgen-5.3.1/libsrc/occ/occpkg.cpp
+      #../netgen-5.3.1/libsrc/occ/vsocc.cpp
+      ../netgen-5.3.1/libsrc/occ/Partition_Inter2d.cxx
+      ../netgen-5.3.1/libsrc/occ/Partition_Inter3d.cxx
+      ../netgen-5.3.1/libsrc/occ/Partition_Loop.cxx
+      ../netgen-5.3.1/libsrc/occ/Partition_Loop2d.cxx
+      ../netgen-5.3.1/libsrc/occ/Partition_Loop3d.cxx
+      ../netgen-5.3.1/libsrc/occ/Partition_Spliter.cxx
+      ../netgen-5.3.1/libsrc/stlgeom/meshstlsurface.cpp
+      ../netgen-5.3.1/libsrc/stlgeom/stlgeom.cpp
+      ../netgen-5.3.1/libsrc/stlgeom/stlgeomchart.cpp
+      ../netgen-5.3.1/libsrc/stlgeom/stlgeommesh.cpp
+      ../netgen-5.3.1/libsrc/stlgeom/stlline.cpp
+      #../netgen-5.3.1/libsrc/stlgeom/stlpkg.cpp
+      ../netgen-5.3.1/libsrc/stlgeom/stltool.cpp
+      ../netgen-5.3.1/libsrc/stlgeom/stltopology.cpp
+      #../netgen-5.3.1/libsrc/stlgeom/vsstl.cpp
+      ## NGLIB
+      ../netgen-5.3.1/nglib/nglib.cpp)
+
+    add_definitions(-DOCCGEOMETRY -DPACKAGE_VERSION="5.3.1")
+else()
+    set(NETGEN_SRCS "")
+endif()
+
 if(MONOLITHIC_BUILD)
     set(SMESH_LIBRARIES SMESH)
-    if (NETGEN_SUPPORT)
-        add_definitions(-DOCCGEOMETRY -DPACKAGE_VERSION="5.3.1")
-        add_library(SMESH
-            ${NETGEN_SRCS}
-            ${NETGENPlugin_SRCS}
-            ${Driver_SRCS}
-            ${DriverDAT_SRCS}
-            ${DriverSTL_SRCS}
-            ${DriverUNV_SRCS}
-            ${SMDS_SRCS}
-            ${SMESH_SRCS}
-            ${SMESHDS_SRCS}
-            ${StdMeshers_SRCS})
-        target_link_libraries(SMESH ${OCE_LIBRARIES} TKSTL TKXCAF TKXDESTEP TKXDEIGES ${ZLIB_LIBRARIES})
-    else ()
-        add_library(SMESH
-            ${Driver_SRCS}
-            ${DriverDAT_SRCS}
-            ${DriverSTL_SRCS}
-            ${DriverUNV_SRCS}
-            ${SMDS_SRCS}
-            ${SMESH_SRCS}
-            ${SMESHDS_SRCS}
-            ${StdMeshers_SRCS})
-        target_link_libraries(SMESH ${OCE_LIBRARIES})
-    endif ()
+    add_library(SMESH
+        ${NETGEN_SRCS}
+        ${NETGENPlugin_SRCS}
+        ${Driver_SRCS}
+        ${DriverDAT_SRCS}
+        ${DriverSTL_SRCS}
+        ${DriverUNV_SRCS}
+        ${SMDS_SRCS}
+        ${SMESH_SRCS}
+        ${SMESHDS_SRCS}
+        ${StdMeshers_SRCS})
+    target_link_libraries(SMESH ${OCE_LIBRARIES} TKSTL TKXCAF TKXDESTEP TKXDEIGES ${ZLIB_LIBRARIES})
+    if(NETGEN_PLUGIN AND NETGEN_INTERNAL)
+        target_link_libraries(SMESH ${ZLIB_LIBRARIES})
+    endif()
     set_target_properties(SMESH PROPERTIES
         SOVERSION ${${PROJECT_NAME}_ABI_SOVERSION}
         VERSION ${${PROJECT_NAME}_ABI_VERSION})
 else()
+    # Build separate libraries
     set(SMESH_LIBRARIES Driver;DriverDAT;DriverSTL;DriverUNV;SMDS;SMESH;SMESHDS;StdMeshers)
-
+    if(NETGEN_PLUGIN)
+        list(APPEND SMESH_LIBRARIES NETGENPlugin)
+        if(NETGEN_INTERNAL)
+            list(APPEND ${NETGENPlugin_SRCS} ${NETGEN_SRCS})
+        endif()
+    endif()
     foreach(_lib ${SMESH_LIBRARIES})
         add_library(${_lib} ${${_lib}_SRCS})
         target_link_libraries(${_lib} ${OCE_LIBRARIES})
@@ -360,6 +367,9 @@ else()
     target_link_libraries(SMESH Driver DriverDAT DriverUNV DriverSTL SMESHDS)
     target_link_libraries(SMESHDS SMDS)
     target_link_libraries(StdMeshers SMESH)
+    if(NETGEN_PLUGIN AND NOT NETGEN_INTERNAL)
+        target_link_libraries(NETGENPlugin ${NETGEN_LIBRARY})
+   endif()
 endif()
 
 if(UNIX)
