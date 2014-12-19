@@ -1,10 +1,10 @@
 package:
   name: smesh # lower case name of package, may contain '-' but no spaces
-  version: 6.5.3.1 # version of package. Should use the PEP-386 verlib
+  version: 6.5.3.1_netgen_5.3.1 # version of package. Should use the PEP-386 verlib
 
 source:
   git_url: https://github.com/tpaviot/smesh.git
-  git_tag: SMESH-6.5.3.1
+  git_tag: review/netgen-5.3.1
 
 build:
   # The build number should be incremented for new builds of the same version
