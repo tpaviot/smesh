@@ -24,7 +24,16 @@ include_directories(inc)
 # Setup options #
 #################
 option(MONOLITHIC_BUILD "Build one monolithic smesh library." ON)
+option(SMESH_TESTING "Enable unittest" OFF)
 
+#############
+# Unittest  #
+#############
+if(SMESH_TESTING)
+    include(CTest)
+    enable_testing()
+    subdirs(test)
+endif(SMESH_TESTING)
 
 ################################
 # OCE include and lib location #
