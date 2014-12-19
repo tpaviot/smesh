@@ -6,7 +6,7 @@ ncpus=4
 echo "Timestamp" && date
 mkdir cmake-build
 cd cmake-build
-cmake ..
+cmake -DSMESH_TESTING=ON ..
 echo ""
 echo "Timestamp" && date
 # make for py3
@@ -15,4 +15,5 @@ echo "Starting build with -j$ncpus ..."
 # trim them to see test results.
 sudo make -j$ncpus install | grep Built
 # Run tests
+make test
 echo "Timestamp" && date
