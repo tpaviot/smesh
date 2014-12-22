@@ -14,7 +14,6 @@ set(SMESH_VERSION_TWEAK 2-dev)
 set(SMESH_ABI_SOVERSION 2)
 set(SMESH_ABI_VERSION ${SMESH_ABI_SOVERSION}.0.0)
 
-set(CMAKE_BUILD_TYPE "Release") # By default, build in release mode
 set(BUILD_SHARED_LIBS ON)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(inc)
