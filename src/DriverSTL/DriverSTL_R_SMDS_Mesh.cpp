@@ -325,9 +325,7 @@ Driver_Mesh::Status DriverSTL_R_SMDS_Mesh::readBinary() const
   for (Standard_Integer iTri = 0; iTri < nbTri; ++iTri) {
 
     // ignore normals
-    readFloat(aFile);
-    readFloat(aFile);
-    readFloat(aFile);
+    aFile.Read(adr,12,lread); // 3 floats, 4 bytes per float
 
     // read vertices
     SMDS_MeshNode* node1 = readNode( aFile, uniqnodes, myMesh );
