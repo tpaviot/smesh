@@ -14,7 +14,6 @@ set(SMESH_VERSION_TWEAK 2-dev)
 set(SMESH_ABI_SOVERSION 2)
 set(SMESH_ABI_VERSION ${SMESH_ABI_SOVERSION}.0.0)
 
-set(CMAKE_BUILD_TYPE "Release") # By default, build in release mode
 set(BUILD_SHARED_LIBS ON)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(inc)
@@ -24,7 +23,16 @@ include_directories(inc)
 # Setup options #
 #################
 option(MONOLITHIC_BUILD "Build one monolithic smesh library." ON)
+option(SMESH_TESTING "Enable unittest" OFF)
 
+#############
+# Unittest  #
+#############
+if(SMESH_TESTING)
+    include(CTest)
+    enable_testing()
+    subdirs(test)
+endif(SMESH_TESTING)
 
 ################################
 # OCE include and lib location #
