@@ -3,24 +3,28 @@ package:
   version: 6.5.3.1 # version of package. Should use the PEP-386 verlib
 
 source:
-  git_url: https://github.com/tpaviot/smesh.git
-  git_tag: master
+#  git_url: https://github.com/tpaviot/smesh.git
+#  git_tag: master
+  path: ../../
 
 build:
   # The build number should be incremented for new builds of the same version
-  number: 2     # (defaults to 0)
+  number: 4     # (defaults to 0)
   binary_relocation: true # (defaults to true)
 
 requirements:
   build:
     - gcc # gfortran
-    - cmake
+#    - cmake
     - opencascade_community_edition 0.16.1
+    - boost
 
 #  # Packages required to run the package. These are the dependencies that
 #  # will be installed automatically whenever the package is installed.
   run:
     - opencascade_community_edition 0.16.1
+    - gcc # fortran
+    - boost
 
 about:
   home: https://github.com/tpaviot/smesh
