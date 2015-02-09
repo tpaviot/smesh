@@ -4,22 +4,23 @@ package:
 
 source:
   git_url: https://github.com/tpaviot/smesh.git
-  git_tag: 6.5.3.1
+  git_tag: master
 
 build:
   # The build number should be incremented for new builds of the same version
-  number: 0     # (defaults to 0)
+  number: 2     # (defaults to 0)
   binary_relocation: true # (defaults to true)
 
 requirements:
   build:
     - gcc # gfortran
-    - opencascade_community_edition >=0.16.0,<0.17.0
+    - cmake
+    - opencascade_community_edition 0.16.1
 
 #  # Packages required to run the package. These are the dependencies that
 #  # will be installed automatically whenever the package is installed.
   run:
-    - opencascade_community_edition >=0.16.0,<0.17.0
+    - opencascade_community_edition 0.16.1
 
 about:
   home: https://github.com/tpaviot/smesh
