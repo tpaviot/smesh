@@ -660,7 +660,7 @@ bool SMESH_Block::ComputeParameters(const gp_Pnt& thePoint,
 
   bool hasHint = ( 0 <= theParamsHint.X() && theParamsHint.X() <= 1 &&
                    0 <= theParamsHint.Y() && theParamsHint.Y() <= 1 &&
-                   0 <= theParamsHint.Y() && theParamsHint.Y() <= 1 );
+                   0 <= theParamsHint.Z() && theParamsHint.Z() <= 1 );
   if ( !hasHint && !myGridComputed )
   {
     // define the first guess by thePoint projection on lines
