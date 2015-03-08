@@ -9,6 +9,8 @@ mkdir cmake-build
 cd cmake-build
 cmake -DCMAKE_BUILD_TYPE:STRING=Release \
       -DOCE_DIR=$PREFIX/lib \
+      -DCMAKE_OSX_DEPLOYMENT_TARGET= \  # horrible default values, pointing to 10.5 SDK
+      -DCMAKE_OSX_SYSROOT= \            # idem, awkward cmake default value... finds the right SDK when left open
       -DCMAKE_INSTALL_PREFIX=$PREFIX \
       ..
 echo ""
