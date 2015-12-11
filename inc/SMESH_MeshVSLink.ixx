@@ -24,7 +24,7 @@
 // Author    : Sioutis Fotios
 // Module    : SMESH
 
-#include <SMESH_MeshVSLink.jxx>
+#include "SMESH_MeshVSLink.jxx"
 
 #ifndef _Standard_TypeMismatch_HeaderFile
 #include <Standard_TypeMismatch.hxx>
