@@ -120,6 +120,13 @@ class SMESH_MeshVSLink : public MeshVS_DataSource3D {
 	//! There is default method, for advance reflection this method can be redefined. <br>
 	Standard_EXPORT Standard_Boolean GetNormal(const Standard_Integer Id,const Standard_Integer Max,Standard_Real& nx,Standard_Real& ny,Standard_Real& nz) const;
 
+    // changes from Mark Blome
+	// smooth shading
+	Standard_EXPORT Standard_Boolean GetNodeNormal(const Standard_Integer ranknode, const Standard_Integer Id, Standard_Real &nx, Standard_Real &ny, Standard_Real &nz) const;
+
+	//
+	Standard_EXPORT void SetDisplayMode(int displaymode);  // 0:MeshVS_DMF_Shading, 1:MeshVS_DMF_WireFrame, 2:MeshVS_DMF_Shrink
+
 	//! This method returns map of all groups the object contains. <br>
 	Standard_EXPORT void GetAllGroups(TColStd_PackedMapOfInteger& Ids) const;
 
