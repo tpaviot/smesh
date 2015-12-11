@@ -9,7 +9,7 @@ source:
 
 build:
   # The build number should be incremented for new builds of the same version
-  number: 4     # (defaults to 0)
+  number: 5     # (defaults to 0)
   binary_relocation: true # (defaults to true)
 
 requirements:

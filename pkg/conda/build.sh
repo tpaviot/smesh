@@ -23,8 +23,11 @@ OSX_SDK="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/De
 #      -DBUILD_WITH_INSTALL_RPATH=OFF \
 #      -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=On
 
+#      -DCMAKE_CXX_COMPILER=$PREFIX/bin/c++ \
+
 cmake -DCMAKE_BUILD_TYPE:STRING=Release \
-      -DCMAKE_CXX_COMPILER=$PREFIX/bin/c++ \
+      -DCMAKE_CXX_COMPILER=/usr/bin/clang++ \
+      -DCMAKE_C_COMPILER=/usr/bin/clang \
       -DCMAKE_INSTALL_PREFIX=$PREFIX \
       -DCMAKE_OSX_SYSROOT=$OSX_SDK \
       -DCMAKE_OSX_DEPLOYMENT_TARGET=10.9 \
