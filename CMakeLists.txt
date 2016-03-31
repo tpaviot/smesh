@@ -9,6 +9,14 @@ set(SMESH_VERSION_TWEAK 2-dev)
 
 
 #####################
+# no @rpath crap   #
+#####################
+# disable @rpath in the install name for any shared library being built
+# note: it is planned that a future version of CMake will enable this by default
+#set(CMAKE_MACOSX_RPATH 0)
+set(CMAKE_SKIP_RPATH 1)
+
+#####################
 # Set ABI SOVERSION #
 #####################
 set(SMESH_ABI_SOVERSION 2)

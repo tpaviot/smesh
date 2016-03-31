@@ -37,5 +37,5 @@
 #include <TColStd_HArray1OfInteger.hxx>
 #endif
 #ifndef _SMESH_MeshVSLink_HeaderFile
-#include <SMESH_MeshVSLink.hxx>
+#include "SMESH_MeshVSLink.hxx"
 #endif

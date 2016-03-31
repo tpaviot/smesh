@@ -136,8 +136,8 @@ public:
   
   int GetId()                { return _id; }
   
-  SMESHDS_Mesh * GetMeshDS() { return _myMeshDS; }
-  
+  SMESHDS_Mesh * GetMeshDS() const { return _myMeshDS; }
+
   SMESH_Gen *GetGen()        { return _gen; }
   
   SMESH_subMesh *GetSubMesh(const TopoDS_Shape & aSubShape)
