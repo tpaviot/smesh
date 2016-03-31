@@ -66,12 +66,17 @@
 #ifndef StdMeshers_Array2OfNode_HeaderFile
 #define StdMeshers_Array2OfNode_HeaderFile
 typedef const SMDS_MeshNode* SMDS_MeshNodePtr;
-DEFINE_BASECOLLECTION (StdMeshers_BaseCollectionNodePtr, SMDS_MeshNodePtr)
 
 #ifndef __BORLANDC__
-DEFINE_ARRAY2(StdMeshers_Array2OfNode,
-			  StdMeshers_BaseCollectionNodePtr, SMDS_MeshNodePtr)
+#if OCC_VERSION_HEX >= 0x060703
+typedef NCollection_Array2<SMDS_MeshNodePtr> StdMeshers_Array2OfNode;
 #else
+DEFINE_BASECOLLECTION (StdMeshers_BaseCollectionNodePtr, SMDS_MeshNodePtr)
+DEFINE_ARRAY2(StdMeshers_Array2OfNode,
+                         StdMeshers_BaseCollectionNodePtr, SMDS_MeshNodePtr)
+#endif
+#else
+DEFINE_BASECOLLECTION (StdMeshers_BaseCollectionNodePtr, SMDS_MeshNodePtr)
 SMESH_DEFINE_ARRAY2(StdMeshers_Array2OfNode,
 			  StdMeshers_BaseCollectionNodePtr, SMDS_MeshNodePtr)
 #endif
@@ -1156,10 +1161,10 @@ bool StdMeshers_Quadrangle_2D::SetNormalizedGrid (SMESH_Mesh & aMesh,
                                                   const TopoDS_Shape& aShape,
                                                   FaceQuadStruct* & quad) //throw (SALOME_Exception)
 {
-  // Algorithme décrit dans "Génération automatique de maillages"
-  // P.L. GEORGE, MASSON, § 6.4.1 p. 84-85
-  // traitement dans le domaine paramétrique 2d u,v
-  // transport - projection sur le carré unité
+  // Algorithme dï¿½crit dans "Gï¿½nï¿½ration automatique de maillages"
+  // P.L. GEORGE, MASSON, ï¿½ 6.4.1 p. 84-85
+  // traitement dans le domaine paramï¿½trique 2d u,v
+  // transport - projection sur le carrï¿½ unitï¿½
 
 //  MESSAGE("StdMeshers_Quadrangle_2D::SetNormalizedGrid");
 //  const TopoDS_Face& F = TopoDS::Face(aShape);
