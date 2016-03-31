@@ -1,0 +1,33 @@
+﻿package:
+  name: smesh
+  version: {{ environ.get('GIT_DESCRIBE_TAG', '6.5.3.1dev') }}
+
+source:
+  path: ../..
+
+build:
+
+build:
+  script_env:
+    - CC
+    - CXX
+
+  number: {{ environ.get('GIT_DESCRIBE_NUMBER', 0) }}
+  binary_relocation: false [osx]
+  features:
+    - vc9               [win and py27]
+    - vc10              [win and py34]
+    - vc14              [win and py35]
+
+requirements:
+  build:
+    - oce ==0.17.1
+    - cmake
+
+  run:
+    - oce ==0.17.1
+
+about:
+  home: https://github.com/tpaviot/smesh
+  license: LGPL
+  summary: A complete MESH framework based on the OCE library.

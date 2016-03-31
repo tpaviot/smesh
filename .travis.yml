@@ -1,16 +1,41 @@
+sudo: required
+
 language: cpp
+
+os: 
+  - osx
+  - linux
+
 compiler:
   - gcc
   - clang
-before_install:
-# following ppa contains oce-0.16.0
-   - sudo apt-get install gfortran
-   - sudo add-apt-repository "deb http://ppa.launchpad.net/freecad-maintainers/oce-release/ubuntu precise main" -y
-   - sudo apt-get update -q
-   - sudo apt-get install liboce-ocaf-dev oce-draw
-before_script:
-script: ./.travis.build.sh
-after_script:
+
+
+install:
+  # We do this conditionally because it saves us some downloading if the
+  # version is the same.
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+      sudo apt-get install gfortran;
+      wget https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh;
+    else
+      wget https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O miniconda.sh;
+    fi
+  - bash miniconda.sh -b -p $HOME/miniconda
+  - export PATH="$HOME/miniconda/bin:$HOME/miniconda/lib:$PATH"
+  - hash -r
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+  # Useful for debugging any issues with conda
+  - conda info -a
+   # download/install OCE from DLR-SC channel
+  - conda config --add channels https://conda.anaconda.org/dlr-sc
+  # install everything required to build the receipe
+  - conda install conda-build anaconda-client
+
+
+script:
+  - conda build ci/conda
+
 branches:
   only:
     - master
