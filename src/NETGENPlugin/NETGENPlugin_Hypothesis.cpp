@@ -211,13 +211,13 @@ istream & NETGENPlugin_Hypothesis::LoadFrom(istream & load)
   int is;
   double val;
 
-  isOK = (load >> val);
+  isOK = static_cast<bool>(load >> val);
   if (isOK)
     _maxSize = val;
   else
     load.clear(ios::badbit | load.rdstate());
 
-  isOK = (load >> is);
+  isOK = static_cast<bool>(load >> is);
   if (isOK)
     SetFineness((Fineness) is);
   else
@@ -225,32 +225,32 @@ istream & NETGENPlugin_Hypothesis::LoadFrom(istream & load)
 
   if (_fineness == UserDefined)
   {
-    isOK = (load >> val);
+    isOK = static_cast<bool>(load >> val);
     if (isOK)
       _growthRate = val;
     else
       load.clear(ios::badbit | load.rdstate());
 
-    isOK = (load >> val);
+    isOK = static_cast<bool>(load >> val);
     if (isOK)
       _nbSegPerEdge = val;
     else
       load.clear(ios::badbit | load.rdstate());
 
-    isOK = (load >> val);
+    isOK = static_cast<bool>(load >> val);
     if (isOK)
       _nbSegPerRadius = val;
     else
       load.clear(ios::badbit | load.rdstate());
   }
 
-  isOK = (load >> is);
+  isOK = static_cast<bool>(load >> is);
   if (isOK)
     _secondOrder = (bool) is;
   else
     load.clear(ios::badbit | load.rdstate());
 
-  isOK = (load >> is);
+  isOK = static_cast<bool>(load >> is);
   if (isOK)
     _optimize = (bool) is;
   else

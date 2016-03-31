@@ -142,19 +142,19 @@ istream & NETGENPlugin_SimpleHypothesis_2D::LoadFrom(istream & load)
   bool isOK = true;
   double val;
 
-  isOK = (load >> val);
+  isOK = static_cast<bool>(load >> val);
   if (isOK)
     _nbSegments = (int) val;
   else
     load.clear(ios::badbit | load.rdstate());
 
-  isOK = (load >> val);
+  isOK = static_cast<bool>(load >> val);
   if (isOK)
     _segmentLength = val;
   else
     load.clear(ios::badbit | load.rdstate());
 
-  isOK = (load >> val);
+  isOK = static_cast<bool>(load >> val);
   if (isOK)
     _area = val;
   else

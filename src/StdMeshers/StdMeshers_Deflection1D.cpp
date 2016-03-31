@@ -118,7 +118,7 @@ ostream & StdMeshers_Deflection1D::SaveTo(ostream & save)
 
 istream & StdMeshers_Deflection1D::LoadFrom(istream & load)
 {
-  bool isOK = (load >> _value);
+  bool isOK = static_cast<bool>(load >> _value);
   if (!isOK)
     load.clear(ios::badbit | load.rdstate());
   return load;

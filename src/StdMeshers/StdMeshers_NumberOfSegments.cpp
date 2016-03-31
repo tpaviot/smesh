@@ -532,7 +532,7 @@ istream & StdMeshers_NumberOfSegments::LoadFrom(istream & load)
   int a;
 
   // read number of segments
-  isOK = (load >> a);
+  isOK = static_cast<bool>(load >> a);
   if (isOK)
     _numberOfSegments = a;
   else
@@ -545,7 +545,7 @@ istream & StdMeshers_NumberOfSegments::LoadFrom(istream & load)
   //    (nb.segments, distr.type, some other params.),
   //    we wait here the ditribution type, which is integer
   double scale_factor;
-  isOK = (load >> scale_factor);
+  isOK = static_cast<bool>(load >> scale_factor);
   a = (int)scale_factor;
 
   // try to interprete ditribution type,
@@ -566,7 +566,7 @@ istream & StdMeshers_NumberOfSegments::LoadFrom(istream & load)
   {
   case DT_Scale:
     {
-      isOK = (load >> b);
+      isOK = static_cast<bool>(load >> b);
       if (isOK)
         _scaleFactor = b;
       else
@@ -580,14 +580,14 @@ istream & StdMeshers_NumberOfSegments::LoadFrom(istream & load)
     break;
   case DT_TabFunc:
     {
-      isOK = (load >> a);
+      isOK = static_cast<bool>(load >> a);
       if (isOK)
       {
         _table.resize(a, 0.);
         int i;
         for (i=0; i < _table.size(); i++)
         {
-          isOK = (load >> b);
+          isOK = static_cast<bool>(load >> b);
           if (isOK)
             _table[i] = b;
           else
@@ -606,7 +606,7 @@ istream & StdMeshers_NumberOfSegments::LoadFrom(istream & load)
   case DT_ExprFunc:
     {
       string str;
-      isOK = (load >> str);
+      isOK = static_cast<bool>(load >> str);
       if (isOK)
         _func = str;
       else
@@ -625,7 +625,7 @@ istream & StdMeshers_NumberOfSegments::LoadFrom(istream & load)
 
   if (_distrType == DT_TabFunc || _distrType == DT_ExprFunc)
   {
-    isOK = (load >> a);
+    isOK = static_cast<bool>(load >> a);
     if (isOK)
       _convMode = a;
     else
@@ -634,14 +634,14 @@ istream & StdMeshers_NumberOfSegments::LoadFrom(istream & load)
 
   // load reversed edges IDs
   int intVal;
-  isOK = (load >> intVal);
+  isOK = static_cast<bool>(load >> intVal);
   if ( isOK && _distrType != DT_Regular && intVal > 0 ) {
     _edgeIDs.reserve( intVal );
     for (int i = 0; i < _edgeIDs.capacity() && isOK; i++) {
-      isOK = (load >> intVal);
+      isOK = static_cast<bool>(load >> intVal);
       if ( isOK ) _edgeIDs.push_back( intVal );
     }
-    isOK = (load >> _objEntry);
+    isOK = static_cast<bool>(load >> _objEntry);
   }
 
   return load;
