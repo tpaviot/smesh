@@ -10,7 +10,10 @@ cmake -DCMAKE_INSTALL_PREFIX=$PREFIX \
 make -j 4
 
 # test
-make test
+if [ `uname` == Linux ]; then
+  make test
+fi
+
 
 # Install step
 # redirect stdout stream to a file because of many boost header files
