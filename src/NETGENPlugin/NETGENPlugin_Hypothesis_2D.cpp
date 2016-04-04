@@ -96,7 +96,7 @@ istream & NETGENPlugin_Hypothesis_2D::LoadFrom(istream & load)
   bool isOK = true;
   int is;
 
-  isOK = (load >> is);
+  isOK = static_cast<bool>(load >> is);
   if (isOK)
     _quadAllowed = (bool) is;
   else
