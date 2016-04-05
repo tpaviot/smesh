@@ -3,15 +3,15 @@ project(SMESH CXX Fortran)
 cmake_minimum_required(VERSION 2.8)
 
 set(SMESH_VERSION_MAJOR 6)
-set(SMESH_VERSION_MINOR 5)
-set(SMESH_VERSION_PATCH 3)
-set(SMESH_VERSION_TWEAK 2-dev)
+set(SMESH_VERSION_MINOR 6)
+set(SMESH_VERSION_PATCH)
+set(SMESH_VERSION_TWEAK)
 
 
 #####################
 # Set ABI SOVERSION #
 #####################
-set(SMESH_ABI_SOVERSION 2)
+set(SMESH_ABI_SOVERSION 3)
 set(SMESH_ABI_VERSION ${SMESH_ABI_SOVERSION}.0.0)
 
 set(BUILD_SHARED_LIBS ON)
@@ -23,7 +23,7 @@ include_directories(inc)
 # Setup options #
 #################
 option(MONOLITHIC_BUILD "Build one monolithic smesh library." ON)
-option(SMESH_TESTING "Enable unittest" OFF)
+option(SMESH_TESTING "Enable unittest" ON)
 
 #############
 # Unittest  #
