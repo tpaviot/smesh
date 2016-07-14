@@ -1,3 +1,13 @@
+Version 6.7 - July 2016
+========================
+
+This version is binary compatible with smesh-6.6
+
+* port to oce-0.17 fix: don't use NCollection_BaseCollection anymore.
+
+Users who contributed to this release:
+  Thomas Paviot
+
 Version 6.6 - April 2016
 ========================
 
