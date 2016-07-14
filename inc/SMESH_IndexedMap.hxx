@@ -6,7 +6,7 @@
 #ifndef SMESH_IndexedMap_HeaderFile
 #define SMESH_IndexedMap_HeaderFile
 
-#include <NCollection_BaseCollection.hxx>
+#include <NCollection_IndexedMap.hxx>
 #include <NCollection_BaseMap.hxx>
 #include <NCollection_TListNode.hxx>
 #include <Standard_NoSuchObject.hxx>
@@ -33,7 +33,7 @@
  *              discussion about the number of buckets.
  */            
 template <class TheKeyType> class SMESH_IndexedMap 
-  : public NCollection_BaseCollection<TheKeyType>,
+  : public NCollection_IndexedMap<TheKeyType>,
     public NCollection_BaseMap
 {
   // **************** Adaptation of the TListNode to the INDEXEDmap
@@ -77,7 +77,7 @@ template <class TheKeyType> class SMESH_IndexedMap
  public:
   // **************** Implementation of the Iterator interface.
   class Iterator 
-	: public NCollection_BaseCollection<TheKeyType>::Iterator
+	: public NCollection_IndexedMap<TheKeyType>::Iterator
   {
   public:
     //! Empty constructor
@@ -126,23 +126,23 @@ template <class TheKeyType> class SMESH_IndexedMap
   //! Constructor
   SMESH_IndexedMap (const Standard_Integer NbBuckets=1,
                           const Handle(NCollection_BaseAllocator)& theAllocator=0L) :
-    NCollection_BaseCollection<TheKeyType>(theAllocator),
-    NCollection_BaseMap (NbBuckets, Standard_False) {}
+    NCollection_IndexedMap<TheKeyType>(theAllocator),
+    NCollection_BaseMap (NbBuckets, Standard_False, theAllocator) {}
 
   //! Copy constructor
   SMESH_IndexedMap (const SMESH_IndexedMap& theOther) :
-    NCollection_BaseCollection<TheKeyType>(theOther.myAllocator),
+    NCollection_IndexedMap<TheKeyType>(theOther.myAllocator),
     NCollection_BaseMap (theOther.NbBuckets(), Standard_False) 
   { *this = theOther; }
 
   //! Assign another collection
-  virtual void Assign (const NCollection_BaseCollection<TheKeyType>& theOther)
+  virtual void Assign (const NCollection_IndexedMap<TheKeyType>& theOther)
   { 
     if (this == &theOther)
       return;
     Clear();
     ReSize (theOther.Size());
-    TYPENAME NCollection_BaseCollection<TheKeyType>::Iterator& anIter = 
+    TYPENAME NCollection_IndexedMap<TheKeyType>::Iterator& anIter = 
       theOther.CreateIterator();
     for (; anIter.More(); anIter.Next())
       Add(anIter.Value());
@@ -406,7 +406,7 @@ template <class TheKeyType> class SMESH_IndexedMap
   // ----------- PRIVATE METHODS -----------
 
   //! Creates Iterator for use on BaseCollection
-  virtual TYPENAME NCollection_BaseCollection<TheKeyType>::Iterator& 
+  virtual TYPENAME NCollection_IndexedMap<TheKeyType>::Iterator& 
     CreateIterator(void) const
   { return *(new (this->IterAllocator()) Iterator(*this)); }
 

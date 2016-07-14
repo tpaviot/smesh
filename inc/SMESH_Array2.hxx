@@ -13,7 +13,7 @@
 #include <Standard_OutOfRange.hxx>
 #endif
 
-#include <NCollection_BaseCollection.hxx>
+#include <NCollection_Array2.hxx>
 
 #ifdef WNT
 // Disable the warning "operator new unmatched by delete"
@@ -34,11 +34,11 @@
 *              for (j = A.LowerCol(); j <= A.UpperCol(); j++)
 */            
 template <class TheItemType> class SMESH_Array2
-  : public NCollection_BaseCollection<TheItemType>
+  : public NCollection_Array2<TheItemType>
 {
  public:
   // **************** Implementation of the Iterator interface.
-  class Iterator : public NCollection_BaseCollection<TheItemType>::Iterator
+  class Iterator : public NCollection_Array2<TheItemType>::Iterator
   {
   public:
     //! Empty constructor - for later Init
@@ -88,7 +88,7 @@ template <class TheItemType> class SMESH_Array2
                      const Standard_Integer theRowUpper,
                      const Standard_Integer theColLower,
                      const Standard_Integer theColUpper) :
-    NCollection_BaseCollection<TheItemType>     (),
+    NCollection_Array2<TheItemType>     (),
     myLowerRow                                  (theRowLower),
     myUpperRow                                  (theRowUpper),
     myLowerCol                                  (theColLower),
@@ -98,7 +98,7 @@ template <class TheItemType> class SMESH_Array2
 
   //! Copy constructor 
   SMESH_Array2 (const SMESH_Array2& theOther) :
-    NCollection_BaseCollection<TheItemType>     (),
+    NCollection_Array2<TheItemType>     (),
     myLowerRow                                  (theOther.LowerRow()),
     myUpperRow                                  (theOther.UpperRow()),
     myLowerCol                                  (theOther.LowerCol()),
@@ -115,7 +115,7 @@ template <class TheItemType> class SMESH_Array2
                      const Standard_Integer theRowUpper,
                      const Standard_Integer theColLower,
                      const Standard_Integer theColUpper) :
-    NCollection_BaseCollection<TheItemType>     (),
+    NCollection_Array2<TheItemType>     (),
     myLowerRow                                  (theRowLower),
     myUpperRow                                  (theRowUpper),
     myLowerCol                                  (theColLower),
@@ -168,7 +168,7 @@ template <class TheItemType> class SMESH_Array2
   //! Assign 
   // Copies items from the other collection into the allocated
   // storage. Raises an exception when sizes differ.
-  virtual void Assign (const NCollection_BaseCollection<TheItemType>& theOther)
+  virtual void Assign (const NCollection_Array2<TheItemType>& theOther)
   {
     if (&theOther == this)
       return;
@@ -176,7 +176,7 @@ template <class TheItemType> class SMESH_Array2
     if (Length() != theOther.Size())
       Standard_DimensionMismatch::Raise ("SMESH_Array2::Assign");
 #endif
-    TYPENAME NCollection_BaseCollection<TheItemType>::Iterator& anIter2 = 
+    TYPENAME NCollection_Array2<TheItemType>::Iterator& anIter2 = 
       theOther.CreateIterator();
     const TheItemType* pEnd = myStart+Length();
     for (TheItemType* pItem=myStart;
@@ -296,7 +296,7 @@ template <class TheItemType> class SMESH_Array2
   }
 
   //! Creates Iterator for use on BaseCollection
-  virtual TYPENAME NCollection_BaseCollection<TheItemType>::Iterator&
+  virtual TYPENAME NCollection_Array2<TheItemType>::Iterator&
     CreateIterator(void) const
   { return *(new (this->IterAllocator()) Iterator(*this)); }
 
