@@ -44,7 +44,7 @@ Requirements
 
   * cmake 2.8 or higher
 
-  * oce 0.16
+  * oce 0.17.1 or oce-0.17.2
 
 Build
 -----
@@ -53,12 +53,3 @@ Build
     $ cd cmake-build
     $ make
     $ make install
-
-Install binaries on Ubuntu 14.04
---------------------------------
-A linux ppa is available at launchpad. To install smesh, just:
-
-    $ sudo add-apt-repository ppa:freecad-maintainers/oce-release -y
-    $ sudo add-apt-repository ppa:tpaviot/smesh -y
-    $ sudo apt-get update -q
-    $ sudo apt-get install smesh
