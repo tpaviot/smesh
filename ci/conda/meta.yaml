@@ -1,6 +1,6 @@
 ﻿package:
   name: smesh
-  version: {{ environ.get('GIT_DESCRIBE_TAG', '6.5.3.1dev') }}
+  version: {{ environ.get('GIT_DESCRIBE_TAG', '6.7') }}
 
 source:
   path: ../..
