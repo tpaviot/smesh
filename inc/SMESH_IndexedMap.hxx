@@ -127,7 +127,7 @@ template <class TheKeyType> class SMESH_IndexedMap
   SMESH_IndexedMap (const Standard_Integer NbBuckets=1,
                           const Handle(NCollection_BaseAllocator)& theAllocator=0L) :
     NCollection_IndexedMap<TheKeyType>(theAllocator),
-    NCollection_BaseMap (NbBuckets, Standard_False) {}
+    NCollection_BaseMap (NbBuckets, Standard_False, theAllocator) {}
 
   //! Copy constructor
   SMESH_IndexedMap (const SMESH_IndexedMap& theOther) :
