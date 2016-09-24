@@ -21,11 +21,11 @@ build:
 
 requirements:
   build:
-    - oce ==0.17.1
+    - oce ==0.17.2
     - cmake
 
   run:
-    - oce ==0.17.1
+    - oce ==0.17.2
 
 about:
   home: https://github.com/tpaviot/smesh
