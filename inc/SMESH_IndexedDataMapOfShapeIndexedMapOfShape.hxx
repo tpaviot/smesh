@@ -32,11 +32,11 @@
 #include "SMESHDS_DataMapOfShape.hxx"
 
 #ifndef __BORLANDC__
-#if OCC_VERSION_HEX >= 0x060703
+//#if OCC_VERSION_HEX >= 0x060703
 #include <NCollection_IndexedMap.hxx>
-#else
-#include <NCollection_DefineIndexedMap.hxx>
-#endif
+//#else
+//#include <NCollection_DefineIndexedMap.hxx>
+//#endif
 #else
 #include <SMESH_DefineIndexedMap.hxx>
 #endif
@@ -46,16 +46,16 @@
 ///  Class SMESH_IndexedMapOfShape
 
 
-#if OCC_VERSION_HEX >= 0x060703
+//#if OCC_VERSION_HEX >= 0x060703
 #ifndef __BORLANDC__
 typedef NCollection_IndexedMap<TopoDS_Shape> SMESH_IndexedMapOfShape;
 #else
 DEFINE_BASECOLLECTION (SMESH_BaseCollectionShape, TopoDS_Shape)
 SMESH_DEFINE_INDEXEDMAP (SMESH_IndexedMapOfShape, SMESH_BaseCollectionShape, TopoDS_Shape)
 #endif
-#else
-DEFINE_INDEXEDMAP (SMESH_IndexedMapOfShape, SMESH_BaseCollectionShape, TopoDS_Shape)
-#endif
+//#else
+//DEFINE_INDEXEDMAP (SMESH_IndexedMapOfShape, SMESH_BaseCollectionShape, TopoDS_Shape)
+//#endif
 
 
 
@@ -64,23 +64,23 @@ DEFINE_INDEXEDMAP (SMESH_IndexedMapOfShape, SMESH_BaseCollectionShape, TopoDS_Sh
 #ifndef SMESH_IndexedDataMapOfShapeIndexedMapOfShape_HeaderFile
 #define SMESH_IndexedDataMapOfShapeIndexedMapOfShape_HeaderFile
 
-#if OCC_VERSION_HEX >= 0x060703
+//#if OCC_VERSION_HEX >= 0x060703
 #include <NCollection_IndexedDataMap.hxx>
-#else
-#include <NCollection_DefineIndexedDataMap.hxx>
-#endif
+//#else
+//#include <NCollection_DefineIndexedDataMap.hxx>
+//#endif
 
 ///  Class SMESH_IndexedDataMapOfShapeIndexedMapOfShape
 
 
-#if OCC_VERSION_HEX >= 0x060703
+//#if OCC_VERSION_HEX >= 0x060703
 typedef NCollection_IndexedDataMap<SMESH_IndexedMapOfShape,TopoDS_Shape> SMESH_IndexedDataMapOfShapeIndexedMapOfShape;
-#else
-#include <NCollection_DefineIndexedDataMap.hxx>
+//#else
+//#include <NCollection_DefineIndexedDataMap.hxx>
 ///  Class SMESH_IndexedDataMapOfShapeIndexedMapOfShape
-DEFINE_BASECOLLECTION (SMESH_BaseCollectionIndexedMapOfShape, SMESH_IndexedMapOfShape)
-DEFINE_INDEXEDDATAMAP (SMESH_IndexedDataMapOfShapeIndexedMapOfShape,
-                       SMESH_BaseCollectionIndexedMapOfShape, TopoDS_Shape,
-                       SMESH_IndexedMapOfShape)
-#endif
+//DEFINE_BASECOLLECTION (SMESH_BaseCollectionIndexedMapOfShape, SMESH_IndexedMapOfShape)
+//DEFINE_INDEXEDDATAMAP (SMESH_IndexedDataMapOfShapeIndexedMapOfShape,
+//                       SMESH_BaseCollectionIndexedMapOfShape, TopoDS_Shape,
+//                       SMESH_IndexedMapOfShape)
+//#endif
 #endif 
