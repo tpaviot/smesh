@@ -86,16 +86,28 @@ if(WIN32)
     set_target_properties(SMESH PROPERTIES COMPILE_FLAGS "-DSMESH_EXPORTS -DSMESHCONTROLS_EXPORTS -DSMESHimpl_EXPORTS -DMESHDriverGMF_EXPORTS -DMESHDRIVERMED_EXPORTS -DMEDWRAPPER_EXPORTS -DMEDWRAPPER_BASE_EXPORTS -DMEDWRAPPER_FACTORY_EXPORTS -DSMESHUtils_EXPORTS -DUTILS_EXPORTS -DMEDWRAPPER_V2_2_EXPORTS")
 endif(WIN32)
 
+#############
+# MEFISTO2D #
+#############
+FILE(GLOB MEFISTO2_source_files MEFISTO2/aptrte.cpp MEFISTO2/trte.c)
+ADD_LIBRARY(MEFISTO2 SHARED ${MEFISTO2_source_files})
+TARGET_LINK_LIBRARIES(MEFISTO2 SMESH ${SMESH_LIBS})
+set_target_properties(MEFISTO2 PROPERTIES SOVERSION ${${PROJECT_NAME}_ABI_SOVERSION}
+                                         VERSION ${${PROJECT_NAME}_ABI_VERSION})
+if(WIN32)
+    set_target_properties(MEFISTO2 PROPERTIES COMPILE_FLAGS "-DMEFISTO2D_EXPORTS")
+endif(WIN32)
+
 ##############
 # StdMeshers #
 ##############
-FILE(GLOB StdMeshers_source_files StdMeshers/*.cpp ../inc/StdMeshers_*.h* MEFISTO2/aptrte.cpp MEFISTO2/trte.c)
+FILE(GLOB StdMeshers_source_files StdMeshers/*.cpp ../inc/StdMeshers_*.h*)
 ADD_LIBRARY(StdMeshers SHARED ${StdMeshers_source_files})
-TARGET_LINK_LIBRARIES(StdMeshers SMESH ${SMESH_LIBS})
+TARGET_LINK_LIBRARIES(StdMeshers SMESH MEFISTO2 ${SMESH_LIBS})
 set_target_properties(StdMeshers PROPERTIES SOVERSION ${${PROJECT_NAME}_ABI_SOVERSION}
                                          VERSION ${${PROJECT_NAME}_ABI_VERSION})
 if(WIN32)
-    set_target_properties(StdMeshers PROPERTIES COMPILE_FLAGS "-DSTDMESHERS_EXPORTS -DSMESHUtils_EXPORTS -DMEFISTO2D_EXPORTS")
+    set_target_properties(StdMeshers PROPERTIES COMPILE_FLAGS "-DSTDMESHERS_EXPORTS -DSMESHUtils_EXPORTS")
 endif(WIN32)
 
 ################
@@ -125,7 +137,8 @@ endif()
 # INSTALL #
 ###########
 include(GNUInstallDirs)
-install(TARGETS ${SMESH_LIBRARIES} DESTINATION ${CMAKE_INSTALL_LIBDIR})
+install(TARGETS Driver DriverUNV DriverDAT DriverSTL SMDS SMESHDS SMESH StdMeshers MEFISTO2
+        DESTINATION ${CMAKE_INSTALL_LIBDIR})
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/inc/
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/smesh)
 if(NOT Boost_FOUND)
