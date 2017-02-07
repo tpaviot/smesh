@@ -99,13 +99,11 @@ if(UNIX)
 else(UNIX)
   if(WIN32)
     ######### Windows ###########
-    message(STATUS "Windows system detected")
-    add_definitions(-DWNT -DWIN32 -D_WINDOWS -DCSFDB -DHAVE_CONFIG_H
-                    -DSMDS_EXPORTS -DSMESHimpl_EXPORTS
-                    -DSMESH_EXPORTS -DSMESHDS_EXPORTS -DMESHDRIVERUNV_EXPORTS
-                    -DMESHDRIVERSTL_EXPORTS -DMESHDRIVERDAT_EXPORTS
-                    -DSTDMESHERS_EXPORTS -DSMESHCONTROLS_EXPORTS
-                    -DMESHDRIVER_EXPORTS -DMEFISTO2D_EXPORTS)
+    IF(MSVC)
+        ADD_DEFINITIONS(-DWNT -DWIN32 -D_WINDOWS -DCSFDB -DUSE_CLOCK -DMSDOS -DNO_ONEXIT -DNO_My_ctype -DNO_ISATTY -DNO_FPINIT /wd4290 /wd4251 /wd4018 /wd4800 /wd4996 /wd4244 /wd4805 /wd4806 /wd4275 /wd4005 /wd4099 /wd4101 /wd4146 /wd4267 /wd4390 /wd4503 /wd4436)
+    ELSE(MSVC)
+        ADD_DEFINITIONS(-DWNT -DWIN32 -D_WINDOWS -DCSFDB)
+    ENDIF(MSVC)
   else(WIN32)
     message("Unknown platform")
   endif(WIN32)
