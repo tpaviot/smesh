@@ -1,5 +1,8 @@
-# SMESH cmake build file
-project(SMESH CXX Fortran)
+if(MSVC)
+  project(SMESH CXX C)
+else(MSVC)
+  project(SMESH CXX Fortran)
+endif(MSVC)
 cmake_minimum_required(VERSION 2.8)
 
 set(SMESH_VERSION_MAJOR 6)
@@ -22,8 +25,8 @@ include_directories(inc)
 #################
 # Setup options #
 #################
-option(MONOLITHIC_BUILD "Build one monolithic smesh library." ON)
 option(SMESH_TESTING "Enable unittest" ON)
+option(SMESH_BUILD_NETGENPLUGIN "NETGEN support" OFF)
 
 #############
 # Unittest  #
@@ -77,15 +80,6 @@ else()
     include_directories(./boost-1.52.0)
 endif()
 
-
-#################
-# Check Fortran #
-#################
-#if(UNIX)
-#  include(CMakeDetermineFortranCompiler)
-#endif(UNIX)
-
-
 ############################
 # Check 32/64 bit platform #
 ############################
@@ -131,21 +125,3 @@ add_subdirectory(src)
 # SMESH Documentation #
 #######################
 add_subdirectory(doc/src)
-
-
-########################
-# Packaging with CPack #
-########################
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "SMESH library")
-set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENCE.lgpl.txt")
-set(CPACK_SET_DESTDIR "ON")
-
-# Define version
-set(CPACK_PACKAGE_VERSION_MAJOR ${SMESH_VERSION_MAJOR})
-set(CPACK_PACKAGE_VERSION_MINOR ${SMESH_VERSION_MINOR})
-set(CPACK_PACKAGE_VERSION_PATCH ${SMESH_VERSION_PATCH})
-set(CPACK_PACKAGE_NAME ${PROJECT_NAME} )
-set(CPACK_PACKAGE_CONTACT "Thomas Paviot <tpaviot@gmail.com>")
-include(InstallRequiredSystemLibraries)
-
-include(CPack)
