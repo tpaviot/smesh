@@ -86,36 +86,14 @@ if(WIN32)
     set_target_properties(SMESH PROPERTIES COMPILE_FLAGS "-DSMESH_EXPORTS -DSMESHCONTROLS_EXPORTS -DSMESHimpl_EXPORTS -DMESHDriverGMF_EXPORTS -DMESHDRIVERMED_EXPORTS -DMEDWRAPPER_EXPORTS -DMEDWRAPPER_BASE_EXPORTS -DMEDWRAPPER_FACTORY_EXPORTS -DSMESHUtils_EXPORTS -DUTILS_EXPORTS -DMEDWRAPPER_V2_2_EXPORTS")
 endif(WIN32)
 
-############
-# MEFISTO2 #
-############
-if(MSVC)
-  set(MEFISTO2_source_files
-      MEFISTO2/aptrte.cpp
-      MEFISTO2/trte.c
-      ../inc/Rn.h
-      ../inc/aptrte.h)
-else(MSVC)
-  set(MEFISTO2_source_files
-        MEFISTO2/aptrte.cpp
-        MEFISTO2/trte.f
-        ../inc/Rn.h
-        ../inc/aptrte.h)
-endif(MSVC)
-ADD_LIBRARY(MEFISTO2 SHARED ${MEFISTO2_source_files})
-TARGET_LINK_LIBRARIES(MEFISTO2 ${SMESH_LIBS}) # in case of Windows link the prebuild Fortran lib
-set_target_properties(MEFISTO2 PROPERTIES SOVERSION ${${PROJECT_NAME}_ABI_SOVERSION}
-                                          VERSION ${${PROJECT_NAME}_ABI_VERSION})
-if(WIN32)
-    set_target_properties(MEFISTO2 PROPERTIES COMPILE_FLAGS "-DMEFISTO2D_EXPORTS")
-endif(WIN32)
+
 
 ##############
 # StdMeshers #
 ##############
-FILE(GLOB StdMeshers_source_files StdMeshers/*.cpp ../inc/StdMeshers_*.h*)
+FILE(GLOB StdMeshers_source_files StdMeshers/*.cpp ../inc/StdMeshers_*.h* MEFISTO2/aptrte.cpp MEFISTO2/trte.c)
 ADD_LIBRARY(StdMeshers SHARED ${StdMeshers_source_files})
-TARGET_LINK_LIBRARIES(StdMeshers SMESH ${SMESH_LIBS} MEFISTO2)
+TARGET_LINK_LIBRARIES(StdMeshers SMESH ${SMESH_LIBS})
 set_target_properties(StdMeshers PROPERTIES SOVERSION ${${PROJECT_NAME}_ABI_SOVERSION}
                                          VERSION ${${PROJECT_NAME}_ABI_VERSION})
 if(WIN32)

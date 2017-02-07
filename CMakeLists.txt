@@ -1,8 +1,5 @@
-if(MSVC)
-  project(SMESH CXX C)
-else(MSVC)
-  project(SMESH CXX Fortran)
-endif(MSVC)
+project(SMESH CXX C)
+
 cmake_minimum_required(VERSION 2.8)
 
 set(SMESH_VERSION_MAJOR 6)
