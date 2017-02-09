@@ -1951,7 +1951,7 @@ namespace { // Structures used by FixQuadraticElements()
   void fixPrism( TChain& allLinks )
   {
     // separate boundary links from internal ones
-    typedef set<const QLink*/*, QLink::PtrComparator*/> QLinkSet;
+    typedef set<const QLink*> QLinkSet;  /*, QLink::PtrComparator*/
     QLinkSet interLinks, bndLinks1, bndLink2;
 
     bool isCurved = false;

@@ -1,6 +1,6 @@
 ﻿package:
   name: smesh
-  version: {{ environ.get('GIT_DESCRIBE_TAG', '6.7') }}
+  version: 6.7.1
 
 source:
   path: ../..
@@ -22,7 +22,9 @@ build:
 requirements:
   build:
     - oce ==0.17.2
+    - ninja
     - cmake
+    - boost
 
   run:
     - oce ==0.17.2

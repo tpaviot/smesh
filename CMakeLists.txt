@@ -1,11 +1,11 @@
-# SMESH cmake build file
-project(SMESH CXX Fortran)
+project(SMESH CXX C)
+
 cmake_minimum_required(VERSION 2.8)
 
 set(SMESH_VERSION_MAJOR 6)
 set(SMESH_VERSION_MINOR 7)
-set(SMESH_VERSION_PATCH)
-set(SMESH_VERSION_TWEAK)
+set(SMESH_VERSION_PATCH 1)
+set(SMESH_VERSION_TWEAK -dev)
 
 
 #####################
@@ -22,8 +22,8 @@ include_directories(inc)
 #################
 # Setup options #
 #################
-option(MONOLITHIC_BUILD "Build one monolithic smesh library." ON)
 option(SMESH_TESTING "Enable unittest" ON)
+option(SMESH_BUILD_NETGENPLUGIN "NETGEN support" OFF)
 
 #############
 # Unittest  #
@@ -77,15 +77,6 @@ else()
     include_directories(./boost-1.52.0)
 endif()
 
-
-#################
-# Check Fortran #
-#################
-#if(UNIX)
-#  include(CMakeDetermineFortranCompiler)
-#endif(UNIX)
-
-
 ############################
 # Check 32/64 bit platform #
 ############################
@@ -108,13 +99,11 @@ if(UNIX)
 else(UNIX)
   if(WIN32)
     ######### Windows ###########
-    message(STATUS "Windows system detected")
-    add_definitions(-DWNT -DWIN32 -D_WINDOWS -DCSFDB -DHAVE_CONFIG_H
-                    -DSMDS_EXPORTS -DSMESHimpl_EXPORTS
-                    -DSMESH_EXPORTS -DSMESHDS_EXPORTS -DMESHDRIVERUNV_EXPORTS
-                    -DMESHDRIVERSTL_EXPORTS -DMESHDRIVERDAT_EXPORTS
-                    -DSTDMESHERS_EXPORTS -DSMESHCONTROLS_EXPORTS
-                    -DMESHDRIVER_EXPORTS -DMEFISTO2D_EXPORTS)
+    IF(MSVC)
+        ADD_DEFINITIONS(-DWNT -DWIN32 -D_WINDOWS -DCSFDB -DUSE_CLOCK -DMSDOS -DNO_ONEXIT -DNO_My_ctype -DNO_ISATTY -DNO_FPINIT /wd4290 /wd4251 /wd4018 /wd4800 /wd4996 /wd4244 /wd4805 /wd4806 /wd4275 /wd4005 /wd4099 /wd4101 /wd4146 /wd4267 /wd4390 /wd4503 /wd4436)
+    ELSE(MSVC)
+        ADD_DEFINITIONS(-DWNT -DWIN32 -D_WINDOWS -DCSFDB)
+    ENDIF(MSVC)
   else(WIN32)
     message("Unknown platform")
   endif(WIN32)
@@ -131,21 +120,3 @@ add_subdirectory(src)
 # SMESH Documentation #
 #######################
 add_subdirectory(doc/src)
-
-
-########################
-# Packaging with CPack #
-########################
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "SMESH library")
-set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENCE.lgpl.txt")
-set(CPACK_SET_DESTDIR "ON")
-
-# Define version
-set(CPACK_PACKAGE_VERSION_MAJOR ${SMESH_VERSION_MAJOR})
-set(CPACK_PACKAGE_VERSION_MINOR ${SMESH_VERSION_MINOR})
-set(CPACK_PACKAGE_VERSION_PATCH ${SMESH_VERSION_PATCH})
-set(CPACK_PACKAGE_NAME ${PROJECT_NAME} )
-set(CPACK_PACKAGE_CONTACT "Thomas Paviot <tpaviot@gmail.com>")
-include(InstallRequiredSystemLibraries)
-
-include(CPack)

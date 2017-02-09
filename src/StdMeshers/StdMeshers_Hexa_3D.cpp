@@ -425,7 +425,10 @@ bool StdMeshers_Hexa_3D::Compute(SMESH_Mesh &         aMesh,
       if(aTool.IsMedium(node))
         continue;
       if ( !findIJ( node, quad, i1, j1 ))
+       {
+        if ( np ) delete [] np;
         return ClearAndReturn( aQuads, false );
+        }
       int ij1 = j1 * nbdown + i1;
       quad->uv_grid[ij1].node = node;
     }
@@ -457,7 +460,10 @@ bool StdMeshers_Hexa_3D::Compute(SMESH_Mesh &         aMesh,
       if(aTool.IsMedium(node))
         continue;
       if ( !findIJ( node, quad, i1, j1 ))
+        {
+        if ( np ) delete [] np;
         return ClearAndReturn( aQuads, false );
+        }
       int ij1 = j1 * nbdown + i1;
       quad->uv_grid[ij1].node = node;
     }
@@ -489,7 +495,10 @@ bool StdMeshers_Hexa_3D::Compute(SMESH_Mesh &         aMesh,
       if(aTool.IsMedium(node))
         continue;
       if ( !findIJ( node, quad, i1, j1 ))
+        {
+        if ( np ) delete [] np;
         return ClearAndReturn( aQuads, false );
+        }
       int ij1 = j1 * nbdown + i1;
       quad->uv_grid[ij1].node = node;
     }
@@ -521,7 +530,10 @@ bool StdMeshers_Hexa_3D::Compute(SMESH_Mesh &         aMesh,
       if(aTool.IsMedium(node))
         continue;
       if ( !findIJ( node, quad, i1, j1 ))
+        {
+        if ( np ) delete [] np;
         return ClearAndReturn( aQuads, false );
+        }
       int ij1 = j1 * nbdown + i1;
       quad->uv_grid[ij1].node = node;
     }
@@ -553,7 +565,10 @@ bool StdMeshers_Hexa_3D::Compute(SMESH_Mesh &         aMesh,
       if(aTool.IsMedium(node))
         continue;
       if ( !findIJ( node, quad, i1, j1 ))
+        {
+        if ( np ) delete [] np;
         return ClearAndReturn( aQuads, false );
+        }
       int ij1 = j1 * nbdown + i1;
       quad->uv_grid[ij1].node = node;
     }
@@ -585,7 +600,10 @@ bool StdMeshers_Hexa_3D::Compute(SMESH_Mesh &         aMesh,
       if(aTool.IsMedium(node))
         continue;
       if ( !findIJ( node, quad, i1, j1 ))
+        {
+        if ( np ) delete [] np;
         return ClearAndReturn( aQuads, false );
+        }
       int ij1 = j1 * nbdown + i1;
       quad->uv_grid[ij1].node = node;
     }
