@@ -53,3 +53,13 @@ Build
     $ cmake ..
     $ make
     $ make install
+
+Build with conda
+----------------
+
+    $ conda build ci/conda
+
+Install with conda
+------------------
+
+    $ conda install -c pythonocc smesh
