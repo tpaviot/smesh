@@ -56,6 +56,18 @@ else()
     LINK_DIRECTORIES(${OCE_LIB_PATH})
 endif()
 
+###################################
+# NETGEN include and lib location #
+###################################
+if(SMESH_BUILD_NETGENPLUGIN)
+    set(NETGEN_NGLIB_INCLUDE_PATH /usr/local/netgen CACHE PATH "Netgen headers location")
+    set(NETGEN_LIBRARIES nglib)
+    include_directories(${NETGEN_NGLIB_INCLUDE_PATH})
+    include_directories(${NETGEN_NGLIB_INCLUDE_PATH}/occ)
+    include_directories(${NETGEN_NGLIB_INCLUDE_PATH}/meshing)
+    include_directories(${NETGEN_NGLIB_INCLUDE_PATH}/general)
+    include_directories(${NETGEN_NGLIB_INCLUDE_PATH}/linalg)
+endif(SMESH_BUILD_NETGENPLUGIN)
 
 ############################
 # Default to release build #
