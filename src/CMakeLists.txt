@@ -121,9 +121,14 @@ if(SMESH_BUILD_NETGENPLUGIN)
                                          VERSION ${${PROJECT_NAME}_ABI_VERSION})
     if(WIN32)
         set_target_properties(NETGENPlugin PROPERTIES COMPILE_FLAGS "-DNETGENPLUGIN_EXPORTS -DNO_PARALLEL_THREADS -DOCCGEOMETRY -DNETGEN_VERSION=${NETGEN_VERSION}")
-    else()
-        set_target_properties(NETGENPlugin PROPERTIES COMPILE_FLAGS "${NETGEN_CXX_FLAGS}")
+    else(WIN32)
+        set(NETGEN_CXX_FLAGS "-std=c++1y")
+        if(APPLE)
+           set(NETGEN_CXX_FLAGS "-std=c++11 -stdlib=libc++")
+        endif(APPLE)
     endif(WIN32)
+    
+    set_target_properties(NETGENPlugin PROPERTIES COMPILE_FLAGS "${NETGEN_CXX_FLAGS}")
 endif (SMESH_BUILD_NETGENPLUGIN)
 
 ####################
