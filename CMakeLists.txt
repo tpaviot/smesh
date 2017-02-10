@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 2.8)
 set(SMESH_VERSION_MAJOR 6)
 set(SMESH_VERSION_MINOR 7)
 set(SMESH_VERSION_PATCH 1)
-set(SMESH_VERSION_TWEAK -dev)
+set(SMESH_VERSION_TWEAK)
 
 
 #####################
