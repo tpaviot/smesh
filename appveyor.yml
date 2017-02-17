@@ -60,7 +60,8 @@ install:
     #- cmd: conda config --add channels https://conda.anaconda.org/conda-forge
     - cmd: conda config --add channels https://conda.anaconda.org/anaconda
     - cmd: conda config --add channels https://conda.anaconda.org/dlr-sc
-    - cmd: conda config --add channels https://conda.anaconda.org/oce 
+    - cmd: conda config --add channels https://conda.anaconda.org/oce
+    - cmd: conda config --add channels https://conda.anaconda.org/pythonocc
 
 # Skip .NET project specific build phase.
 build: off

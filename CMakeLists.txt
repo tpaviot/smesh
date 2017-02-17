@@ -23,7 +23,7 @@ include_directories(inc)
 # Setup options #
 #################
 option(SMESH_TESTING "Enable unittest" ON)
-#option(SMESH_BUILD_NETGENPLUGIN "NETGEN support" OFF)
+option(SMESH_BUILD_NETGENPLUGIN "NETGEN support" OFF)
 
 #############
 # Unittest  #
