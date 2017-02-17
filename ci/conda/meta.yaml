@@ -25,9 +25,11 @@ requirements:
     - ninja
     - cmake
     - boost
+    - netgen
 
   run:
     - oce ==0.17.2
+    - netgen
 
 about:
   home: https://github.com/tpaviot/smesh

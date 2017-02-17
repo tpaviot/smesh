@@ -51,6 +51,7 @@ before_install:
   - conda config --add channels https://conda.anaconda.org/conda-forge
   - conda config --add channels https://conda.anaconda.org/dlr-sc
   - conda config --add channels https://conda.anaconda.org/oce
+  - conda config --add channels https://conda.anaconda.org/pythonocc
   # install everything required to build the receipe
   - conda install conda-build anaconda-client
 
