@@ -48,10 +48,11 @@ before_install:
   - conda info -a
   # Add dlr-sc channel for third part libraries
   # necessary because of gl2ps
-  - conda config --add channels https://conda.anaconda.org/conda-forge
   - conda config --add channels https://conda.anaconda.org/dlr-sc
   - conda config --add channels https://conda.anaconda.org/oce
   - conda config --add channels https://conda.anaconda.org/pythonocc
+  - conda config --add channels https://conda.anaconda.org/salford_systems
+  - conda config --add channels https://conda.anaconda.org/conda-forge
   # install everything required to build the receipe
   - conda install conda-build anaconda-client
 

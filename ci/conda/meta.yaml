@@ -26,6 +26,8 @@ requirements:
     - cmake
     - boost
     - netgen
+    - gcc-5 ==5.4.0     [linux or osx]
+    #- binutils ==2.26   [linux]
 
   run:
     - oce ==0.17.2
