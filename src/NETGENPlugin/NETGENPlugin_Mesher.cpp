@@ -108,7 +108,7 @@ NETGENPlugin_Mesher::NETGENPlugin_Mesher (SMESH_Mesh* mesh,
 void NETGENPlugin_Mesher::defaultParameters()
 {
 #ifdef WNT
-  netgen::MeshingParameters& mparams = netgen::GlobalMeshingParameters();
+  netgen::MeshingParameters& mparams = netgen::MeshingParameters();
 #else
   netgen::MeshingParameters& mparams = netgen::mparam;
 #endif
@@ -139,7 +139,7 @@ void NETGENPlugin_Mesher::SetParameters(const NETGENPlugin_Hypothesis* hyp)
   if (hyp)
   {
 #ifdef WNT
-    netgen::MeshingParameters& mparams = netgen::GlobalMeshingParameters();
+    netgen::MeshingParameters& mparams = netgen::MeshingParameters();
 #else
     netgen::MeshingParameters& mparams = netgen::mparam;
 #endif
@@ -531,7 +531,7 @@ bool NETGENPlugin_Mesher::fillNgMesh(netgen::OCCGeometry&           occgeom,
 bool NETGENPlugin_Mesher::Compute()
 {
 #ifdef WNT
-  netgen::MeshingParameters& mparams = netgen::GlobalMeshingParameters();
+  netgen::MeshingParameters& mparams = netgen::MeshingParameters();
 #else
   netgen::MeshingParameters& mparams = netgen::mparam;
 #endif  
@@ -978,7 +978,7 @@ void NETGENPlugin_Mesher::RemoveTmpFiles()
 bool NETGENPlugin_Mesher::Evaluate(MapShapeNbElems& aResMap)
 {
 #ifdef WNT
-  netgen::MeshingParameters& mparams = netgen::GlobalMeshingParameters();
+  netgen::MeshingParameters& mparams = netgen::MeshingParameters();
 #else
   netgen::MeshingParameters& mparams = netgen::mparam;
 #endif  
