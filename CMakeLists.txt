@@ -61,7 +61,7 @@ endif()
 ###################################
 if(SMESH_BUILD_NETGENPLUGIN)
     set(NETGEN_NGLIB_INCLUDE_PATH /usr/local/netgen CACHE PATH "Netgen headers location")
-    set(NETGEN_LIBRARIES nglib)
+    find_library(NETGEN_LIBRARIES nglib)
     include_directories(${NETGEN_NGLIB_INCLUDE_PATH})
     include_directories(${NETGEN_NGLIB_INCLUDE_PATH}/occ)
     include_directories(${NETGEN_NGLIB_INCLUDE_PATH}/meshing)
