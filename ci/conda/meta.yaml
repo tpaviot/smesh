@@ -27,7 +27,8 @@ requirements:
     - boost
     - netgen
     - gcc-5 ==5.4.0     [linux or osx]
-    #- binutils ==2.26   [linux]
+    - binutils ==2.26   [linux]
+    - freetype ==2.5.5  [linux]
 
   run:
     - oce ==0.17.2
