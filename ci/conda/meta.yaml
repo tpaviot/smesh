@@ -33,6 +33,7 @@ requirements:
   run:
     - oce ==0.17.2
     - netgen
+    - libgcc-5 ==5.4.0    [linux or osx]
 
 about:
   home: https://github.com/tpaviot/smesh
