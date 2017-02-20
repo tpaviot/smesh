@@ -60,8 +60,8 @@ namespace nglib {
 #include <meshing.hpp>
 //#include <meshtype.hpp>
 namespace netgen {
-  extern int OCCGenerateMesh (OCCGeometry&, Mesh*&, int, int, char*);
-  /*extern*/ MeshingParameters mparam;
+  extern int OCCGenerateMesh (OCCGeometry&, shared_ptr<Mesh> &, MeshingParameters&);
+  extern MeshingParameters mparam;
 }
 
 using namespace std;
@@ -289,7 +289,11 @@ bool NETGENPlugin_NETGEN_2D_ONLY::Compute(SMESH_Mesh&         aMesh,
                                           const TopoDS_Shape& aShape)
 {
   MESSAGE("NETGENPlugin_NETGEN_2D_ONLY::Compute()");
-
+#ifdef WNT
+  netgen::MeshingParameters& mparams = netgen::MeshingParameters();
+#else
+  netgen::MeshingParameters& mparams = netgen::mparam;
+#endif  
   SMESHDS_Mesh* meshDS = aMesh.GetMeshDS();
   int faceID = meshDS->ShapeToIndex( aShape );
 
@@ -358,24 +362,24 @@ bool NETGENPlugin_NETGEN_2D_ONLY::Compute(SMESH_Mesh&         aMesh,
 
   //cout << " edgeLength = " << edgeLength << endl;
 
-  netgen::mparam.maxh = edgeLength;
-  netgen::mparam.quad = _hypQuadranglePreference ? 1 : 0;
+  mparams.maxh = edgeLength;
+  mparams.quad = _hypQuadranglePreference ? 1 : 0;
   //ngMesh->SetGlobalH ( edgeLength );
 
   // -------------------------
   // Generate surface mesh
   // -------------------------
 
-  char *optstr = 0;
-  int startWith = MESHCONST_MESHSURFACE;
-  int endWith   = MESHCONST_OPTSURFACE;
   int err = 1;
 
   try {
 #if (OCC_VERSION_MAJOR << 16 | OCC_VERSION_MINOR << 8 | OCC_VERSION_MAINTENANCE) > 0x060100
     OCC_CATCH_SIGNALS;
 #endif
-    err = netgen::OCCGenerateMesh(occgeo, ngMesh, startWith, endWith, optstr);
+    mparams.perfstepsstart = netgen::MESHCONST_MESHSURFACE;
+    mparams.perfstepsend = netgen::MESHCONST_OPTSURFACE;
+    std::shared_ptr<netgen::Mesh> _ngMesh;
+    err = netgen::OCCGenerateMesh(occgeo, _ngMesh, mparams);
   }
   catch (Standard_Failure& ex) {
     string comment = ex.DynamicType()->Name();
