@@ -85,8 +85,9 @@ protected:
   const TopoDS_Shape&  _shape;
   bool                 _isVolume;
   bool                 _optimize;
-
+  
   const NETGENPlugin_SimpleHypothesis_2D * _simpleHyp;
+  std::shared_ptr<netgen::Mesh> ngMesh;
   std::map< int, std::pair<int,int> >      _faceDescriptors;
 };
 
