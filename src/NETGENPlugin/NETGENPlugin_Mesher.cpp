@@ -65,7 +65,7 @@ namespace nglib {
 #include <meshing.hpp>
 //#include <ngexception.hpp>
 namespace netgen {
-  extern int OCCGenerateMesh (OCCGeometry&, Mesh*&, int, int, char*);
+  extern int OCCGenerateMesh (OCCGeometry&, shared_ptr<Mesh>&, MeshingParameters&, int, int);
   extern MeshingParameters mparam;
 }
 
@@ -559,7 +559,8 @@ bool NETGENPlugin_Mesher::Compute()
   // Generate the mesh
   // -------------------------
 
-  netgen::Mesh *ngMesh = NULL;
+  //netgen::Mesh *ngMesh = NULL;
+  std::shared_ptr<netgen::Mesh> ngMesh;
 
   SMESH_Comment comment;
   int err = 0;
@@ -591,7 +592,7 @@ bool NETGENPlugin_Mesher::Compute()
     char *optstr = 0;
     int startWith = netgen::MESHCONST_ANALYSE;
     int endWith   = netgen::MESHCONST_ANALYSE;
-    err = netgen::OCCGenerateMesh(occgeo, ngMesh, startWith, endWith, optstr);
+    err = netgen::OCCGenerateMesh(occgeo, ngMesh, mparams, startWith, endWith);
     if (err) comment << "Error in netgen::OCCGenerateMesh() at MESHCONST_ANALYSE step";
 
     // fill ngMesh with nodes and elements of computed submeshes
@@ -604,7 +605,7 @@ bool NETGENPlugin_Mesher::Compute()
     if (!err)
     {
       startWith = endWith = netgen::MESHCONST_MESHEDGES;
-      err = netgen::OCCGenerateMesh(occgeo, ngMesh, startWith, endWith, optstr);
+      err = netgen::OCCGenerateMesh(occgeo, ngMesh, mparams, startWith, endWith);
       if (err) comment << "Error in netgen::OCCGenerateMesh() at 1D mesh generation";
     }
     // ---------------------
@@ -646,7 +647,7 @@ bool NETGENPlugin_Mesher::Compute()
       // let netgen compute 2D mesh
       startWith = netgen::MESHCONST_MESHSURFACE;
       endWith = _optimize ? netgen::MESHCONST_OPTSURFACE : netgen::MESHCONST_MESHSURFACE;
-      err = netgen::OCCGenerateMesh(occgeo, ngMesh, startWith, endWith, optstr);
+      err = netgen::OCCGenerateMesh(occgeo, ngMesh, mparams, startWith, endWith);
       if (err) comment << "Error in netgen::OCCGenerateMesh() at surface mesh generation";
     }
     // ---------------------
@@ -686,7 +687,7 @@ bool NETGENPlugin_Mesher::Compute()
       // let netgen compute 3D mesh
       startWith = netgen::MESHCONST_MESHVOLUME;
       endWith = _optimize ? netgen::MESHCONST_OPTVOLUME : netgen::MESHCONST_MESHVOLUME;
-      err = netgen::OCCGenerateMesh(occgeo, ngMesh, startWith, endWith, optstr);
+      err = netgen::OCCGenerateMesh(occgeo, ngMesh, mparams, startWith, endWith);
       if (err) comment << "Error in netgen::OCCGenerateMesh()";
     }
     if (!err && mparams.secondorder > 0)
@@ -949,7 +950,7 @@ bool NETGENPlugin_Mesher::Compute()
     }
   }
 
-  nglib::Ng_DeleteMesh((nglib::Ng_Mesh*)ngMesh);
+  ngMesh.reset();
   nglib::Ng_Exit();
 
   RemoveTmpFiles();
