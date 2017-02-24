@@ -411,31 +411,31 @@ void StdMeshers_FaceSide::dump(const char* msg) const
 {
 #ifdef _DEBUG_
   if (msg) MESSAGE ( std::endl << msg );
-  MESSAGE_BEGIN ("NB EDGES: "<< myEdge.size() );
-  MESSAGE_ADD ( "nbPoints: "<<myNbPonits<<" vecSize: " << myPoints.size()<<" "<<myFalsePoints.size() );
+  MESS_BEGIN ("NB EDGES: "<< myEdge.size() );
+  MESSAGE ( "nbPoints: "<<myNbPonits<<" vecSize: " << myPoints.size()<<" "<<myFalsePoints.size() );
   for ( int i=0; i<myEdge.size(); ++i)
   {
-    MESSAGE_ADD ( "\t"<<i+1 );
-    MESSAGE_ADD ( "\tEDGE: " );
+    MESSAGE ( "\t"<<i+1 );
+    MESSAGE ( "\tEDGE: " );
     if (myEdge[i].IsNull()) {
-      MESSAGE_ADD ( "NULL" );
+      MESSAGE ( "NULL" );
     }
     else {
       TopAbs::Print(myEdge[i].Orientation(),cout)<<" "<<myEdge[i].TShape().operator->()<<endl;
-      MESSAGE_ADD ( "\tV1: " << TopExp::FirstVertex( myEdge[i], 1).TShape().operator->()
+      MESSAGE ( "\tV1: " << TopExp::FirstVertex( myEdge[i], 1).TShape().operator->()
                  << "  V2: " << TopExp::LastVertex( myEdge[i], 1).TShape().operator->() );
     }
-    MESSAGE_ADD ( "\tC2d: ");
+    MESSAGE ( "\tC2d: ");
     
     if (myC2d[i].IsNull()) {
-      MESSAGE_ADD ( "NULL" );
+      MESSAGE ( "NULL" );
     }
     else {
-      MESSAGE_ADD ( myC2d[i].operator->() );
+      MESSAGE ( myC2d[i].operator->() );
     }
       
-    MESSAGE_ADD ( "\tF: "<<myFirst[i]<< " L: "<< myLast[i] );
-    MESSAGE_END ( "\tnormPar: "<<myNormPar[i]<<endl );
+    MESSAGE ( "\tF: "<<myFirst[i]<< " L: "<< myLast[i] );
+    MESSAGE ( "\tnormPar: "<<myNormPar[i]<<endl );
   }
 #endif
 }

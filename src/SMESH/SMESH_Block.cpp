@@ -1052,7 +1052,7 @@ int SMESH_Block::GetOrderedEdges (const TopoDS_Face&   theFace,
               edge = TopoDS::Edge( edge.Oriented( wExp.Orientation() ));
               TopoDS_Vertex v = TopExp::FirstVertex( edge, true );
               gp_Pnt p = BRep_Tool::Pnt( v );
-              MESSAGE_ADD ( i << " " << v.TShape().operator->() << " "
+              MESSAGE ( i << " " << v.TShape().operator->() << " "
                             << p.X() << " " << p.Y() << " " << p.Z() << " " << std::endl );
             }
 #endif

@@ -4678,7 +4678,7 @@ void SMESH_Pattern::DumpPoints() const
 #ifdef _DEBUG_
   vector< TPoint >::const_iterator pVecIt = myPoints.begin();
   for ( int i = 0; pVecIt != myPoints.end(); pVecIt++, i++ )
-    MESSAGE_ADD ( std::endl << i << ": " << *pVecIt );
+    MESSAGE ( std::endl << i << ": " << *pVecIt );
 #endif
 }
 
