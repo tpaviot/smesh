@@ -167,7 +167,7 @@ inline SMDS_MeshInfo::SMDS_MeshInfo():
 
 inline void // Clear
 SMDS_MeshInfo::Clear()
-{ for ( int i=0; i<myNb.size(); ++i ) if ( myNb[i] ) (*myNb[i])=0;
+{ for ( unsigned int i=0; i<myNb.size(); ++i ) if ( myNb[i] ) (*myNb[i])=0;
   myNbPolygons=myNbPolyhedrons=0;
 }
 
@@ -237,7 +237,7 @@ SMDS_MeshInfo::NbElements(SMDSAbs_ElementType type) const
   int nb = 0;
   switch (type) {
   case SMDSAbs_All:
-    for ( int i=1+index( SMDSAbs_Node,1 ); i<myNb.size(); ++i ) if ( myNb[i] ) nb += *myNb[i];
+    for (unsigned int i=1+index( SMDSAbs_Node,1 ); i<myNb.size(); ++i ) if ( myNb[i] ) nb += *myNb[i];
     nb += myNbPolygons + myNbPolyhedrons;
     break;
   case SMDSAbs_Volume:
