@@ -1582,7 +1582,7 @@ bool SMESH_MeshEditor::TriToQuad (TIDSortedElemSet &                   theElems,
       if ( startElem ) {
         // Get candidates to be fused
         const SMDS_MeshElement *tr1 = startElem, *tr2 = 0, *tr3 = 0;
-        const SMESH_TLink *link12, *link13;
+        const SMESH_TLink *link12=NULL, *link13=NULL;
         startElem = 0;
         ASSERT( mapEl_setLi.find( tr1 ) != mapEl_setLi.end() );
         set< SMESH_TLink >& setLi = mapEl_setLi[ tr1 ];

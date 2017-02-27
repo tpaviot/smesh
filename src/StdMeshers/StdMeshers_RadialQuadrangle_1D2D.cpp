@@ -979,7 +979,7 @@ bool StdMeshers_RadialQuadrangle_1D2D::Evaluate(SMESH_Mesh& aMesh,
 
   TopoDS_Edge E1,E2,E3;
   Handle(Geom_Curve) C1,C2,C3;
-  double f1,l1,f2,l2,f3,l3;
+  double f1=0,l1=0,f2=0,l2=0,f3=0,l3=0;
   int nbe = 0;
   TopExp_Explorer exp;
   for ( exp.Init( aShape, TopAbs_EDGE ); exp.More(); exp.Next() ) {

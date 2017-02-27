@@ -1019,7 +1019,7 @@ void StdMeshers_Hexa_3D::GetConv2DCoefs(const faceQuadStruct & quad,
   VA = quad.side[0]->FirstVertex();
   VB = quad.side[0]->LastVertex();
   
-        int a1, b1, c1, a2, b2, c2;
+        int a1=0, b1=0, c1=0, a2=0, b2=0, c2=0;
         if (VA.IsSame(V0)) {
                 if (VB.IsSame(V1))
                 {

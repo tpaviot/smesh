@@ -258,12 +258,13 @@ bool StdMeshers_Quadrangle_2D::Compute (SMESH_Mesh& aMesh,
   Handle(Geom_Surface) S = BRep_Tool::Surface(F);
 
   // internal mesh nodes
-  int i, j, geomFaceID = meshDS->ShapeToIndex( F );
+  int i, j, geomFaceID = meshDS->ShapeToIndex( F ), ij=0;
+  double u=0, v=0;
   for (i = 1; i < nbhoriz - 1; i++) {
     for (j = 1; j < nbvertic - 1; j++) {
-      int ij = j * nbhoriz + i;
-      double u = quad->uv_grid[ij].u;
-      double v = quad->uv_grid[ij].v;
+      ij = j * nbhoriz + i;
+      u = quad->uv_grid[ij].u;
+      v = quad->uv_grid[ij].v;
       gp_Pnt P = S->Value(u, v);
       SMDS_MeshNode * node = meshDS->AddNode(P.X(), P.Y(), P.Z());
       meshDS->SetNodeOnFace(node, geomFaceID, u, v);
@@ -1504,7 +1505,7 @@ bool StdMeshers_Quadrangle_2D::ComputeQuadPref (SMESH_Mesh &        aMesh,
     npl.Append(uv_el[i].normParam);
   }
 
-  int dl,dr;
+  int dl=0,dr=0;
   if(OldVersion) {
     // add some params to right and left after the first param
     // insert to right
@@ -1540,6 +1541,7 @@ bool StdMeshers_Quadrangle_2D::ComputeQuadPref (SMESH_Mesh &        aMesh,
   TColgp_SequenceOfXY UVL;
   TColgp_SequenceOfXY UVR;
 
+  double x0=0, x1=0, y0=0, y1=0;
   if(OldVersion) {
     // step1: create faces for left domain
     StdMeshers_Array2OfNode NodesL(1,dl+1,1,nl);
@@ -1553,11 +1555,11 @@ bool StdMeshers_Quadrangle_2D::ComputeQuadPref (SMESH_Mesh &        aMesh,
       // create and add needed nodes
       TColgp_SequenceOfXY UVtmp;
       for(i=1; i<=dl; i++) {
-        double x0 = npt.Value(i+1);
-        double x1 = x0;
+        x0 = npt.Value(i+1);
+        x1 = x0;
         // diagonal node
-        double y0 = npl.Value(i+1);
-        double y1 = npr.Value(i+1);
+        y0 = npl.Value(i+1);
+        y1 = npr.Value(i+1);
         gp_UV UV = CalcUV(x0, x1, y0, y1, quad, a0, a1, a2, a3);
         gp_Pnt P = S->Value(UV.X(),UV.Y());
         SMDS_MeshNode * N = meshDS->AddNode(P.X(), P.Y(), P.Z());
@@ -1566,8 +1568,8 @@ bool StdMeshers_Quadrangle_2D::ComputeQuadPref (SMESH_Mesh &        aMesh,
         if(UVL.Length()<nbv-nnn-1) UVL.Append(UV);
         // internal nodes
         for(j=2; j<nl; j++) {
-          double y0 = npl.Value(dl+j);
-          double y1 = npr.Value(dl+j);
+          y0 = npl.Value(dl+j);
+          y1 = npr.Value(dl+j);
           gp_UV UV = CalcUV(x0, x1, y0, y1, quad, a0, a1, a2, a3);
           gp_Pnt P = S->Value(UV.X(),UV.Y());
           SMDS_MeshNode* N = meshDS->AddNode(P.X(), P.Y(), P.Z());
@@ -1624,11 +1626,11 @@ bool StdMeshers_Quadrangle_2D::ComputeQuadPref (SMESH_Mesh &        aMesh,
       // create and add needed nodes
       TColgp_SequenceOfXY UVtmp;
       for(i=1; i<=dr; i++) {
-        double x0 = npt.Value(nt-i);
-        double x1 = x0;
+        x0 = npt.Value(nt-i);
+        x1 = x0;
         // diagonal node
-        double y0 = npl.Value(i+1);
-        double y1 = npr.Value(i+1);
+        y0 = npl.Value(i+1);
+        y1 = npr.Value(i+1);
         gp_UV UV = CalcUV(x0, x1, y0, y1, quad, a0, a1, a2, a3);
         gp_Pnt P = S->Value(UV.X(),UV.Y());
         SMDS_MeshNode * N = meshDS->AddNode(P.X(), P.Y(), P.Z());
@@ -1637,8 +1639,8 @@ bool StdMeshers_Quadrangle_2D::ComputeQuadPref (SMESH_Mesh &        aMesh,
         if(UVR.Length()<nbv-nnn-1) UVR.Append(UV);
         // internal nodes
         for(j=2; j<nr; j++) {
-          double y0 = npl.Value(nbv-j+1);
-          double y1 = npr.Value(nbv-j+1);
+          y0 = npl.Value(nbv-j+1);
+          y1 = npr.Value(nbv-j+1);
           gp_UV UV = CalcUV(x0, x1, y0, y1, quad, a0, a1, a2, a3);
           gp_Pnt P = S->Value(UV.X(),UV.Y());
           SMDS_MeshNode* N = meshDS->AddNode(P.X(), P.Y(), P.Z());
@@ -1697,11 +1699,11 @@ bool StdMeshers_Quadrangle_2D::ComputeQuadPref (SMESH_Mesh &        aMesh,
     // create and add needed nodes
     // add linear layers
     for(i=2; i<nb; i++) {
-      double x0 = npt.Value(dl+i);
-      double x1 = x0;
+      x0 = npt.Value(dl+i);
+      x1 = x0;
       for(j=1; j<nnn; j++) {
-        double y0 = npl.Value(nbv-nnn+j);
-        double y1 = npr.Value(nbv-nnn+j);
+        y0 = npl.Value(nbv-nnn+j);
+        y1 = npr.Value(nbv-nnn+j);
         gp_UV UV = CalcUV(x0, x1, y0, y1, quad, a0, a1, a2, a3);
         gp_Pnt P = S->Value(UV.X(),UV.Y());
         SMDS_MeshNode* N = meshDS->AddNode(P.X(), P.Y(), P.Z());
@@ -1802,7 +1804,6 @@ bool StdMeshers_Quadrangle_2D::ComputeQuadPref (SMESH_Mesh &        aMesh,
         TColgp_SequenceOfXY UVtmp;
         double drparam = npr.Value(nr) - npr.Value(nnn-1);
         double dlparam = npl.Value(nnn) - npl.Value(nnn-1);
-        double y0,y1;
         for(i=1; i<=drl; i++) {
           // add existed nodes from right edge
           NodesC.SetValue(nb,i+1,uv_er[nnn+i-2].node);
@@ -1845,8 +1846,8 @@ bool StdMeshers_Quadrangle_2D::ComputeQuadPref (SMESH_Mesh &        aMesh,
         TColgp_SequenceOfXY UVtmp;
         double dlparam = npl.Value(nl) - npl.Value(nnn-1);
         double drparam = npr.Value(nnn) - npr.Value(nnn-1);
-        double y0 = npl.Value(nnn-1);
-        double y1 = npr.Value(nnn-1);
+        y0 = npl.Value(nnn-1);
+        y1 = npr.Value(nnn-1);
         for(i=1; i<=drl; i++) {
           // add existed nodes from right edge
           NodesC.SetValue(1,i+1,uv_el[nnn+i-2].node);
