@@ -1687,14 +1687,14 @@ bool SMESH_subMesh::CheckComputeError(SMESH_Algo* theAlgo, const TopoDS_Shape& t
         text << " \"" << _computeError->myComment << "\"";
 
 #ifdef _DEBUG_
-      MESSAGE_BEGIN ( text );
+      MESS_BEGIN ( text );
       // Show vertices location of a failed shape
       TopTools_IndexedMapOfShape vMap;
       TopExp::MapShapes( _subShape, TopAbs_VERTEX, vMap );
-      MESSAGE_ADD ( "Subshape vertices " << ( vMap.Extent()>10 ? "(first 10):" : ":") );
+      MESSAGE ( "Subshape vertices " << ( vMap.Extent()>10 ? "(first 10):" : ":") );
       for ( int iv = 1; iv <= vMap.Extent() && iv < 11; ++iv ) {
         gp_Pnt P( BRep_Tool::Pnt( TopoDS::Vertex( vMap( iv ) )));
-        MESSAGE_ADD ( "#" << _father->GetMeshDS()->ShapeToIndex( vMap( iv )) << " "
+        MESSAGE ( "#" << _father->GetMeshDS()->ShapeToIndex( vMap( iv )) << " "
                    << P.X() << " " << P.Y() << " " << P.Z() << " " );
       }
 #else

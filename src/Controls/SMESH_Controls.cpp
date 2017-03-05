@@ -1253,7 +1253,7 @@ void Length2D::GetValues(TValues& theValues){
       long aNodeId[4];
       gp_Pnt P[4];
 
-      double aLength;
+      double aLength=0;
       const SMDS_MeshElement* aNode;
       if(anIter->more()){
         aNode = anIter->next();
@@ -1369,7 +1369,7 @@ double MultiConnection2D::GetValue( long theElementId )
       SMDS_ElemIteratorPtr anIter = aFaceElem->nodesIterator();
       if (!anIter) break;
 
-      const SMDS_MeshNode *aNode, *aNode0;
+      const SMDS_MeshNode *aNode=NULL, *aNode0=NULL;
       TColStd_MapOfInteger aMap, aMapPrev;
 
       for (i = 0; i <= len; i++) {

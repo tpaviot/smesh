@@ -140,7 +140,7 @@ class SMDS_MeshNode_MyIterator:public SMDS_ElemIterator
                            const NCollection_List<const SMDS_MeshElement*>& s)
   {
     const SMDS_MeshElement * e;
-    bool toInsert;
+    bool toInsert=false;
     NCollection_List<const SMDS_MeshElement*>::Iterator it(s);
     for(; it.More(); it.Next())
     {

@@ -1052,7 +1052,7 @@ int SMESH_Block::GetOrderedEdges (const TopoDS_Face&   theFace,
               edge = TopoDS::Edge( edge.Oriented( wExp.Orientation() ));
               TopoDS_Vertex v = TopExp::FirstVertex( edge, true );
               gp_Pnt p = BRep_Tool::Pnt( v );
-              MESSAGE_ADD ( i << " " << v.TShape().operator->() << " "
+              MESSAGE ( i << " " << v.TShape().operator->() << " "
                             << p.X() << " " << p.Y() << " " << p.Z() << " " << std::endl );
             }
 #endif
@@ -1302,7 +1302,7 @@ bool SMESH_Block::FindBlockShapes(const TopoDS_Shell&         theShell,
     return false;
   }
   TopTools_ListIteratorOfListOfShape f001It, f000It ( f000List );
-  int i, j, iFound1, iFound2;
+  int i, j, iFound1=0, iFound2=0;
   for ( j = 0; f000It.More(); f000It.Next(), j++ )
   {
     if ( NB_FACES_BY_VERTEX == 6 && j % 2 ) continue; // each face encounters twice

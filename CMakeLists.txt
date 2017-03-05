@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 2.8)
 
 set(SMESH_VERSION_MAJOR 6)
 set(SMESH_VERSION_MINOR 7)
-set(SMESH_VERSION_PATCH 1)
+set(SMESH_VERSION_PATCH 2)
 set(SMESH_VERSION_TWEAK)
 
 
@@ -23,7 +23,24 @@ include_directories(inc)
 # Setup options #
 #################
 option(SMESH_TESTING "Enable unittest" ON)
+option(SMESH_EXTRA_WARNINGS "Enable Maximum Warnings Level" OFF)
 #option(SMESH_BUILD_NETGENPLUGIN "NETGEN support" OFF)
+
+##################
+# Extra warnings #
+##################
+# Enable Extra warnings for each compiler
+if(SMESH_EXTRA_WARNINGS)
+    if(MSVC)
+        add_definitions("/W4 /wd9025")
+    endif(MSVC)
+    if(CMAKE_COMPILER_IS_GNUCXX)
+        add_definitions("-Wall -Wextra")
+    endif(CMAKE_COMPILER_IS_GNUCXX)
+    if(CLANG)
+        add_definitions("-Weverything")
+    endif(CLANG)
+endif(SMESH_EXTRA_WARNINGS)
 
 #############
 # Unittest  #

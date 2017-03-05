@@ -1582,7 +1582,7 @@ bool SMESH_MeshEditor::TriToQuad (TIDSortedElemSet &                   theElems,
       if ( startElem ) {
         // Get candidates to be fused
         const SMDS_MeshElement *tr1 = startElem, *tr2 = 0, *tr3 = 0;
-        const SMESH_TLink *link12, *link13;
+        const SMESH_TLink *link12=NULL, *link13=NULL;
         startElem = 0;
         ASSERT( mapEl_setLi.find( tr1 ) != mapEl_setLi.end() );
         set< SMESH_TLink >& setLi = mapEl_setLi[ tr1 ];
@@ -2207,7 +2207,7 @@ static bool getClosestUV (Extrema_GenExtPS& projector,
 {
   projector.Perform( point );
   if ( projector.IsDone() ) {
-    double u, v, minVal = DBL_MAX;
+    double u=0., v=0., minVal = DBL_MAX;
     for ( int i = projector.NbExt(); i > 0; i-- )
       if ( projector.SquareDistance( i ) < minVal ) {
         minVal = projector.SquareDistance( i );
@@ -2285,7 +2285,7 @@ void SMESH_MeshEditor::Smooth (TIDSortedElemSet &          theElems,
     Handle(Geom_Surface) surface;
     SMESHDS_SubMesh* faceSubMesh = 0;
     TopoDS_Face face;
-    double fToler2 = 0, vPeriod = 0., uPeriod = 0., f,l;
+    double fToler2 = 0, vPeriod = 0, uPeriod = 0, f=0 , l=0;
     double u1 = 0, u2 = 0, v1 = 0, v2 = 0;
     bool isUPeriodic = false, isVPeriodic = false;
     if ( *fId ) {
@@ -4271,9 +4271,7 @@ SMESH_MeshEditor::ExtrusionAlongTrack (TIDSortedElemSet &   theElements,
       list<SMESH_MeshEditor_PathPoint> currList = *itLLPP;
       itPP = currList.begin();
       SMESH_MeshEditor_PathPoint PP2 = currList.front();
-      gp_Pnt P1 = PP1.Pnt();
       //cout<<"    PP1: Pnt("<<P1.X()<<","<<P1.Y()<<","<<P1.Z()<<")"<<endl;
-      gp_Pnt P2 = PP2.Pnt();
       gp_Dir D1 = PP1.Tangent();
       gp_Dir D2 = PP2.Tangent();
       gp_Dir Dnew( gp_Vec( (D1.X()+D2.X())/2, (D1.Y()+D2.Y())/2,
@@ -4558,7 +4556,7 @@ SMESH_MeshEditor::MakeExtrElements(TIDSortedElemSet&  theElements,
             vector<const SMDS_MeshNode*> aNodes(2*(aNbTP-1));
             gp_XYZ P(node->X(), node->Y(), node->Z());
             list< const SMDS_MeshNode* >::iterator it = listNewNodes.begin();
-            int i;
+            unsigned int i = 0;
             for(i=0; i<aNbTP-1; i++) {
               const SMDS_MeshNode* N = *it;
               double x = ( N->X() + P.X() )/2.;
@@ -5268,7 +5266,7 @@ SMESH_NodeSearcher* SMESH_MeshEditor::GetNodeSearcher()
 // ========================================================================
 namespace // Utils used in SMESH_ElementSearcherImpl::FindElementsByPoint()
 {
-  const int MaxNbElemsInLeaf = 10; // maximal number of elements in a leaf of tree
+  const unsigned int MaxNbElemsInLeaf = 10; // maximal number of elements in a leaf of tree
   const int MaxLevel         = 7;  // maximal tree height -> nb terminal boxes: 8^7 = 2097152
   const double NodeRadius = 1e-9;  // to enlarge bnd box of element
 
@@ -5332,7 +5330,7 @@ namespace // Utils used in SMESH_ElementSearcherImpl::FindElementsByPoint()
 
   ElementBndBoxTree::~ElementBndBoxTree()
   {
-    for ( int i = 0; i < _elements.size(); ++i )
+    for ( unsigned int i = 0; i < _elements.size(); ++i )
       if ( --_elements[i]->_refCount <= 0 )
         delete _elements[i];
   }
@@ -5346,7 +5344,7 @@ namespace // Utils used in SMESH_ElementSearcherImpl::FindElementsByPoint()
   Bnd_B3d* ElementBndBoxTree::buildRootBox()
   {
     Bnd_B3d* box = new Bnd_B3d;
-    for ( int i = 0; i < _elements.size(); ++i )
+    for ( unsigned int i = 0; i < _elements.size(); ++i )
       box->Add( *_elements[i] );
     return box;
   }
@@ -5359,7 +5357,7 @@ namespace // Utils used in SMESH_ElementSearcherImpl::FindElementsByPoint()
 
   void ElementBndBoxTree::buildChildrenData()
   {
-    for ( int i = 0; i < _elements.size(); ++i )
+    for ( unsigned int i = 0; i < _elements.size(); ++i )
     {
       for (int j = 0; j < 8; j++)
       {
@@ -5624,7 +5622,7 @@ bool SMESH_MeshEditor::isOut( const SMDS_MeshElement* element, const gp_Pnt& poi
     {
       // define point position by the closest edge
       double minDist = numeric_limits<double>::max();
-      int iMinDist;
+      int iMinDist = 0;
       for ( i = 0; i < element->NbNodes(); ++i )
       {
         gp_Vec edge( xyz[i], xyz[i+1]);
@@ -6468,7 +6466,7 @@ SMESH_MeshEditor::FindFaceInSet(const SMDS_MeshNode*    n1,
     if ( !elemSet.empty() && elemSet.find( elem ) == elemSet.end())
       continue;
     // get face nodes and find index of n1
-    int i1, nbN = elem->NbNodes(), iNode = 0;
+    int i1 = 0, nbN = elem->NbNodes(), iNode = 0;
     //const SMDS_MeshNode* faceNodes[ nbN ], *n;
     vector<const SMDS_MeshNode*> faceNodes( nbN );
     const SMDS_MeshNode* n;
@@ -6856,7 +6854,7 @@ SMESH_MeshEditor::SewFreeBorder (const SMDS_MeshNode* theBordFirstNode,
       {
         const SMDS_MeshElement* elem = invElemIt->next();
         // prepare data for a loop on links coming to prevSideNode, of a face or a volume
-        int iPrevNode, iNode = 0, nbNodes = elem->NbNodes();
+        int iPrevNode = 0, iNode = 0, nbNodes = elem->NbNodes();
         vector< const SMDS_MeshNode* > faceNodes( nbNodes, (const SMDS_MeshNode*)0 );
         bool isVolume = volume.Set( elem );
         const SMDS_MeshNode** nodes = isVolume ? volume.GetNodes() : & faceNodes[0];

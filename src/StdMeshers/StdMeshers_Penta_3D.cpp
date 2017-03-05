@@ -1370,7 +1370,7 @@ bool StdMeshers_Penta_3D::LoadIJNodes(StdMeshers_IJNodeMap & theIJNodes,
 
   // find the other edges of theFace and orientation of e1
   TopoDS_Edge e1, e2, eTop;
-  bool rev1, CumOri = false;
+  bool rev1 = false, CumOri = false;
   TopExp_Explorer exp( theFace, TopAbs_EDGE );
   int nbEdges = 0;
   for ( ; exp.More(); exp.Next() ) {
@@ -1464,7 +1464,7 @@ bool StdMeshers_Penta_3D::LoadIJNodes(StdMeshers_IJNodeMap & theIJNodes,
   BRep_Tool::Range( eFrw, f, l );
   double range = l - f;
   SMDS_NodeIteratorPtr nIt = smb->GetNodes();
-  const SMDS_MeshNode* node;
+  const SMDS_MeshNode* node=NULL;
   while ( nIt->more() ) {
     node = nIt->next();
     if(myTool->IsMedium(node))
