@@ -1,8 +1,17 @@
+Version 6.7.2 - March 2017
+=============================
+This version is binary compatible with smesh-6.6
+
+* fixed compiler warnings
+
+Users who contributed to this release:
+  Thomas Paviot
+
 Version 6.7.1 - February 2017
 =============================
 This version is binary compatible with smesh-6.6
 
-* bugifxes
+* bugfixes
 
 Users who contributed to this release:
   Thomas Paviot

@@ -17,6 +17,8 @@ We use the following online resources:
        http://groups.google.com/group/smesh-dev/about
   * Travic-CI
        https://travis-ci.org/tpaviot/smesh
+  * Appveyor
+       https://ci.appveyor.com/project/tpaviot/smesh
 
 Just ask @tpaviot (tpaviot@gmail.com) for a request regarding write access to the repository.
 
@@ -31,6 +33,11 @@ How to stay up to date with latest developements?
 
     cd smesh
     git pull
+
+Install with conda
+------------------
+
+$ conda install -c pythonocc smesh=6.7.2
 
 Build - Install
 ---------------
