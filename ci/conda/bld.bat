@@ -18,3 +18,7 @@ if errorlevel 1 exit 1
 REM Install step
 ninja install
 if errorlevel 1 exit 1
+
+REM Test step
+ninja test
+if errorlevel 1 exit 1
