@@ -32,7 +32,7 @@ option(SMESH_EXTRA_WARNINGS "Enable Maximum Warnings Level" OFF)
 # Enable Extra warnings for each compiler
 if(SMESH_EXTRA_WARNINGS)
     if(MSVC)
-        add_definitions("/W4 /wd9025")
+        add_definitions("/W4")
     endif(MSVC)
     if(CMAKE_COMPILER_IS_GNUCXX)
         add_definitions("-Wall -Wextra")
