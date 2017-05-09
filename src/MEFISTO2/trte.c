@@ -8839,9 +8839,9 @@ L150:
     for (k = 1; k <= 2; ++k) {
 	if (noarst[ns[k - 1]] == *noar) {
 /*           il faut remettre a jour le pointeur sur une arete */
-	    if (nosoar[ns[k - 1] * nosoar_dim1 + 1] == ns[k - 1] && nosoar[ns[
-		    k - 1] * nosoar_dim1 + 2] > 0 && nosoar[ns[k - 1] * 
-		    nosoar_dim1 + 4] > 0) {
+	    if ((nosoar[ns[k - 1] * nosoar_dim1 + 1] == ns[k - 1]) && (nosoar[ns[
+		    k - 1] * nosoar_dim1 + 2] > 0) && (nosoar[ns[k - 1] * 
+		    nosoar_dim1 + 4]) > 0) {
 /*              arete active de sommet ns(k) */
 		noarst[ns[k - 1]] = ns[k - 1];
 	    } else {
@@ -8850,9 +8850,9 @@ L150:
 		    if (nosoar[i__ * nosoar_dim1 + 1] > 0 && nosoar[i__ * 
 			    nosoar_dim1 + 4] > 0) {
 /*                    arete non vide */
-			if (nosoar[i__ * nosoar_dim1 + 2] == ns[k - 1] || 
-				nosoar[i__ * nosoar_dim1 + 1] == ns[k - 1] && 
-				nosoar[i__ * nosoar_dim1 + 2] > 0) {
+			if (((nosoar[i__ * nosoar_dim1 + 2] == ns[k - 1]) || 
+				(nosoar[i__ * nosoar_dim1 + 1] == ns[k - 1])) && 
+				(nosoar[i__ * nosoar_dim1 + 2] > 0)) {
 /*                       arete active de sommet ns(k) */
 			    noarst[ns[k - 1]] = i__;
 			    goto L8;
