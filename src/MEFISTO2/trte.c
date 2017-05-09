@@ -184,9 +184,9 @@ doublereal diptdr_(doublereal *pt, doublereal *p1dr, doublereal *p2dr)
 /*        critere : 2 racine(3) * rayon_inscrit / plus longue arete */
 /* Computing MAX */
 	d__2 = max(a,b);
-	*qualite = sqrt((d__1 = (p - a) / p * (p - b) * (p - c__), abs(d__1)))
-		 * 3.4641016151377544f / max(d__2,c__);
-    } else {
+    d__1 = (p - a) / p * (p - b) * (p - c__);
+    *qualite = sqrt(abs(d__1)) * 3.4641016151377544f / max(d__2,c__);
+	} else {
 	*qualite = 0.;
     }
 
