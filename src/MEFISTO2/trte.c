@@ -12,6 +12,28 @@
 
 #include "f2c.h"
 
+#include <stdio.h>
+
+integer do_lio(ftnint *type, ftnint *number, char *ptr, ftnlen len)
+{
+    printf(ptr);
+    return (0);
+}
+
+integer do_fio(ftnint *number, char *ptr, ftnlen len)
+{
+    printf(ptr);
+    return (0);
+}
+
+integer e_wsle(void) {printf("\n");return (0);}
+integer s_wsfe(cilist *a) {return (0);}
+integer s_rsle(cilist *a) {return (0);}
+integer e_rsfe(void) {return (0);}
+integer e_wsfe() {return (0);}
+integer e_rsle() {return (0);}
+integer s_wsle(cilist *a) {return (0);}
+
 /* Common Block Declarations */
 
 union {
@@ -1314,7 +1336,7 @@ L30:
     /* Builtin functions */
     integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
 	    e_wsle(void), s_wsfe(cilist *), do_fio(integer *, char *, ftnlen),
-	     e_wsfe(void);
+	     e_wsfe();
 
     /* Local variables */
     static doublereal x1, y1, x21, y21, x31, y31, xc, yc, rot, aire2;
@@ -1689,7 +1711,7 @@ doublereal angled_(doublereal *p1, doublereal *p2, doublereal *p3)
 	    ".6,\002,\002,g14.6,\002,\002,g14.6,\002)=0!\002)";
 
     /* Builtin functions */
-    integer s_wsfe(cilist *), do_fio(integer *, char *, ftnlen), e_wsfe(void);
+    integer s_wsfe(cilist *), do_fio(integer *, char *, ftnlen), e_wsfe();
 
     /* Local variables */
     static doublereal d0;
@@ -3448,7 +3470,7 @@ L9990:
     /* Builtin functions */
     integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
 	    e_wsle(void), s_wsfe(cilist *), do_fio(integer *, char *, ftnlen),
-	     e_wsfe(void);
+	     e_wsfe();
 
     /* Local variables */
     static integer j, ii, nt0, nt1, nar, nta, noar, nosotr[3];
@@ -6688,7 +6710,7 @@ L9900:
     /* Builtin functions */
     integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
 	    e_wsle(void), s_wsfe(cilist *), do_fio(integer *, char *, ftnlen),
-	     e_wsfe(void);
+	     e_wsfe();
 
     /* Local variables */
     static integer i__;
@@ -8603,7 +8625,7 @@ L10:
     integer nosoar_dim1, nosoar_offset, noartr_dim1, noartr_offset, i__1;
 
     /* Builtin functions */
-    integer s_wsfe(cilist *), do_fio(integer *, char *, ftnlen), e_wsfe(void);
+    integer s_wsfe(cilist *), do_fio(integer *, char *, ftnlen), e_wsfe();
 
     /* Local variables */
     static integer k, n, np, nt;
@@ -9630,7 +9652,7 @@ L40:
 
     /* Builtin functions */
     integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
-	    e_wsle(void), s_rsle(cilist *), e_rsle(void);
+	    e_wsle(void), s_rsle(cilist *), e_rsle();
     double sqrt(doublereal);
 
     /* Local variables */
