@@ -8,7 +8,12 @@
 #define F2C_INCLUDE
 #define _LARGE_FILE_SOURCE
 #define _LARGEFILE64_SOURCE
+
+#ifdef _MSC_VER
+#include "stdint_msvc.h"
+#else
 #include <stdint.h>
+#endif
 
 typedef int32_t integer;
 typedef uint32_t uinteger;
