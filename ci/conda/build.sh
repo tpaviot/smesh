@@ -13,7 +13,7 @@ cmake -G Ninja -DCMAKE_INSTALL_PREFIX=$PREFIX \
 ninja
 
 # Install step
-ninja install
+ninja install > installed_files.txt
 
 # test
 ninja test
