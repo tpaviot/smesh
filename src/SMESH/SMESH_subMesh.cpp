@@ -53,6 +53,7 @@
 
 #include <Standard_OutOfMemory.hxx>
 #include <Standard_ErrorHandler.hxx>
+#include <StdFail_NotDone.hxx>
 
 using namespace std;
 
@@ -273,41 +274,65 @@ bool SMESH_subMesh::SubMeshesComputed()
       case TopAbs_COMPOUND:
         {
           MESSAGE("The not computed sub mesh is a COMPOUND");
+#if defined RAISE_EXCEPTION_ON_FAILURE
+          StdFail_NotDone::Raise("Submesh not computed.");
+#endif
           break;
         }
       case TopAbs_COMPSOLID:
         {
           MESSAGE("The not computed sub mesh is a COMPSOLID");
+#if defined RAISE_EXCEPTION_ON_FAILURE
+          StdFail_NotDone::Raise("Submesh not computed.");
+#endif
           break;
         }
       case TopAbs_SHELL:
         {
           MESSAGE("The not computed sub mesh is a SHEL");
+#if defined RAISE_EXCEPTION_ON_FAILURE
+          StdFail_NotDone::Raise("Submesh not computed.");
+#endif
           break;
         }
       case TopAbs_WIRE:
         {
           MESSAGE("The not computed sub mesh is a WIRE");
+#if defined RAISE_EXCEPTION_ON_FAILURE
+          StdFail_NotDone::Raise("Submesh not computed.");
+#endif
           break;
         }
       case TopAbs_SOLID:
         {
           MESSAGE("The not computed sub mesh is a SOLID");
+#if defined RAISE_EXCEPTION_ON_FAILURE
+          StdFail_NotDone::Raise("Submesh not computed.");
+#endif
           break;
         }
       case TopAbs_FACE:
         {
           MESSAGE("The not computed sub mesh is a FACE");
+#if defined RAISE_EXCEPTION_ON_FAILURE
+          StdFail_NotDone::Raise("Submesh not computed.");
+#endif
           break;
         }
       case TopAbs_EDGE:
         {
           MESSAGE("The not computed sub mesh is a EDGE");
+#if defined RAISE_EXCEPTION_ON_FAILURE
+          StdFail_NotDone::Raise("Submesh not computed.");
+#endif
           break;
         }
       default:
         {
           MESSAGE("The not computed sub mesh is of unknown type");
+#if defined RAISE_EXCEPTION_ON_FAILURE
+          StdFail_NotDone::Raise("Submesh not computed.");
+#endif
           break;
         }
       }
@@ -1702,6 +1727,7 @@ bool SMESH_subMesh::CheckComputeError(SMESH_Algo* theAlgo, const TopoDS_Shape& t
 #endif
       _computeState = FAILED_TO_COMPUTE;
       noErrors = false;
+      StdFail_NotDone::Raise("Triangulation not done.");
     }
   }
   return noErrors;
