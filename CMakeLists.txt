@@ -42,6 +42,11 @@ if(SMESH_EXTRA_WARNINGS)
     endif(CLANG)
 endif(SMESH_EXTRA_WARNINGS)
 
+# raise exception if MEFISTO2 mesh fails
+if(RAISE_EXCEPTION_ON_FAILURE)
+    add_definitions("-DRAISE_EXCEPTION_ON_FAILURE")
+endif(RAISE_EXCEPTION_ON_FAILURE)
+
 #############
 # Unittest  #
 #############
