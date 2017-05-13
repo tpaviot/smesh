@@ -1747,7 +1747,8 @@ doublereal angled_(doublereal *p1, doublereal *p2, doublereal *p3)
 /*      double precision  areteideale */
 
     *ierr = 0;
-    if (*nutysu > 0) {
+    *nutysu=0;
+    if (FALSE_) { //(*nutysu > 0) {
 	d0 = *longai;
 /*        le point ou se calcule la longueur */
 	xyz[0] = *dx;
@@ -1758,7 +1759,8 @@ doublereal angled_(doublereal *p1, doublereal *p2, doublereal *p3)
 	xyzd[0] = 0.;
 	xyzd[1] = 0.;
 	xyzd[2] = 0.;
-	areteideale_(longai);
+	//areteideale_(longai);
+	*longai=1.;
 /*         (xyz,xyzd) */
 	if (*longai < 0.) {
 	    io___105.ciunit = unites_1.imprim;
@@ -1895,7 +1897,7 @@ doublereal angled_(doublereal *p1, doublereal *p2, doublereal *p3)
 /*                sinon pxyd(3,*) est la distance calculee dans le plan par */
 /*                propagation a partir des tailles des aretes de la frontiere */
 
-    if (*nutysu > 0) {
+    if(FALSE_) { //if (*nutysu > 0) {
 
 /*        la fonction taille_ideale(x,y,z) existe */
 /*        --------------------------------------- */
@@ -2114,7 +2116,7 @@ L15:
 		d__2 = pxyd[*ns1 * 3 + 2] - pxyd[*ns2 * 3 + 2];
 		d2 = d__1 * d__1 + d__2 * d__2;
 
-		if (*nutysu == 0) {
+		if (TRUE_) { //if (*nutysu == 0) {
 
 /*                 il n'existe pas de fonction 'taille_ideale' */
 /*                 ------------------------------------------- */
@@ -2205,7 +2207,7 @@ L15:
 		    if (*ierr != 0) {
 			return 0;
 		    }
-		    if (*nutysu > 0) {
+		    if (FALSE_) {//if (*nutysu > 0) {
 			i__1 = *nbsomm;
 			for (j = nbsom0 + 1; j <= i__1; ++j) {
 /*                       mise a jour de taille_ideale des nouveaux sommets de te */
@@ -4400,7 +4402,7 @@ L100:
 /*           mise a jour de la distance souhaitee autour de ns */
 	    xns = pxyd[ns * 3 + 1];
 	    yns = pxyd[ns * 3 + 2];
-	    if (*nutysu > 0) {
+	    if(FALSE_) {//if (*nutysu > 0) {
 /*              la fonction taille_ideale(x,y,z) existe */
 		tetaid_(nutysu, &xns, &yns, &pxyd[ns * 3 + 3], &ier);
 	    }
@@ -4563,7 +4565,7 @@ L35:
 			     3]) / 3.;
 /* L160: */
 		}
-		if (*nutysu > 0) {
+		if (FALSE_) {//if (*nutysu > 0) {
 /*                 la fonction taille_ideale(x,y,z) existe */
 		    tetaid_(nutysu, &pxyd[*nbsomm * 3 + 1], &pxyd[*nbsomm * 3 
 			    + 2], &pxyd[*nbsomm * 3 + 3], &ier);
@@ -4620,7 +4622,7 @@ L200:
 /*           ponderation pour eviter les degenerescenses */
 	    pxyd[ns * 3 + 1] = ponde1 * pxyd[ns * 3 + 1] + ponder * xbar;
 	    pxyd[ns * 3 + 2] = ponde1 * pxyd[ns * 3 + 2] + ponder * ybar;
-	    if (*nutysu > 0) {
+	    if (FALSE_) {//if (*nutysu > 0) {
 /*              la fonction taille_ideale(x,y,z) existe */
 		tetaid_(nutysu, &pxyd[ns * 3 + 1], &pxyd[ns * 3 + 2], &pxyd[
 			ns * 3 + 3], &ier);
