@@ -27,6 +27,7 @@
 #include "Rn.h"
 #include "aptrte.h"
 #include "utilities.h"
+#include <StdFail_NotDone.hxx>
 
 using namespace std;
 
@@ -737,6 +738,11 @@ void  aptrte( Z   nutysu, R      aretmx,
   if( mnarcf1 != NULL ) delete [] mnarcf1;
   if( mnarcf2 != NULL ) delete [] mnarcf2;
   if( mnarcf3 != NULL ) delete [] mnarcf3;
+#if defined RAISE_EXCEPTION_ON_FAILURE
+  if (ierr==1) {
+    StdFail_NotDone::Raise("Triangulation not computed.");
+  }
+#endif
   return;
 
  ERREUR:

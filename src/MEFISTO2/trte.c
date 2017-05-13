@@ -10,238 +10,31 @@
 		http://www.netlib.org/f2c/libf2c.zip
 */
 
-/*
- Since Mefisto is using very little real fortran API calls only the definition 
- portion of the f2c header is used and the fortran write() calls are commented out:
+#include "f2c.h"
 
- 	//io___187.ciunit = unites_2.imprim;
-	//s_wsle(&io___187);
-	//do_lio(&c__9, &c__1, "pas de triangle d'abscisse minimale", (ftnlen)
-	//	35);
-	//e_wsle();
+#include <stdio.h>
 
-This calls print out error information and are not needed in FreeCAD....
+integer do_lio(ftnint *type, ftnint *number, char *ptr, ftnlen len)
+{
+    printf(ptr);
+    return (0);
+}
 
-JR 2014
-*/
+integer do_fio(ftnint *number, char *ptr, ftnlen len)
+{
+    printf(ptr);
+    return (0);
+}
 
-// start F2c.h content
-typedef long int integer;
-typedef unsigned long int uinteger;
-typedef char *address;
-typedef short int shortint;
-typedef float real;
-typedef double doublereal;
-typedef struct { real r, i; } complex;
-typedef struct { doublereal r, i; } doublecomplex;
-typedef long int logical;
-typedef short int shortlogical;
-typedef char logical1;
-typedef char integer1;
-#ifdef INTEGER_STAR_8	/* Adjust for integer*8. */
-typedef long long longint;		/* system-dependent */
-typedef unsigned long long ulongint;	/* system-dependent */
-#define qbit_clear(a,b)	((a) & ~((ulongint)1 << (b)))
-#define qbit_set(a,b)	((a) |  ((ulongint)1 << (b)))
-#endif
+integer e_wsle(void) {printf("\n");return (0);}
+integer s_wsfe(cilist *a) {return (0);}
+integer s_rsle(cilist *a) {return (0);}
+integer e_rsfe(void) {return (0);}
+integer e_wsfe() {return (0);}
+integer e_rsle() {return (0);}
+integer s_wsle(cilist *a) {return (0);}
 
-#define TRUE_ (1)
-#define FALSE_ (0)
-
-/* Extern is for use with -E */
-#ifndef Extern
-#define Extern extern
-#endif
-
-/* I/O stuff */
-
-#ifdef f2c_i2
-/* for -i2 */
-typedef short flag;
-typedef short ftnlen;
-typedef short ftnint;
-#else
-typedef long int flag;
-typedef long int ftnlen;
-typedef long int ftnint;
-#endif
-
-/*external read, write*/
-typedef struct
-{	flag cierr;
-	ftnint ciunit;
-	flag ciend;
-	char *cifmt;
-	ftnint cirec;
-} cilist;
-
-/*internal read, write*/
-typedef struct
-{	flag icierr;
-	char *iciunit;
-	flag iciend;
-	char *icifmt;
-	ftnint icirlen;
-	ftnint icirnum;
-} icilist;
-
-/*open*/
-typedef struct
-{	flag oerr;
-	ftnint ounit;
-	char *ofnm;
-	ftnlen ofnmlen;
-	char *osta;
-	char *oacc;
-	char *ofm;
-	ftnint orl;
-	char *oblnk;
-} olist;
-
-/*close*/
-typedef struct
-{	flag cerr;
-	ftnint cunit;
-	char *csta;
-} cllist;
-
-/*rewind, backspace, endfile*/
-typedef struct
-{	flag aerr;
-	ftnint aunit;
-} alist;
-
-/* inquire */
-typedef struct
-{	flag inerr;
-	ftnint inunit;
-	char *infile;
-	ftnlen infilen;
-	ftnint	*inex;	/*parameters in standard's order*/
-	ftnint	*inopen;
-	ftnint	*innum;
-	ftnint	*innamed;
-	char	*inname;
-	ftnlen	innamlen;
-	char	*inacc;
-	ftnlen	inacclen;
-	char	*inseq;
-	ftnlen	inseqlen;
-	char 	*indir;
-	ftnlen	indirlen;
-	char	*infmt;
-	ftnlen	infmtlen;
-	char	*inform;
-	ftnint	informlen;
-	char	*inunf;
-	ftnlen	inunflen;
-	ftnint	*inrecl;
-	ftnint	*innrec;
-	char	*inblank;
-	ftnlen	inblanklen;
-} inlist;
-
-#define VOID void
-
-union Multitype {	/* for multiple entry points */
-	integer1 g;
-	shortint h;
-	integer i;
-	/* longint j; */
-	real r;
-	doublereal d;
-	complex c;
-	doublecomplex z;
-	};
-
-typedef union Multitype Multitype;
-
-/*typedef long int Long;*/	/* No longer used; formerly in Namelist */
-
-struct Vardesc {	/* for Namelist */
-	char *name;
-	char *addr;
-	ftnlen *dims;
-	int  type;
-	};
-typedef struct Vardesc Vardesc;
-
-struct Namelist {
-	char *name;
-	Vardesc **vars;
-	int nvars;
-	};
-typedef struct Namelist Namelist;
-
-#define abs(x) ((x) >= 0 ? (x) : -(x))
-#define dabs(x) (doublereal)abs(x)
-#define min(a,b) ((a) <= (b) ? (a) : (b))
-#define max(a,b) ((a) >= (b) ? (a) : (b))
-#define dmin(a,b) (doublereal)min(a,b)
-#define dmax(a,b) (doublereal)max(a,b)
-#define bit_test(a,b)	((a) >> (b) & 1)
-#define bit_clear(a,b)	((a) & ~((uinteger)1 << (b)))
-#define bit_set(a,b)	((a) |  ((uinteger)1 << (b)))
-
-/* procedure parameter types for -A and -C++ */
-
-#define F2C_proc_par_types 1
-#ifdef NIX
-typedef int /* Unknown procedure type */ (*U_fp)(...);
-typedef shortint (*J_fp)(...);
-typedef integer (*I_fp)(...);
-typedef real (*R_fp)(...);
-typedef doublereal (*D_fp)(...), (*E_fp)(...);
-typedef /* Complex */ VOID (*C_fp)(...);
-typedef /* Double Complex */ VOID (*Z_fp)(...);
-typedef logical (*L_fp)(...);
-typedef shortlogical (*K_fp)(...);
-typedef /* Character */ VOID (*H_fp)(...);
-typedef /* Subroutine */ int (*S_fp)(...);
-#else
-typedef int /* Unknown procedure type */ (*U_fp)();
-typedef shortint (*J_fp)();
-typedef integer (*I_fp)();
-typedef real (*R_fp)();
-typedef doublereal (*D_fp)(), (*E_fp)();
-typedef /* Complex */ VOID (*C_fp)();
-typedef /* Double Complex */ VOID (*Z_fp)();
-typedef logical (*L_fp)();
-typedef shortlogical (*K_fp)();
-typedef /* Character */ VOID (*H_fp)();
-typedef /* Subroutine */ int (*S_fp)();
-#endif
-/* E_fp is for real functions when -R is not specified */
-typedef VOID C_f;	/* complex function */
-typedef VOID H_f;	/* character function */
-typedef VOID Z_f;	/* double complex function */
-typedef doublereal E_f;	/* real function with -R not specified */
-
-/* undef any lower-case symbols that your C compiler predefines, e.g.: */
-
-#ifndef Skip_f2c_Undefs
-#undef cray
-#undef gcos
-#undef mc68010
-#undef mc68020
-#undef mips
-#undef pdp11
-#undef sgi
-#undef sparc
-#undef sun
-#undef sun2
-#undef sun3
-#undef sun4
-#undef u370
-#undef u3b
-#undef u3b2
-#undef u3b5
-#undef unix
-#undef vax
-#endif
-
-// stop F2c.h content
-
+/* Common Block Declarations */
 
 union {
     struct {
@@ -392,9 +185,8 @@ doublereal diptdr_(doublereal *pt, doublereal *p1dr, doublereal *p2dr)
 /* Computing MAX */
 	d__2 = max(a,b);
     d__1 = (p - a) / p * (p - b) * (p - c__);
-	*qualite = sqrt(abs(d__1))
-		 * 3.4641016151377544f / max(d__2,c__);
-    } else {
+    *qualite = sqrt(abs(d__1)) * 3.4641016151377544f / max(d__2,c__);
+	} else {
 	*qualite = 0.;
     }
 
@@ -700,11 +492,11 @@ integer nosui3_(integer *i__)
 	integer *ierr)
 {
     /* System generated locals */
-    integer nosoar_dim1, nosoar_offset;
+    integer nosoar_dim1, nosoar_offset, i__1;
 
     /* Builtin functions */
-    //integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
-	   // e_wsle(void);
+    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
+	    e_wsle(void);
 
     /* Local variables */
     static integer i__, n, nu2sar[2];
@@ -789,10 +581,10 @@ integer nosui3_(integer *i__)
     if (*noar == 0) {
 
 /*        saturation du tableau nosoar */
-	//io___13.ciunit = unites_1.imprim;
-	//s_wsle(&io___13);
-	//do_lio(&c__9, &c__1, "fasoar: tableau nosoar sature", (ftnlen)29);
-	//e_wsle();
+	io___13.ciunit = unites_1.imprim;
+	s_wsle(&io___13);
+	do_lio(&c__9, &c__1, "fasoar: tableau nosoar sature", (ftnlen)29);
+	e_wsle();
 	*ierr = 1;
 	return 0;
 
@@ -820,38 +612,38 @@ integer nosui3_(integer *i__)
 /*        alors il y a une erreur */
 	if (nosoar[*noar * nosoar_dim1 + 4] > 0 && nosoar[*noar * nosoar_dim1 
 		+ 5] > 0) {
-	    if ((nosoar[*noar * nosoar_dim1 + 4] != *nt1 && nosoar[*noar * 
-		    nosoar_dim1 + 4] != *nt2) || (nosoar[*noar * nosoar_dim1 + 
-		    5] != *nt1 && nosoar[*noar * nosoar_dim1 + 5] != *nt2)) {
+	    if (nosoar[*noar * nosoar_dim1 + 4] != *nt1 && nosoar[*noar * 
+		    nosoar_dim1 + 4] != *nt2 || nosoar[*noar * nosoar_dim1 + 
+		    5] != *nt1 && nosoar[*noar * nosoar_dim1 + 5] != *nt2) {
 /*                arete appartenant a plus de 2 triangles => erreur */
 		if (*ierr >= 0) {
-		 //   io___14.ciunit = unites_1.imprim;
-		 //   s_wsle(&io___14);
-		 //   do_lio(&c__9, &c__1, "erreur fasoar: arete ", (ftnlen)21);
-		 //   do_lio(&c__3, &c__1, (char *)&(*noar), (ftnlen)sizeof(
-			//    integer));
-		 //   do_lio(&c__9, &c__1, " dans 2 triangles", (ftnlen)17);
-		 //   do_lio(&c__3, &c__1, (char *)&nosoar[*noar * nosoar_dim1 
-			//    + 4], (ftnlen)sizeof(integer));
-		 //   do_lio(&c__3, &c__1, (char *)&nosoar[*noar * nosoar_dim1 
-			//    + 5], (ftnlen)sizeof(integer));
-		 //   do_lio(&c__9, &c__1, " et ajouter", (ftnlen)11);
-		 //   do_lio(&c__3, &c__1, (char *)&(*nt1), (ftnlen)sizeof(
-			//    integer));
-		 //   do_lio(&c__3, &c__1, (char *)&(*nt2), (ftnlen)sizeof(
-			//    integer));
-		 //   e_wsle();
-		 //   io___15.ciunit = unites_1.imprim;
-		 //   s_wsle(&io___15);
-		 //   do_lio(&c__9, &c__1, "arete", (ftnlen)5);
-		 //   do_lio(&c__3, &c__1, (char *)&(*noar), (ftnlen)sizeof(
-			//    integer));
-		 //   i__1 = *mosoar;
-		 //   for (i__ = 1; i__ <= i__1; ++i__) {
-			//do_lio(&c__3, &c__1, (char *)&nosoar[i__ + *noar * 
-			//	nosoar_dim1], (ftnlen)sizeof(integer));
-		 //   }
-		 //   e_wsle();
+		    io___14.ciunit = unites_1.imprim;
+		    s_wsle(&io___14);
+		    do_lio(&c__9, &c__1, "erreur fasoar: arete ", (ftnlen)21);
+		    do_lio(&c__3, &c__1, (char *)&(*noar), (ftnlen)sizeof(
+			    integer));
+		    do_lio(&c__9, &c__1, " dans 2 triangles", (ftnlen)17);
+		    do_lio(&c__3, &c__1, (char *)&nosoar[*noar * nosoar_dim1 
+			    + 4], (ftnlen)sizeof(integer));
+		    do_lio(&c__3, &c__1, (char *)&nosoar[*noar * nosoar_dim1 
+			    + 5], (ftnlen)sizeof(integer));
+		    do_lio(&c__9, &c__1, " et ajouter", (ftnlen)11);
+		    do_lio(&c__3, &c__1, (char *)&(*nt1), (ftnlen)sizeof(
+			    integer));
+		    do_lio(&c__3, &c__1, (char *)&(*nt2), (ftnlen)sizeof(
+			    integer));
+		    e_wsle();
+		    io___15.ciunit = unites_1.imprim;
+		    s_wsle(&io___15);
+		    do_lio(&c__9, &c__1, "arete", (ftnlen)5);
+		    do_lio(&c__3, &c__1, (char *)&(*noar), (ftnlen)sizeof(
+			    integer));
+		    i__1 = *mosoar;
+		    for (i__ = 1; i__ <= i__1; ++i__) {
+			do_lio(&c__3, &c__1, (char *)&nosoar[i__ + *noar * 
+				nosoar_dim1], (ftnlen)sizeof(integer));
+		    }
+		    e_wsle();
 		}
 
 /*                ERREUR. CORRECTION POUR VOIR ... */
@@ -872,20 +664,20 @@ integer nosui3_(integer *i__)
 	    if (nosoar[*noar * nosoar_dim1 + 5] > 0 && *nt1 > 0 && nosoar[*
 		    noar * nosoar_dim1 + 5] != *nt1) {
 /*               arete appartenant a plus de 2 triangles => erreur */
-		//io___18.ciunit = unites_1.imprim;
-		//s_wsle(&io___18);
-		//do_lio(&c__9, &c__1, "erreur fasoar: arete ", (ftnlen)21);
-		//do_lio(&c__3, &c__1, (char *)&(*noar), (ftnlen)sizeof(integer)
-		//	);
-		//do_lio(&c__9, &c__1, " dans triangles", (ftnlen)15);
-		//do_lio(&c__3, &c__1, (char *)&nosoar[*noar * nosoar_dim1 + 4],
-		//	 (ftnlen)sizeof(integer));
-		//do_lio(&c__3, &c__1, (char *)&nosoar[*noar * nosoar_dim1 + 5],
-		//	 (ftnlen)sizeof(integer));
-		//do_lio(&c__9, &c__1, " et ajouter triangle", (ftnlen)20);
-		//do_lio(&c__3, &c__1, (char *)&(*nt1), (ftnlen)sizeof(integer))
-		//	;
-		//e_wsle();
+		io___18.ciunit = unites_1.imprim;
+		s_wsle(&io___18);
+		do_lio(&c__9, &c__1, "erreur fasoar: arete ", (ftnlen)21);
+		do_lio(&c__3, &c__1, (char *)&(*noar), (ftnlen)sizeof(integer)
+			);
+		do_lio(&c__9, &c__1, " dans triangles", (ftnlen)15);
+		do_lio(&c__3, &c__1, (char *)&nosoar[*noar * nosoar_dim1 + 4],
+			 (ftnlen)sizeof(integer));
+		do_lio(&c__3, &c__1, (char *)&nosoar[*noar * nosoar_dim1 + 5],
+			 (ftnlen)sizeof(integer));
+		do_lio(&c__9, &c__1, " et ajouter triangle", (ftnlen)20);
+		do_lio(&c__3, &c__1, (char *)&(*nt1), (ftnlen)sizeof(integer))
+			;
+		e_wsle();
 		*ierr = 3;
 		return 0;
 	    }
@@ -899,19 +691,19 @@ integer nosui3_(integer *i__)
 	    if (nosoar[*noar * nosoar_dim1 + 5] > 0 && nosoar[*noar * 
 		    nosoar_dim1 + 5] != *nt2) {
 /*               arete appartenant a plus de 2 triangles => erreur */
-		//io___19.ciunit = unites_1.imprim;
-		//s_wsle(&io___19);
-		//do_lio(&c__9, &c__1, "erreur fasoar: arete ", (ftnlen)21);
-		//do_lio(&c__3, &c__1, (char *)&(*noar), (ftnlen)sizeof(integer)
-		//	);
-		//do_lio(&c__9, &c__1, " de st", (ftnlen)6);
-		//do_lio(&c__3, &c__1, (char *)&nosoar[*noar * nosoar_dim1 + 1],
-		//	 (ftnlen)sizeof(integer));
-		//do_lio(&c__9, &c__1, "-", (ftnlen)1);
-		//do_lio(&c__3, &c__1, (char *)&nosoar[*noar * nosoar_dim1 + 2],
-		//	 (ftnlen)sizeof(integer));
-		//do_lio(&c__9, &c__1, " dans plus de 2 triangles", (ftnlen)25);
-		//e_wsle();
+		io___19.ciunit = unites_1.imprim;
+		s_wsle(&io___19);
+		do_lio(&c__9, &c__1, "erreur fasoar: arete ", (ftnlen)21);
+		do_lio(&c__3, &c__1, (char *)&(*noar), (ftnlen)sizeof(integer)
+			);
+		do_lio(&c__9, &c__1, " de st", (ftnlen)6);
+		do_lio(&c__3, &c__1, (char *)&nosoar[*noar * nosoar_dim1 + 1],
+			 (ftnlen)sizeof(integer));
+		do_lio(&c__9, &c__1, "-", (ftnlen)1);
+		do_lio(&c__3, &c__1, (char *)&nosoar[*noar * nosoar_dim1 + 2],
+			 (ftnlen)sizeof(integer));
+		do_lio(&c__9, &c__1, " dans plus de 2 triangles", (ftnlen)25);
+		e_wsle();
 		*ierr = 4;
 		return 0;
 	    }
@@ -1542,9 +1334,9 @@ L30:
     doublereal d__1, d__2;
 
     /* Builtin functions */
- /*   integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
+    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
 	    e_wsle(void), s_wsfe(cilist *), do_fio(integer *, char *, ftnlen),
-	     e_wsfe(void);*/
+	     e_wsfe();
 
     /* Local variables */
     static doublereal x1, y1, x21, y21, x31, y31, xc, yc, rot, aire2;
@@ -1603,18 +1395,18 @@ L30:
 /*            nblgrc(nrerr) = 1 */
 /*            kerr(1) = 'erreur cenced: triangle degenere' */
 /*            call lereur */
-	    //io___79.ciunit = unites_1.imprim;
-	    //s_wsle(&io___79);
-	    //do_lio(&c__9, &c__1, "erreur cenced: triangle degenere", (ftnlen)
-		//    32);
-	    //e_wsle();
-	    //io___80.ciunit = unites_1.imprim;
-	    //s_wsfe(&io___80);
-	    //do_fio(&c__2, (char *)&xy1[1], (ftnlen)sizeof(doublereal));
-	    //do_fio(&c__2, (char *)&xy2[1], (ftnlen)sizeof(doublereal));
-	    //do_fio(&c__2, (char *)&xy3[1], (ftnlen)sizeof(doublereal));
-	    //do_fio(&c__1, (char *)&aire2, (ftnlen)sizeof(doublereal));
-	    //e_wsfe();
+	    io___79.ciunit = unites_1.imprim;
+	    s_wsle(&io___79);
+	    do_lio(&c__9, &c__1, "erreur cenced: triangle degenere", (ftnlen)
+		    32);
+	    e_wsle();
+	    io___80.ciunit = unites_1.imprim;
+	    s_wsfe(&io___80);
+	    do_fio(&c__2, (char *)&xy1[1], (ftnlen)sizeof(doublereal));
+	    do_fio(&c__2, (char *)&xy2[1], (ftnlen)sizeof(doublereal));
+	    do_fio(&c__2, (char *)&xy3[1], (ftnlen)sizeof(doublereal));
+	    do_fio(&c__1, (char *)&aire2, (ftnlen)sizeof(doublereal));
+	    e_wsfe();
 	}
 	cetria[1] = 0.;
 	cetria[2] = 0.;
@@ -1727,8 +1519,8 @@ doublereal angled_(doublereal *p1, doublereal *p2, doublereal *p3)
 
     /* Builtin functions */
     double sqrt(doublereal);
-    //integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
-	   // e_wsle(void);
+    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
+	    e_wsle(void);
 
     /* Local variables */
     static doublereal a[2];
@@ -1855,10 +1647,10 @@ doublereal angled_(doublereal *p1, doublereal *p2, doublereal *p3)
     for (k = 1; k <= 2; ++k) {
 	if (a[k - 1] < s * 1e-4f) {
 /*            nblgrc(nrerr) = 1 */
-	    //io___98.ciunit = imprim;
-	    //s_wsle(&io___98);
-	    //do_lio(&c__9, &c__1, "tous les points sont alignes", (ftnlen)28);
-	    //e_wsle();
+	    io___98.ciunit = imprim;
+	    s_wsle(&io___98);
+	    do_lio(&c__9, &c__1, "tous les points sont alignes", (ftnlen)28);
+	    e_wsle();
 /*            call lereur */
 	    *ierr = 7;
 	    return 0;
@@ -1919,7 +1711,7 @@ doublereal angled_(doublereal *p1, doublereal *p2, doublereal *p3)
 	    ".6,\002,\002,g14.6,\002,\002,g14.6,\002)=0!\002)";
 
     /* Builtin functions */
-    //integer s_wsfe(cilist *), do_fio(integer *, char *, ftnlen), e_wsfe(void);
+    integer s_wsfe(cilist *), do_fio(integer *, char *, ftnlen), e_wsfe();
 
     /* Local variables */
     static doublereal d0;
@@ -1969,17 +1761,17 @@ doublereal angled_(doublereal *p1, doublereal *p2, doublereal *p3)
 	areteideale_(longai);
 /*         (xyz,xyzd) */
 	if (*longai < 0.) {
-	    //io___105.ciunit = unites_1.imprim;
-	    //s_wsfe(&io___105);
-	    //do_fio(&c__3, (char *)&xyz[0], (ftnlen)sizeof(doublereal));
-	    //e_wsfe();
+	    io___105.ciunit = unites_1.imprim;
+	    s_wsfe(&io___105);
+	    do_fio(&c__3, (char *)&xyz[0], (ftnlen)sizeof(doublereal));
+	    e_wsfe();
 	    *longai = -(*longai);
 	}
 	if (*longai == 0.) {
-	    //io___106.ciunit = unites_1.imprim;
-	    //s_wsfe(&io___106);
-	    //do_fio(&c__3, (char *)&xyz[0], (ftnlen)sizeof(doublereal));
-	    //e_wsfe();
+	    io___106.ciunit = unites_1.imprim;
+	    s_wsfe(&io___106);
+	    do_fio(&c__3, (char *)&xyz[0], (ftnlen)sizeof(doublereal));
+	    e_wsfe();
 	    *ierr = 2;
 	    *longai = d0;
 	}
@@ -1998,8 +1790,8 @@ doublereal angled_(doublereal *p1, doublereal *p2, doublereal *p3)
     static integer equiv_2[3];
 
     /* Builtin functions */
-    //integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
-	   // e_wsle(void);
+    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
+	    e_wsle(void);
 
     /* Local variables */
     static doublereal a;
@@ -2266,11 +2058,11 @@ L15:
 
 /*           non les 4 sous-triangles sont mis dans la queue */
 	    if (lhqueu + 4 >= *mxqueu) {
-		//io___126.ciunit = unites_2.imprim;
-		//s_wsle(&io___126);
-		//do_lio(&c__9, &c__1, "tehote: saturation de la queue", (
-		//	ftnlen)30);
-		//e_wsle();
+		io___126.ciunit = unites_2.imprim;
+		s_wsle(&io___126);
+		do_lio(&c__9, &c__1, "tehote: saturation de la queue", (
+			ftnlen)30);
+		e_wsle();
 		*ierr = 7;
 		return 0;
 	    }
@@ -2301,8 +2093,8 @@ L15:
 	    dmin__ = pxyd[*ns1 * 3 + 1];
 	    dmax__ = pxyd[*ns2 * 3 + 1];
 	}
-	if ((xrmin <= dmin__ && dmin__ <= xrmax) || (xrmin <= dmax__ && dmax__ <=
-		 xrmax)) {
+	if (xrmin <= dmin__ && dmin__ <= xrmax || xrmin <= dmax__ && dmax__ <=
+		 xrmax) {
 	    if (pxyd[*ns1 * 3 + 2] > pxyd[*ns3 * 3 + 2]) {
 		dmin__ = pxyd[*ns3 * 3 + 2];
 		dmax__ = pxyd[*ns1 * 3 + 2];
@@ -2310,8 +2102,8 @@ L15:
 		dmin__ = pxyd[*ns1 * 3 + 2];
 		dmax__ = pxyd[*ns3 * 3 + 2];
 	    }
-	    if ((yrmin <= dmin__ && dmin__ <= yrmax) || (yrmin <= dmax__ && 
-		    dmax__ <= yrmax)) {
+	    if (yrmin <= dmin__ && dmin__ <= yrmax || yrmin <= dmax__ && 
+		    dmax__ <= yrmax) {
 
 /*              nte est un te feuille et interne au rectangle englobant */
 /*              ======================================================= */
@@ -2442,10 +2234,10 @@ L30:
 
 /*     pb dans le calcul de la fonction taille_ideale */
 L9999:
-    //io___132.ciunit = unites_2.imprim;
-    //s_wsle(&io___132);
-    //do_lio(&c__9, &c__1, "pb dans le calcul de taille_ideale", (ftnlen)34);
-    //e_wsle();
+    io___132.ciunit = unites_2.imprim;
+    s_wsle(&io___132);
+    do_lio(&c__9, &c__1, "pb dans le calcul de taille_ideale", (ftnlen)34);
+    e_wsle();
 /*      nblgrc(nrerr) = 1 */
 /*      kerr(1) = 'pb dans le calcul de taille_ideale' */
 /*      call lereur */
@@ -2469,8 +2261,8 @@ L9999:
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    //integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
-	   // e_wsle(void);
+    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
+	    e_wsle(void);
 
     /* Local variables */
     static doublereal a;
@@ -2655,11 +2447,11 @@ L10:
 	if (letree[nte * 9] > 0) {
 /*           non les 4 sous-triangles sont mis dans la queue */
 	    if (lhqueu + 4 >= *mxqueu) {
-		//io___146.ciunit = unites_2.imprim;
-		//s_wsle(&io___146);
-		//do_lio(&c__9, &c__1, "tetrte: saturation de la queue", (
-		//	ftnlen)30);
-		//e_wsle();
+		io___146.ciunit = unites_2.imprim;
+		s_wsle(&io___146);
+		do_lio(&c__9, &c__1, "tetrte: saturation de la queue", (
+			ftnlen)30);
+		e_wsle();
 		*ierr = 5;
 		return 0;
 	    }
@@ -2689,8 +2481,8 @@ L10:
 	    dmin__ = pxyd[ns1 * 3 + 1];
 	    dmax__ = pxyd[ns2 * 3 + 1];
 	}
-	if ((xrmin <= dmin__ && dmin__ <= xrmax) || (xrmin <= dmax__ && dmax__ <=
-		 xrmax)) {
+	if (xrmin <= dmin__ && dmin__ <= xrmax || xrmin <= dmax__ && dmax__ <=
+		 xrmax) {
 	    if (pxyd[ns1 * 3 + 2] > pxyd[ns3 * 3 + 2]) {
 		dmin__ = pxyd[ns3 * 3 + 2];
 		dmax__ = pxyd[ns1 * 3 + 2];
@@ -2698,8 +2490,8 @@ L10:
 		dmin__ = pxyd[ns1 * 3 + 2];
 		dmax__ = pxyd[ns3 * 3 + 2];
 	    }
-	    if ((yrmin <= dmin__ && dmin__ <= yrmax) || (yrmin <= dmax__ && 
-		    dmax__ <= yrmax)) {
+	    if (yrmin <= dmin__ && dmin__ <= yrmax || yrmin <= dmax__ && 
+		    dmax__ <= yrmax) {
 
 /*              te minimal et interne au rectangle englobant */
 /*              -------------------------------------------- */
@@ -3220,8 +3012,8 @@ L20:
 	    i__2;
 
     /* Builtin functions */
-    //integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
-	   // e_wsle(void);
+    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
+	    e_wsle(void);
 
     /* Local variables */
     static integer i__, j, na, nl, nt, na0, na1, ns1, ns2, nt2;
@@ -3335,11 +3127,11 @@ L20:
 /*         nblgrc(nrerr) = 1 */
 /*         kerr(1) = 'pas de triangle d''abscisse minimale' */
 /*         call lereur */
-	//io___187.ciunit = unites_2.imprim;
-	//s_wsle(&io___187);
-	//do_lio(&c__9, &c__1, "pas de triangle d'abscisse minimale", (ftnlen)
-	//	35);
-	//e_wsle();
+	io___187.ciunit = unites_2.imprim;
+	s_wsle(&io___187);
+	do_lio(&c__9, &c__1, "pas de triangle d'abscisse minimale", (ftnlen)
+		35);
+	e_wsle();
 	*ierr = 2;
 	goto L9990;
     }
@@ -3676,9 +3468,9 @@ L9990:
     integer noartr_dim1, noartr_offset, nosoar_dim1, nosoar_offset, i__1;
 
     /* Builtin functions */
-    //integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
-	   // e_wsle(void), s_wsfe(cilist *), do_fio(integer *, char *, ftnlen),
-	   //  e_wsfe(void);
+    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
+	    e_wsle(void), s_wsfe(cilist *), do_fio(integer *, char *, ftnlen),
+	     e_wsfe();
 
     /* Local variables */
     static integer j, ii, nt0, nt1, nar, nta, noar, nosotr[3];
@@ -3762,14 +3554,14 @@ L9990:
     }
 
 /*     le premier triangle de sommet ns */
- //   nt0 = (i__1 = nosoar[nar * nosoar_dim1 + 4], abs(i__1));
+    nt0 = (i__1 = nosoar[nar * nosoar_dim1 + 4], abs(i__1));
     if (nt0 <= 0) {
-	//io___202.ciunit = unites_1.imprim;
-	//s_wsle(&io___202);
-	//do_lio(&c__9, &c__1, "trp1st: sommet", (ftnlen)14);
-	//do_lio(&c__3, &c__1, (char *)&(*ns), (ftnlen)sizeof(integer));
-	//do_lio(&c__9, &c__1, " dans aucun triangle", (ftnlen)20);
-	//e_wsle();
+	io___202.ciunit = unites_1.imprim;
+	s_wsle(&io___202);
+	do_lio(&c__9, &c__1, "trp1st: sommet", (ftnlen)14);
+	do_lio(&c__3, &c__1, (char *)&(*ns), (ftnlen)sizeof(integer));
+	do_lio(&c__9, &c__1, " dans aucun triangle", (ftnlen)20);
+	e_wsle();
 	goto L100;
     }
 
@@ -3809,13 +3601,13 @@ L10:
     } else if (nosoar[noar * nosoar_dim1 + 5] == nt0) {
 	nt1 = nosoar[noar * nosoar_dim1 + 4];
     } else {
-	//io___207.ciunit = unites_1.imprim;
-	//s_wsle(&io___207);
-	//do_lio(&c__9, &c__1, "trp1st: anomalie arete", (ftnlen)22);
-	//do_lio(&c__3, &c__1, (char *)&noar, (ftnlen)sizeof(integer));
-	//do_lio(&c__9, &c__1, " sans triangle", (ftnlen)14);
-	//do_lio(&c__3, &c__1, (char *)&nt0, (ftnlen)sizeof(integer));
-	//e_wsle();
+	io___207.ciunit = unites_1.imprim;
+	s_wsle(&io___207);
+	do_lio(&c__9, &c__1, "trp1st: anomalie arete", (ftnlen)22);
+	do_lio(&c__3, &c__1, (char *)&noar, (ftnlen)sizeof(integer));
+	do_lio(&c__9, &c__1, " sans triangle", (ftnlen)14);
+	do_lio(&c__3, &c__1, (char *)&nt0, (ftnlen)sizeof(integer));
+	e_wsle();
 	goto L100;
     }
 
@@ -3861,13 +3653,13 @@ L25:
 	} else if (nosoar[noar * nosoar_dim1 + 5] == nt1) {
 	    nt1 = nosoar[noar * nosoar_dim1 + 4];
 	} else {
-	    //io___208.ciunit = unites_1.imprim;
-	    //s_wsle(&io___208);
-	    //do_lio(&c__9, &c__1, "trp1st: Anomalie arete", (ftnlen)22);
-	    //do_lio(&c__3, &c__1, (char *)&noar, (ftnlen)sizeof(integer));
-	    //do_lio(&c__9, &c__1, " sans triangle", (ftnlen)14);
-	    //do_lio(&c__3, &c__1, (char *)&nt1, (ftnlen)sizeof(integer));
-	    //e_wsle();
+	    io___208.ciunit = unites_1.imprim;
+	    s_wsle(&io___208);
+	    do_lio(&c__9, &c__1, "trp1st: Anomalie arete", (ftnlen)22);
+	    do_lio(&c__3, &c__1, (char *)&noar, (ftnlen)sizeof(integer));
+	    do_lio(&c__9, &c__1, " sans triangle", (ftnlen)14);
+	    do_lio(&c__3, &c__1, (char *)&nt1, (ftnlen)sizeof(integer));
+	    e_wsle();
 	    goto L100;
 	}
 
@@ -3923,13 +3715,13 @@ L33:
     } else if (nosoar[noar * nosoar_dim1 + 5] == nta) {
 	nt1 = nosoar[noar * nosoar_dim1 + 4];
     } else {
-	//io___209.ciunit = unites_1.imprim;
-	//s_wsle(&io___209);
-	//do_lio(&c__9, &c__1, "trp1st: Anomalie arete", (ftnlen)22);
-	//do_lio(&c__3, &c__1, (char *)&noar, (ftnlen)sizeof(integer));
-	//do_lio(&c__9, &c__1, " SANS triangle", (ftnlen)14);
-	//do_lio(&c__3, &c__1, (char *)&nta, (ftnlen)sizeof(integer));
-	//e_wsle();
+	io___209.ciunit = unites_1.imprim;
+	s_wsle(&io___209);
+	do_lio(&c__9, &c__1, "trp1st: Anomalie arete", (ftnlen)22);
+	do_lio(&c__3, &c__1, (char *)&noar, (ftnlen)sizeof(integer));
+	do_lio(&c__9, &c__1, " SANS triangle", (ftnlen)14);
+	do_lio(&c__3, &c__1, (char *)&nta, (ftnlen)sizeof(integer));
+	e_wsle();
 	goto L100;
     }
     if (nt1 <= 0) {
@@ -3984,13 +3776,13 @@ L60:
     } else if (nosoar[noar * nosoar_dim1 + 5] == nt1) {
 	nt1 = nosoar[noar * nosoar_dim1 + 4];
     } else {
-	//io___210.ciunit = unites_1.imprim;
-	//s_wsle(&io___210);
-	//do_lio(&c__9, &c__1, "trp1st: anomalie arete", (ftnlen)22);
-	//do_lio(&c__3, &c__1, (char *)&noar, (ftnlen)sizeof(integer));
-	//do_lio(&c__9, &c__1, " SANS triangle", (ftnlen)14);
-	//do_lio(&c__3, &c__1, (char *)&nt1, (ftnlen)sizeof(integer));
-	//e_wsle();
+	io___210.ciunit = unites_1.imprim;
+	s_wsle(&io___210);
+	do_lio(&c__9, &c__1, "trp1st: anomalie arete", (ftnlen)22);
+	do_lio(&c__3, &c__1, (char *)&noar, (ftnlen)sizeof(integer));
+	do_lio(&c__9, &c__1, " SANS triangle", (ftnlen)14);
+	do_lio(&c__3, &c__1, (char *)&nt1, (ftnlen)sizeof(integer));
+	e_wsle();
 	goto L100;
     }
     if (nt1 > 0) {
@@ -4038,27 +3830,27 @@ L100:
 /*     saturation de la pile des triangles */
 /*     ----------------------------------- */
 L9990:
- //   io___212.ciunit = unites_1.imprim;
- //   s_wsle(&io___212);
- //   do_lio(&c__9, &c__1, "trp1st: saturation pile des triangles autour du so"
-	//    "mmet", (ftnlen)54);
- //   do_lio(&c__3, &c__1, (char *)&(*ns), (ftnlen)sizeof(integer));
- //   e_wsle();
- //   io___213.ciunit = unites_1.imprim;
- //   s_wsle(&io___213);
- //   do_lio(&c__9, &c__1, "Plus de", (ftnlen)7);
- //   do_lio(&c__3, &c__1, (char *)&(*mxpile), (ftnlen)sizeof(integer));
- //   do_lio(&c__9, &c__1, " triangles de sommet", (ftnlen)20);
- //   do_lio(&c__3, &c__1, (char *)&(*ns), (ftnlen)sizeof(integer));
- //   e_wsle();
- //   io___214.ciunit = unites_1.imprim;
- //   s_wsfe(&io___214);
- //   i__1 = *mxpile;
- //   for (ii = 1; ii <= i__1; ++ii) {
-	//do_fio(&c__1, (char *)&ii, (ftnlen)sizeof(integer));
-	//do_fio(&c__1, (char *)&lapile[ii], (ftnlen)sizeof(integer));
- //   }
- //   e_wsfe();
+    io___212.ciunit = unites_1.imprim;
+    s_wsle(&io___212);
+    do_lio(&c__9, &c__1, "trp1st: saturation pile des triangles autour du so"
+	    "mmet", (ftnlen)54);
+    do_lio(&c__3, &c__1, (char *)&(*ns), (ftnlen)sizeof(integer));
+    e_wsle();
+    io___213.ciunit = unites_1.imprim;
+    s_wsle(&io___213);
+    do_lio(&c__9, &c__1, "Plus de", (ftnlen)7);
+    do_lio(&c__3, &c__1, (char *)&(*mxpile), (ftnlen)sizeof(integer));
+    do_lio(&c__9, &c__1, " triangles de sommet", (ftnlen)20);
+    do_lio(&c__3, &c__1, (char *)&(*ns), (ftnlen)sizeof(integer));
+    e_wsle();
+    io___214.ciunit = unites_1.imprim;
+    s_wsfe(&io___214);
+    i__1 = *mxpile;
+    for (ii = 1; ii <= i__1; ++ii) {
+	do_fio(&c__1, (char *)&ii, (ftnlen)sizeof(integer));
+	do_fio(&c__1, (char *)&lapile[ii], (ftnlen)sizeof(integer));
+    }
+    e_wsfe();
 
 /* L9999: */
     *lhpile = 0;
@@ -4143,8 +3935,8 @@ L9990:
     static integer equiv_2[3];
 
     /* Builtin functions */
-    //integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
-	//    e_wsle(void);
+    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
+	    e_wsle(void);
 
     /* Local variables */
     static real d__;
@@ -4275,12 +4067,12 @@ L15:
 	narete = noarst[ns];
 	if (narete <= 0) {
 /*           erreur: le point appartient a aucune arete */
-	    //io___226.ciunit = unites_2.imprim;
-	    //s_wsle(&io___226);
-	    //do_lio(&c__9, &c__1, "sommet ", (ftnlen)7);
-	    //do_lio(&c__3, &c__1, (char *)&ns, (ftnlen)sizeof(integer));
-	    //do_lio(&c__9, &c__1, " dans aucune arete", (ftnlen)18);
-	    //e_wsle();
+	    io___226.ciunit = unites_2.imprim;
+	    s_wsle(&io___226);
+	    do_lio(&c__9, &c__1, "sommet ", (ftnlen)7);
+	    do_lio(&c__3, &c__1, (char *)&ns, (ftnlen)sizeof(integer));
+	    do_lio(&c__9, &c__1, " dans aucune arete", (ftnlen)18);
+	    e_wsle();
 	    *ierr = 11;
 	    return 0;
 	}
@@ -4390,13 +4182,13 @@ L100:
 	;
     }
 
-    //io___238.ciunit = unites_2.imprim;
-    //s_wsle(&io___238);
-    //do_lio(&c__9, &c__1, "tesusp: suppression de", (ftnlen)22);
-    //do_lio(&c__3, &c__1, (char *)&nbstsu, (ftnlen)sizeof(integer));
-    //do_lio(&c__9, &c__1, " sommets de te trop proches de la frontiere", (
-	   // ftnlen)43);
-    //e_wsle();
+    io___238.ciunit = unites_2.imprim;
+    s_wsle(&io___238);
+    do_lio(&c__9, &c__1, "tesusp: suppression de", (ftnlen)22);
+    do_lio(&c__3, &c__1, (char *)&nbstsu, (ftnlen)sizeof(integer));
+    do_lio(&c__9, &c__1, " sommets de te trop proches de la frontiere", (
+	    ftnlen)43);
+    e_wsle();
     return 0;
 } /* tesusp_ */
 
@@ -4420,8 +4212,8 @@ L100:
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    //integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
-	   // e_wsle(void);
+    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
+	    e_wsle(void);
     double sqrt(doublereal);
 
     /* Local variables */
@@ -4640,23 +4432,23 @@ L19:
 		    airetm = d__;
 		    imax = i__;
 		} else if (d__ <= 0.) {
-		    //io___260.ciunit = unites_1.imprim;
-		    //s_wsle(&io___260);
-		    //do_lio(&c__9, &c__1, "teamqa: triangle notrcf(", (ftnlen)
-			   // 24);
-		    //do_lio(&c__3, &c__1, (char *)&i__, (ftnlen)sizeof(integer)
-			   // );
-		    //do_lio(&c__9, &c__1, ")=", (ftnlen)2);
-		    //do_lio(&c__3, &c__1, (char *)&notrcf[i__], (ftnlen)sizeof(
-			   // integer));
-		    //do_lio(&c__9, &c__1, " st", (ftnlen)3);
-		    //do_lio(&c__3, &c__3, (char *)&nosotr[0], (ftnlen)sizeof(
-			   // integer));
-		    //do_lio(&c__9, &c__1, " AIRE=", (ftnlen)6);
-		    //do_lio(&c__5, &c__1, (char *)&d__, (ftnlen)sizeof(
-			   // doublereal));
-		    //do_lio(&c__9, &c__1, "<=0", (ftnlen)3);
-		    //e_wsle();
+		    io___260.ciunit = unites_1.imprim;
+		    s_wsle(&io___260);
+		    do_lio(&c__9, &c__1, "teamqa: triangle notrcf(", (ftnlen)
+			    24);
+		    do_lio(&c__3, &c__1, (char *)&i__, (ftnlen)sizeof(integer)
+			    );
+		    do_lio(&c__9, &c__1, ")=", (ftnlen)2);
+		    do_lio(&c__3, &c__1, (char *)&notrcf[i__], (ftnlen)sizeof(
+			    integer));
+		    do_lio(&c__9, &c__1, " st", (ftnlen)3);
+		    do_lio(&c__3, &c__3, (char *)&nosotr[0], (ftnlen)sizeof(
+			    integer));
+		    do_lio(&c__9, &c__1, " AIRE=", (ftnlen)6);
+		    do_lio(&c__5, &c__1, (char *)&d__, (ftnlen)sizeof(
+			    doublereal));
+		    do_lio(&c__9, &c__1, "<=0", (ftnlen)3);
+		    e_wsle();
 		    goto L1000;
 		}
 
@@ -4670,13 +4462,13 @@ L19:
 		    }
 /* L20: */
 		}
-		//io___262.ciunit = unites_1.imprim;
-		//s_wsle(&io___262);
-		//do_lio(&c__9, &c__1, "teamqa: ERREUR triangle", (ftnlen)23);
-		//do_lio(&c__3, &c__1, (char *)&nt, (ftnlen)sizeof(integer));
-		//do_lio(&c__9, &c__1, " SANS sommet", (ftnlen)12);
-		//do_lio(&c__3, &c__1, (char *)&ns, (ftnlen)sizeof(integer));
-		//e_wsle();
+		io___262.ciunit = unites_1.imprim;
+		s_wsle(&io___262);
+		do_lio(&c__9, &c__1, "teamqa: ERREUR triangle", (ftnlen)23);
+		do_lio(&c__3, &c__1, (char *)&nt, (ftnlen)sizeof(integer));
+		do_lio(&c__9, &c__1, " SANS sommet", (ftnlen)12);
+		do_lio(&c__3, &c__1, (char *)&ns, (ftnlen)sizeof(integer));
+		e_wsle();
 
 /*              construction de la liste des sommets des aretes simples */
 /*              de la boule des triangles de sommet ns */
@@ -4756,11 +4548,11 @@ L35:
 		nusotr_(&nt, mosoar, &nosoar[nosoar_offset], moartr, &noartr[
 			noartr_offset], nosotr);
 		if (*nbsomm >= *mxsomm) {
-		    //io___274.ciunit = unites_1.imprim;
-		    //s_wsle(&io___274);
-		    //do_lio(&c__9, &c__1, "saturation du tableau pxyd", (
-			   // ftnlen)26);
-		    //e_wsle();
+		    io___274.ciunit = unites_1.imprim;
+		    s_wsle(&io___274);
+		    do_lio(&c__9, &c__1, "saturation du tableau pxyd", (
+			    ftnlen)26);
+		    e_wsle();
 /*                 abandon de l'amelioration du sommet ns */
 		    goto L9999;
 		}
@@ -5217,8 +5009,8 @@ L50:
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    //integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
-	   // e_wsle(void);
+    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
+	    e_wsle(void);
     double sqrt(doublereal);
 
     /* Local variables */
@@ -5321,10 +5113,10 @@ L2:
 	return 0;
 
     } else if (nbar <= 2) {
-	//io___310.ciunit = unites_1.imprim;
-	//s_wsle(&io___310);
-	//do_lio(&c__9, &c__1, "erreur trchtd: cf<3 aretes", (ftnlen)26);
-	//e_wsle();
+	io___310.ciunit = unites_1.imprim;
+	s_wsle(&io___310);
+	do_lio(&c__9, &c__1, "erreur trchtd: cf<3 aretes", (ftnlen)26);
+	e_wsle();
 	*namin = 0;
 	*namin0 = 0;
 	return 0;
@@ -5544,8 +5336,8 @@ L200:
     integer nosoar_dim1, nosoar_offset, noartr_dim1, noartr_offset;
 
     /* Builtin functions */
-    //integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
-	   // e_wsle(void);
+    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
+	    e_wsle(void);
 
     /* Local variables */
     static integer nav, na2s, na3s, nav1, ierr;
@@ -5752,19 +5544,19 @@ L200:
 
 /*     erreur */
 L9100:
-    //io___334.ciunit = unites_1.imprim;
-    //s_wsle(&io___334);
-    //do_lio(&c__9, &c__1, "saturation du tableau mxarcf", (ftnlen)28);
-    //e_wsle();
+    io___334.ciunit = unites_1.imprim;
+    s_wsle(&io___334);
+    do_lio(&c__9, &c__1, "saturation du tableau mxarcf", (ftnlen)28);
+    e_wsle();
     *nt = 0;
     return 0;
 
 /*     erreur tableau nosoar sature */
 L9900:
-    //io___335.ciunit = unites_1.imprim;
-    //s_wsle(&io___335);
-    //do_lio(&c__9, &c__1, "saturation du tableau nosoar", (ftnlen)28);
-    //e_wsle();
+    io___335.ciunit = unites_1.imprim;
+    s_wsle(&io___335);
+    do_lio(&c__9, &c__1, "saturation du tableau nosoar", (ftnlen)28);
+    e_wsle();
     *nt = 0;
     return 0;
 } /* trcf0a_ */
@@ -5779,8 +5571,8 @@ L9900:
     integer nosoar_dim1, nosoar_offset, noartr_dim1, noartr_offset;
 
     /* Builtin functions */
-    //integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
-	   // e_wsle(void);
+    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
+	    e_wsle(void);
 
     /* Local variables */
     static integer na3, nav, ierr;
@@ -5857,10 +5649,10 @@ L9900:
 
     /* Function Body */
     if (*nbcf >= *mxarcf) {
-	//io___336.ciunit = unites_1.imprim;
-	//s_wsle(&io___336);
-	//do_lio(&c__9, &c__1, "saturation du tableau noarcf", (ftnlen)28);
-	//e_wsle();
+	io___336.ciunit = unites_1.imprim;
+	s_wsle(&io___336);
+	do_lio(&c__9, &c__1, "saturation du tableau noarcf", (ftnlen)28);
+	e_wsle();
 	*nt = 0;
 	return 0;
     }
@@ -5913,10 +5705,10 @@ L9900:
 /*     recherche d'une arete de cf vide */
     nav = n1arcf[0];
     if (nav <= 0) {
-	//io___340.ciunit = unites_1.imprim;
-	//s_wsle(&io___340);
-	//do_lio(&c__9, &c__1, "saturation du tableau noarcf", (ftnlen)28);
-	//e_wsle();
+	io___340.ciunit = unites_1.imprim;
+	s_wsle(&io___340);
+	do_lio(&c__9, &c__1, "saturation du tableau noarcf", (ftnlen)28);
+	e_wsle();
 	*nt = 0;
 	return 0;
     }
@@ -5941,10 +5733,10 @@ L9900:
 
 /*     erreur tableau nosoar sature */
 L9900:
-    //io___341.ciunit = unites_1.imprim;
-    //s_wsle(&io___341);
-    //do_lio(&c__9, &c__1, "saturation du tableau nosoar", (ftnlen)28);
-    //e_wsle();
+    io___341.ciunit = unites_1.imprim;
+    s_wsle(&io___341);
+    do_lio(&c__9, &c__1, "saturation du tableau nosoar", (ftnlen)28);
+    e_wsle();
     *nt = 0;
     return 0;
 } /* trcf1a_ */
@@ -5958,8 +5750,8 @@ L9900:
     integer nosoar_dim1, nosoar_offset, noartr_dim1, noartr_offset;
 
     /* Builtin functions */
-    //integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
-	   // e_wsle(void);
+    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
+	    e_wsle(void);
 
     /* Local variables */
     static integer na2, na3, ierr;
@@ -6041,11 +5833,11 @@ L9900:
 	     &ierr);
     if (ierr != 0) {
 	if (ierr == 1) {
-	    //io___345.ciunit = unites_1.imprim;
-	    //s_wsle(&io___345);
-	    //do_lio(&c__9, &c__1, "saturation des aretes (tableau nosoar)", (
-		   // ftnlen)38);
-	    //e_wsle();
+	    io___345.ciunit = unites_1.imprim;
+	    s_wsle(&io___345);
+	    do_lio(&c__9, &c__1, "saturation des aretes (tableau nosoar)", (
+		    ftnlen)38);
+	    e_wsle();
 	}
 	*nt = 0;
 	return 0;
@@ -6087,8 +5879,8 @@ L9900:
     integer nosoar_dim1, nosoar_offset, noartr_dim1, noartr_offset;
 
     /* Builtin functions */
-    //integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
-	   // e_wsle(void);
+    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
+	    e_wsle(void);
 
     /* Local variables */
     static integer n;
@@ -6143,11 +5935,11 @@ L9900:
 
     /* Function Body */
     if (*n1artr <= 0) {
-	//io___346.ciunit = unites_1.imprim;
-	//s_wsle(&io___346);
-	//do_lio(&c__9, &c__1, "saturation du tableau noartr des aretes", (
-	//	ftnlen)39);
-	//e_wsle();
+	io___346.ciunit = unites_1.imprim;
+	s_wsle(&io___346);
+	do_lio(&c__9, &c__1, "saturation du tableau noartr des aretes", (
+		ftnlen)39);
+	e_wsle();
 	*nt = 0;
 	return 0;
     }
@@ -6436,8 +6228,8 @@ L9900:
 	    i__2;
 
     /* Builtin functions */
-    //integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
-	   // e_wsle(void);
+    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
+	    e_wsle(void);
 
     /* Local variables */
     static doublereal d__;
@@ -6651,30 +6443,30 @@ L3:
 	    s = surtd2_(&pxyd[ns1 * 3 + 1], &pxyd[ns2 * 3 + 1], &pxyd[ns3 * 3 
 		    + 1]);
 	    if (s <= 0.) {
-		//io___375.ciunit = unites_1.imprim;
-		//s_wsle(&io___375);
-		//do_lio(&c__9, &c__1, "tridcf: trcf3a produit tr", (ftnlen)25);
-		//do_lio(&c__3, &c__1, (char *)&nt, (ftnlen)sizeof(integer));
-		//do_lio(&c__9, &c__1, " st", (ftnlen)3);
-		//do_lio(&c__3, &c__1, (char *)&ns1, (ftnlen)sizeof(integer));
-		//do_lio(&c__3, &c__1, (char *)&ns2, (ftnlen)sizeof(integer));
-		//do_lio(&c__3, &c__1, (char *)&ns3, (ftnlen)sizeof(integer));
-		//e_wsle();
-		//io___376.ciunit = unites_1.imprim;
-		//s_wsle(&io___376);
-		//do_lio(&c__9, &c__1, "tridcf: triangle AIRE<0", (ftnlen)23);
-		//e_wsle();
+		io___375.ciunit = unites_1.imprim;
+		s_wsle(&io___375);
+		do_lio(&c__9, &c__1, "tridcf: trcf3a produit tr", (ftnlen)25);
+		do_lio(&c__3, &c__1, (char *)&nt, (ftnlen)sizeof(integer));
+		do_lio(&c__9, &c__1, " st", (ftnlen)3);
+		do_lio(&c__3, &c__1, (char *)&ns1, (ftnlen)sizeof(integer));
+		do_lio(&c__3, &c__1, (char *)&ns2, (ftnlen)sizeof(integer));
+		do_lio(&c__3, &c__1, (char *)&ns3, (ftnlen)sizeof(integer));
+		e_wsle();
+		io___376.ciunit = unites_1.imprim;
+		s_wsle(&io___376);
+		do_lio(&c__9, &c__1, "tridcf: triangle AIRE<0", (ftnlen)23);
+		e_wsle();
 	    }
 	    if (nt <= 0) {
 		*ierr = 7;
 		return 0;
 	    }
 	    if (*nbtrcf >= *mxarcf) {
-		//io___377.ciunit = unites_1.imprim;
-		//s_wsle(&io___377);
-		//do_lio(&c__9, &c__1, "saturation du tableau notrcf", (ftnlen)
-		//	28);
-		//e_wsle();
+		io___377.ciunit = unites_1.imprim;
+		s_wsle(&io___377);
+		do_lio(&c__9, &c__1, "saturation du tableau notrcf", (ftnlen)
+			28);
+		e_wsle();
 		*ierr = 8;
 		return 0;
 	    }
@@ -6684,11 +6476,11 @@ L3:
 /*           modification du cf. creation d'une arete dans noarcf */
 	    na12 = n1arcf[0];
 	    if (na12 <= 0) {
-		//io___379.ciunit = unites_1.imprim;
-		//s_wsle(&io___379);
-		//do_lio(&c__9, &c__1, "saturation du tableau noarcf", (ftnlen)
-		//	28);
-		//e_wsle();
+		io___379.ciunit = unites_1.imprim;
+		s_wsle(&io___379);
+		do_lio(&c__9, &c__1, "saturation du tableau noarcf", (ftnlen)
+			28);
+		e_wsle();
 		*ierr = 10;
 		return 0;
 	    }
@@ -6714,16 +6506,16 @@ L3:
     }
 
     if (imin == 0) {
-	//io___380.ciunit = unites_1.imprim;
-	//s_wsle(&io___380);
-	//do_lio(&c__9, &c__1, "tridcf: il reste", (ftnlen)16);
-	//do_lio(&c__3, &c__1, (char *)&nbstp, (ftnlen)sizeof(integer));
-	//do_lio(&c__9, &c__1, " sommets isoles non triangules", (ftnlen)30);
-	//e_wsle();
-	//io___381.ciunit = unites_1.imprim;
-	//s_wsle(&io___381);
-	//do_lio(&c__9, &c__1, "ameliorer l'algorithme", (ftnlen)22);
-	//e_wsle();
+	io___380.ciunit = unites_1.imprim;
+	s_wsle(&io___380);
+	do_lio(&c__9, &c__1, "tridcf: il reste", (ftnlen)16);
+	do_lio(&c__3, &c__1, (char *)&nbstp, (ftnlen)sizeof(integer));
+	do_lio(&c__9, &c__1, " sommets isoles non triangules", (ftnlen)30);
+	e_wsle();
+	io___381.ciunit = unites_1.imprim;
+	s_wsle(&io___381);
+	do_lio(&c__9, &c__1, "ameliorer l'algorithme", (ftnlen)22);
+	e_wsle();
 /* cc         pause */
 	*ierr = 9;
 	return 0;
@@ -6766,25 +6558,25 @@ L10:
 	s = surtd2_(&pxyd[nosotr[0] * 3 + 1], &pxyd[nosotr[1] * 3 + 1], &pxyd[
 		nosotr[2] * 3 + 1]);
 	if (s <= 0.) {
-	    //io___387.ciunit = unites_1.imprim;
-	    //s_wsle(&io___387);
-	    //do_lio(&c__9, &c__1, "tridcf: trcf3s produit tr", (ftnlen)25);
-	    //do_lio(&c__3, &c__1, (char *)&nt, (ftnlen)sizeof(integer));
-	    //do_lio(&c__9, &c__1, " st", (ftnlen)3);
-	    //do_lio(&c__3, &c__3, (char *)&nosotr[0], (ftnlen)sizeof(integer));
-	    //e_wsle();
-	    //io___388.ciunit = unites_1.imprim;
-	    //s_wsle(&io___388);
-	    //do_lio(&c__9, &c__1, "tridcf: triangle AIRE<0", (ftnlen)23);
-	    //e_wsle();
+	    io___387.ciunit = unites_1.imprim;
+	    s_wsle(&io___387);
+	    do_lio(&c__9, &c__1, "tridcf: trcf3s produit tr", (ftnlen)25);
+	    do_lio(&c__3, &c__1, (char *)&nt, (ftnlen)sizeof(integer));
+	    do_lio(&c__9, &c__1, " st", (ftnlen)3);
+	    do_lio(&c__3, &c__3, (char *)&nosotr[0], (ftnlen)sizeof(integer));
+	    e_wsle();
+	    io___388.ciunit = unites_1.imprim;
+	    s_wsle(&io___388);
+	    do_lio(&c__9, &c__1, "tridcf: triangle AIRE<0", (ftnlen)23);
+	    e_wsle();
 	}
 
 /*        ajout du triangle cree a sa pile */
 	if (*nbtrcf >= *mxarcf) {
-	    //io___389.ciunit = unites_1.imprim;
-	    //s_wsle(&io___389);
-	    //do_lio(&c__9, &c__1, "saturation du tableau notrcf", (ftnlen)28);
-	    //e_wsle();
+	    io___389.ciunit = unites_1.imprim;
+	    s_wsle(&io___389);
+	    do_lio(&c__9, &c__1, "saturation du tableau notrcf", (ftnlen)28);
+	    e_wsle();
 	    *ierr = 4;
 	    return 0;
 	}
@@ -6825,58 +6617,58 @@ L10:
 /*              l'arete appartient a 2 triangles differents de nt0 */
 /*              anomalie. chainage des triangles des aretes defectueux */
 /*              a corriger */
-		//io___395.ciunit = unites_1.imprim;
-		//s_wsle(&io___395);
-		//do_lio(&c__9, &c__1, "tridcf: erreur 1 arete dans 3 triangles"
-		//	, (ftnlen)39);
-		//e_wsle();
-		//io___396.ciunit = unites_1.imprim;
-		//s_wsle(&io___396);
-		//do_lio(&c__9, &c__1, "tridcf: arete nosoar(", (ftnlen)21);
-		//do_lio(&c__3, &c__1, (char *)&noar, (ftnlen)sizeof(integer));
-		//do_lio(&c__9, &c__1, ")=", (ftnlen)2);
-		//i__2 = *mosoar;
-		//for (k = 1; k <= i__2; ++k) {
-		//    do_lio(&c__3, &c__1, (char *)&nosoar[k + noar * 
-		//	    nosoar_dim1], (ftnlen)sizeof(integer));
-		//}
-		//e_wsle();
+		io___395.ciunit = unites_1.imprim;
+		s_wsle(&io___395);
+		do_lio(&c__9, &c__1, "tridcf: erreur 1 arete dans 3 triangles"
+			, (ftnlen)39);
+		e_wsle();
+		io___396.ciunit = unites_1.imprim;
+		s_wsle(&io___396);
+		do_lio(&c__9, &c__1, "tridcf: arete nosoar(", (ftnlen)21);
+		do_lio(&c__3, &c__1, (char *)&noar, (ftnlen)sizeof(integer));
+		do_lio(&c__9, &c__1, ")=", (ftnlen)2);
+		i__2 = *mosoar;
+		for (k = 1; k <= i__2; ++k) {
+		    do_lio(&c__3, &c__1, (char *)&nosoar[k + noar * 
+			    nosoar_dim1], (ftnlen)sizeof(integer));
+		}
+		e_wsle();
 		nusotr_(&nt0, mosoar, &nosoar[nosoar_offset], moartr, &noartr[
 			noartr_offset], nosotr);
-		//io___398.ciunit = unites_1.imprim;
-		//s_wsle(&io___398);
-		//do_lio(&c__9, &c__1, "tridcf: triangle nt0=", (ftnlen)21);
-		//do_lio(&c__3, &c__1, (char *)&nt0, (ftnlen)sizeof(integer));
-		//do_lio(&c__9, &c__1, " st:", (ftnlen)4);
-		//for (k = 1; k <= 3; ++k) {
-		//    do_lio(&c__3, &c__1, (char *)&nosotr[k - 1], (ftnlen)
-		//	    sizeof(integer));
-		//}
-		//e_wsle();
+		io___398.ciunit = unites_1.imprim;
+		s_wsle(&io___398);
+		do_lio(&c__9, &c__1, "tridcf: triangle nt0=", (ftnlen)21);
+		do_lio(&c__3, &c__1, (char *)&nt0, (ftnlen)sizeof(integer));
+		do_lio(&c__9, &c__1, " st:", (ftnlen)4);
+		for (k = 1; k <= 3; ++k) {
+		    do_lio(&c__3, &c__1, (char *)&nosotr[k - 1], (ftnlen)
+			    sizeof(integer));
+		}
+		e_wsle();
 		nusotr_(&nt1, mosoar, &nosoar[nosoar_offset], moartr, &noartr[
 			noartr_offset], nosotr);
-		//io___399.ciunit = unites_1.imprim;
-		//s_wsle(&io___399);
-		//do_lio(&c__9, &c__1, "tridcf: triangle nt1=", (ftnlen)21);
-		//do_lio(&c__3, &c__1, (char *)&nt1, (ftnlen)sizeof(integer));
-		//do_lio(&c__9, &c__1, " st:", (ftnlen)4);
-		//for (k = 1; k <= 3; ++k) {
-		//    do_lio(&c__3, &c__1, (char *)&nosotr[k - 1], (ftnlen)
-		//	    sizeof(integer));
-		//}
-		//e_wsle();
+		io___399.ciunit = unites_1.imprim;
+		s_wsle(&io___399);
+		do_lio(&c__9, &c__1, "tridcf: triangle nt1=", (ftnlen)21);
+		do_lio(&c__3, &c__1, (char *)&nt1, (ftnlen)sizeof(integer));
+		do_lio(&c__9, &c__1, " st:", (ftnlen)4);
+		for (k = 1; k <= 3; ++k) {
+		    do_lio(&c__3, &c__1, (char *)&nosotr[k - 1], (ftnlen)
+			    sizeof(integer));
+		}
+		e_wsle();
 		nusotr_(&nt2, mosoar, &nosoar[nosoar_offset], moartr, &noartr[
 			noartr_offset], nosotr);
-		//io___400.ciunit = unites_1.imprim;
-		//s_wsle(&io___400);
-		//do_lio(&c__9, &c__1, "tridcf: triangle nt2=", (ftnlen)21);
-		//do_lio(&c__3, &c__1, (char *)&nt2, (ftnlen)sizeof(integer));
-		//do_lio(&c__9, &c__1, " st:", (ftnlen)4);
-		//for (k = 1; k <= 3; ++k) {
-		//    do_lio(&c__3, &c__1, (char *)&nosotr[k - 1], (ftnlen)
-		//	    sizeof(integer));
-		//}
-		//e_wsle();
+		io___400.ciunit = unites_1.imprim;
+		s_wsle(&io___400);
+		do_lio(&c__9, &c__1, "tridcf: triangle nt2=", (ftnlen)21);
+		do_lio(&c__3, &c__1, (char *)&nt2, (ftnlen)sizeof(integer));
+		do_lio(&c__9, &c__1, " st:", (ftnlen)4);
+		for (k = 1; k <= 3; ++k) {
+		    do_lio(&c__3, &c__1, (char *)&nosotr[k - 1], (ftnlen)
+			    sizeof(integer));
+		}
+		e_wsle();
 /* cc               pause */
 		*ierr = 5;
 		return 0;
@@ -6892,10 +6684,10 @@ L20:
 
 /*     erreur tableau nosoar sature */
 L9900:
-    //io___401.ciunit = unites_1.imprim;
-    //s_wsle(&io___401);
-    //do_lio(&c__9, &c__1, "saturation du tableau nosoar", (ftnlen)28);
-    //e_wsle();
+    io___401.ciunit = unites_1.imprim;
+    s_wsle(&io___401);
+    do_lio(&c__9, &c__1, "saturation du tableau nosoar", (ftnlen)28);
+    e_wsle();
     *ierr = 6;
     return 0;
 } /* tridcf_ */
@@ -6916,9 +6708,9 @@ L9900:
     doublereal d__1;
 
     /* Builtin functions */
-    //integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
-	   // e_wsle(void), s_wsfe(cilist *), do_fio(integer *, char *, ftnlen),
-	   //  e_wsfe(void);
+    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
+	    e_wsle(void), s_wsfe(cilist *), do_fio(integer *, char *, ftnlen),
+	     e_wsfe();
 
     /* Local variables */
     static integer i__;
@@ -7053,10 +6845,10 @@ L9900:
     }
 
     if (nbtrcf * 3 > *mxarcf) {
-	//io___403.ciunit = unites_2.imprim;
-	//s_wsle(&io___403);
-	//do_lio(&c__9, &c__1, "saturation du tableau noarcf", (ftnlen)28);
-	//e_wsle();
+	io___403.ciunit = unites_2.imprim;
+	s_wsle(&io___403);
+	do_lio(&c__9, &c__1, "saturation du tableau noarcf", (ftnlen)28);
+	e_wsle();
 	*ierr = 10;
 	return 0;
     }
@@ -7149,35 +6941,35 @@ L9900:
 	s = surtd2_(&pxyd[nosotr[0] * 3 + 1], &pxyd[nosotr[1] * 3 + 1], &pxyd[
 		nosotr[2] * 3 + 1]);
 	if (s <= 0.) {
-	    //io___416.ciunit = unites_2.imprim;
-	    //s_wsle(&io___416);
-	    //do_lio(&c__9, &c__1, "te1stm: apres tridcf le triangle", (ftnlen)
-		   // 32);
-	    //do_lio(&c__3, &c__1, (char *)&nt, (ftnlen)sizeof(integer));
-	    //do_lio(&c__9, &c__1, " st", (ftnlen)3);
-	    //do_lio(&c__3, &c__3, (char *)&nosotr[0], (ftnlen)sizeof(integer));
-	    //do_lio(&c__9, &c__1, " AIRE<0", (ftnlen)7);
-	    //e_wsle();
+	    io___416.ciunit = unites_2.imprim;
+	    s_wsle(&io___416);
+	    do_lio(&c__9, &c__1, "te1stm: apres tridcf le triangle", (ftnlen)
+		    32);
+	    do_lio(&c__3, &c__1, (char *)&nt, (ftnlen)sizeof(integer));
+	    do_lio(&c__9, &c__1, " st", (ftnlen)3);
+	    do_lio(&c__3, &c__3, (char *)&nosotr[0], (ftnlen)sizeof(integer));
+	    do_lio(&c__9, &c__1, " AIRE<0", (ftnlen)7);
+	    e_wsle();
 	}
 	s1 += abs(s);
 /* L55: */
     }
 
     if ((d__1 = s0 - s1, abs(d__1)) > s0 * 1e-10) {
-	//io___417.ciunit = unites_2.imprim;
-	//s_wsle(&io___417);
-	//e_wsle();
-	//io___418.ciunit = unites_2.imprim;
-	//s_wsle(&io___418);
-	//do_lio(&c__9, &c__1, "te1stm: difference des aires lors suppression "
-	//	"st", (ftnlen)48);
-	//do_lio(&c__3, &c__1, (char *)&(*nsasup), (ftnlen)sizeof(integer));
-	//e_wsle();
-	//io___419.ciunit = unites_2.imprim;
-	//s_wsfe(&io___419);
-	//do_fio(&c__1, (char *)&s0, (ftnlen)sizeof(doublereal));
-	//do_fio(&c__1, (char *)&s1, (ftnlen)sizeof(doublereal));
-	//e_wsfe();
+	io___417.ciunit = unites_2.imprim;
+	s_wsle(&io___417);
+	e_wsle();
+	io___418.ciunit = unites_2.imprim;
+	s_wsle(&io___418);
+	do_lio(&c__9, &c__1, "te1stm: difference des aires lors suppression "
+		"st", (ftnlen)48);
+	do_lio(&c__3, &c__1, (char *)&(*nsasup), (ftnlen)sizeof(integer));
+	e_wsle();
+	io___419.ciunit = unites_2.imprim;
+	s_wsfe(&io___419);
+	do_fio(&c__1, (char *)&s0, (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&s1, (ftnlen)sizeof(doublereal));
+	e_wsfe();
     }
 
 /*     transformation des triangles du cf en triangles delaunay */
@@ -7411,8 +7203,8 @@ L9900:
     integer noartr_dim1, noartr_offset, nosoar_dim1, nosoar_offset, i__1;
 
     /* Builtin functions */
-    //integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
-	   // e_wsle(void);
+    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
+	    e_wsle(void);
 
     /* Local variables */
     static integer i__, nt, naa;
@@ -7465,11 +7257,11 @@ L9900:
 /*         kerr(1) = kerr(mxlger)(1:6) // */
 /*     %           ' no incorrect arete dans nosoar' */
 /*         call lereur */
-	//io___431.ciunit = unites_1.imprim;
-	//s_wsle(&io___431);
-	//do_lio(&c__3, &c__1, (char *)&(*na), (ftnlen)sizeof(integer));
-	//do_lio(&c__9, &c__1, " no incorrect arete dans nosoar", (ftnlen)31);
-	//e_wsle();
+	io___431.ciunit = unites_1.imprim;
+	s_wsle(&io___431);
+	do_lio(&c__3, &c__1, (char *)&(*na), (ftnlen)sizeof(integer));
+	do_lio(&c__9, &c__1, " no incorrect arete dans nosoar", (ftnlen)31);
+	e_wsle();
 	*ns4 = 0;
 	return 0;
     }
@@ -7480,11 +7272,11 @@ L9900:
 /*         kerr(1) = kerr(mxlger)(1:6) // */
 /*     %           ' arete non active dans nosoar' */
 /*         call lereur */
-	//io___432.ciunit = unites_1.imprim;
-	//s_wsle(&io___432);
-	//do_lio(&c__3, &c__1, (char *)&(*na), (ftnlen)sizeof(integer));
-	//do_lio(&c__9, &c__1, " arete non active dans nosoar", (ftnlen)29);
-	//e_wsle();
+	io___432.ciunit = unites_1.imprim;
+	s_wsle(&io___432);
+	do_lio(&c__3, &c__1, (char *)&(*na), (ftnlen)sizeof(integer));
+	do_lio(&c__9, &c__1, " arete non active dans nosoar", (ftnlen)29);
+	e_wsle();
 	*ns4 = 0;
 	return 0;
     }
@@ -7497,12 +7289,12 @@ L9900:
 /*         kerr(1) =  'triangle 1 incorrect pour l''arete ' // */
 /*     %               kerr(mxlger)(1:6) */
 /*         call lereur */
-	//io___434.ciunit = unites_1.imprim;
-	//s_wsle(&io___434);
-	//do_lio(&c__9, &c__1, "triangle 1 incorrect pour l'arete ", (ftnlen)34)
-	//	;
-	//do_lio(&c__3, &c__1, (char *)&(*na), (ftnlen)sizeof(integer));
-	//e_wsle();
+	io___434.ciunit = unites_1.imprim;
+	s_wsle(&io___434);
+	do_lio(&c__9, &c__1, "triangle 1 incorrect pour l'arete ", (ftnlen)34)
+		;
+	do_lio(&c__3, &c__1, (char *)&(*na), (ftnlen)sizeof(integer));
+	e_wsle();
 	*ns4 = 0;
 	return 0;
     }
@@ -7514,13 +7306,13 @@ L9900:
 /* L5: */
     }
 /*     si arrivee ici => bogue avant */
- /*   io___436.ciunit = unites_1.imprim;
+    io___436.ciunit = unites_1.imprim;
     s_wsle(&io___436);
     do_lio(&c__9, &c__1, "mt4sqa: arete", (ftnlen)13);
     do_lio(&c__3, &c__1, (char *)&(*na), (ftnlen)sizeof(integer));
     do_lio(&c__9, &c__1, " non dans le triangle", (ftnlen)21);
     do_lio(&c__3, &c__1, (char *)&nt, (ftnlen)sizeof(integer));
-    e_wsle();*/
+    e_wsle();
     *ns4 = 0;
     return 0;
 
@@ -7559,12 +7351,12 @@ L8:
 /*         kerr(1) =  'triangle 2 incorrect pour l''arete ' // */
 /*     %               kerr(mxlger)(1:6) */
 /*         call lereur */
-	//io___438.ciunit = unites_1.imprim;
-	//s_wsle(&io___438);
-	//do_lio(&c__9, &c__1, "triangle 2 incorrect pour l'arete ", (ftnlen)34)
-	//	;
-	//do_lio(&c__3, &c__1, (char *)&(*na), (ftnlen)sizeof(integer));
-	//e_wsle();
+	io___438.ciunit = unites_1.imprim;
+	s_wsle(&io___438);
+	do_lio(&c__9, &c__1, "triangle 2 incorrect pour l'arete ", (ftnlen)34)
+		;
+	do_lio(&c__3, &c__1, (char *)&(*na), (ftnlen)sizeof(integer));
+	e_wsle();
 	*ns4 = 0;
 	return 0;
     }
@@ -7589,8 +7381,8 @@ L8:
     integer nosoar_dim1, nosoar_offset, noartr_dim1, noartr_offset, i__1;
 
     /* Builtin functions */
-    //integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
-	   // e_wsle(void);
+    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
+	    e_wsle(void);
 
     /* Local variables */
     static integer n1, n2, n3, ns1, ns2, ns3, ns4, nt1, nt2, na31, na23, na14,
@@ -7666,10 +7458,10 @@ L8:
 /* L10: */
     }
 /*     impossible d'arriver ici sans bogue! */
-    //io___445.ciunit = unites_2.imprim;
-    //s_wsle(&io___445);
-    //do_lio(&c__9, &c__1, "anomalie dans te2t2t 1", (ftnlen)22);
-    //e_wsle();
+    io___445.ciunit = unites_2.imprim;
+    s_wsle(&io___445);
+    do_lio(&c__9, &c__1, "anomalie dans te2t2t 1", (ftnlen)22);
+    e_wsle();
 
 /*     l'arete de sommets 2 et 3 */
 L15:
@@ -7697,10 +7489,10 @@ L15:
 /* L20: */
     }
 /*     impossible d'arriver ici sans bogue! */
-    //io___451.ciunit = unites_2.imprim;
-    //s_wsle(&io___451);
-    //do_lio(&c__9, &c__1, "Anomalie dans te2t2t 2", (ftnlen)22);
-    //e_wsle();
+    io___451.ciunit = unites_2.imprim;
+    s_wsle(&io___451);
+    do_lio(&c__9, &c__1, "Anomalie dans te2t2t 2", (ftnlen)22);
+    e_wsle();
 
 /*     l'arete de sommets 1 et 4 */
 L25:
@@ -7794,8 +7586,8 @@ L25:
     integer nosoar_dim1, nosoar_offset, noartr_dim1, noartr_offset;
 
     /* Builtin functions */
-    //integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
-	   // e_wsle(void);
+    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
+	    e_wsle(void);
 
     /* Local variables */
     static integer i__, i1, nt;
@@ -7875,10 +7667,10 @@ L25:
     /* Function Body */
     if (*n1artr <= 0) {
 /*        tableau noartr sature */
-	//io___456.ciunit = unites_1.imprim;
-	//s_wsle(&io___456);
-	//do_lio(&c__9, &c__1, "f0trte: tableau noartr sature", (ftnlen)29);
-	//e_wsle();
+	io___456.ciunit = unites_1.imprim;
+	s_wsle(&io___456);
+	do_lio(&c__9, &c__1, "f0trte: tableau noartr sature", (ftnlen)29);
+	e_wsle();
 	*ierr = 2;
 	return 0;
     }
@@ -8738,8 +8530,8 @@ L10:
     integer noartr_dim1, noartr_offset, nosoar_dim1, nosoar_offset;
 
     /* Builtin functions */
-    //integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
-	   // e_wsle(void);
+    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
+	    e_wsle(void);
 
     /* Local variables */
     static integer na;
@@ -8788,12 +8580,12 @@ L10:
 /*         kerr(1) = kerr(mxlger)(1:6) // */
 /*     %           ' no triangle dans noartr incorrect' */
 /*         call lereur */
-	//io___481.ciunit = unites_1.imprim;
-	//s_wsle(&io___481);
-	//do_lio(&c__3, &c__1, (char *)&(*nt), (ftnlen)sizeof(integer));
-	//do_lio(&c__9, &c__1, " no triangle dans noartr incorrect", (ftnlen)34)
-	//	;
-	//e_wsle();
+	io___481.ciunit = unites_1.imprim;
+	s_wsle(&io___481);
+	do_lio(&c__3, &c__1, (char *)&(*nt), (ftnlen)sizeof(integer));
+	do_lio(&c__9, &c__1, " no triangle dans noartr incorrect", (ftnlen)34)
+		;
+	e_wsle();
 	*ns1 = 0;
 	return 0;
     }
@@ -8833,7 +8625,7 @@ L10:
     integer nosoar_dim1, nosoar_offset, noartr_dim1, noartr_offset, i__1;
 
     /* Builtin functions */
-    integer s_wsfe(cilist *), do_fio(integer *, char *, ftnlen), e_wsfe(void);
+    integer s_wsfe(cilist *), do_fio(integer *, char *, ftnlen), e_wsfe();
 
     /* Local variables */
     static integer k, n, np, nt;
@@ -8964,10 +8756,10 @@ L10:
 	}
 
 /*        erreur: le point np n'est pas dans l'un des nbtr triangles */
-	//io___489.ciunit = unites_1.imprim;
-	//s_wsfe(&io___489);
-	//do_fio(&c__1, (char *)&np, (ftnlen)sizeof(integer));
-	//e_wsfe();
+	io___489.ciunit = unites_1.imprim;
+	s_wsfe(&io___489);
+	do_fio(&c__1, (char *)&np, (ftnlen)sizeof(integer));
+	e_wsfe();
 	*ierr = 3;
 	return 0;
 
@@ -8986,8 +8778,8 @@ L150:
     integer nosoar_dim1, nosoar_offset, i__1;
 
     /* Builtin functions */
-    //integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
-	   // e_wsle(void);
+    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
+	    e_wsle(void);
 
     /* Local variables */
     static integer i__, k, ns[2], noar0, noar1;
@@ -9047,9 +8839,9 @@ L150:
     for (k = 1; k <= 2; ++k) {
 	if (noarst[ns[k - 1]] == *noar) {
 /*           il faut remettre a jour le pointeur sur une arete */
-	    if (nosoar[ns[k - 1] * nosoar_dim1 + 1] == ns[k - 1] && nosoar[ns[
-		    k - 1] * nosoar_dim1 + 2] > 0 && nosoar[ns[k - 1] * 
-		    nosoar_dim1 + 4] > 0) {
+	    if ((nosoar[ns[k - 1] * nosoar_dim1 + 1] == ns[k - 1]) && (nosoar[ns[
+		    k - 1] * nosoar_dim1 + 2] > 0) && (nosoar[ns[k - 1] * 
+		    nosoar_dim1 + 4]) > 0) {
 /*              arete active de sommet ns(k) */
 		noarst[ns[k - 1]] = ns[k - 1];
 	    } else {
@@ -9058,9 +8850,9 @@ L150:
 		    if (nosoar[i__ * nosoar_dim1 + 1] > 0 && nosoar[i__ * 
 			    nosoar_dim1 + 4] > 0) {
 /*                    arete non vide */
-			if  (nosoar[i__ * nosoar_dim1 + 2] == ns[k - 1] || 
-				(nosoar[i__ * nosoar_dim1 + 1] == ns[k - 1] && 
-				 nosoar[i__ * nosoar_dim1 + 2] > 0)) {
+			if (((nosoar[i__ * nosoar_dim1 + 2] == ns[k - 1]) || 
+				(nosoar[i__ * nosoar_dim1 + 1] == ns[k - 1])) && 
+				(nosoar[i__ * nosoar_dim1 + 2] > 0)) {
 /*                       arete active de sommet ns(k) */
 			    noarst[ns[k - 1]] = i__;
 			    goto L8;
@@ -9094,39 +8886,39 @@ L10:
 	    }
 
 /*           l'arete noar n'a pas ete retrouvee dans le chainage => erreur */
-	 //   io___495.ciunit = unites_1.imprim;
-	 //   s_wsle(&io___495);
-	 //   do_lio(&c__9, &c__1, "erreur sasoar:arete non dans le chainage ", 
-		//    (ftnlen)41);
-	 //   do_lio(&c__3, &c__1, (char *)&(*noar), (ftnlen)sizeof(integer));
-	 //   e_wsle();
-	 //   io___496.ciunit = unites_1.imprim;
-	 //   s_wsle(&io___496);
-	 //   do_lio(&c__9, &c__1, "arete de st1=", (ftnlen)13);
-	 //   do_lio(&c__3, &c__1, (char *)&nosoar[*noar * nosoar_dim1 + 1], (
-		//    ftnlen)sizeof(integer));
-	 //   do_lio(&c__9, &c__1, " st2=", (ftnlen)5);
-	 //   do_lio(&c__3, &c__1, (char *)&nosoar[*noar * nosoar_dim1 + 2], (
-		//    ftnlen)sizeof(integer));
-	 //   do_lio(&c__9, &c__1, " ligne=", (ftnlen)7);
-	 //   do_lio(&c__3, &c__1, (char *)&nosoar[*noar * nosoar_dim1 + 3], (
-		//    ftnlen)sizeof(integer));
-	 //   do_lio(&c__9, &c__1, " tr1=", (ftnlen)5);
-	 //   do_lio(&c__3, &c__1, (char *)&nosoar[*noar * nosoar_dim1 + 4], (
-		//    ftnlen)sizeof(integer));
-	 //   do_lio(&c__9, &c__1, " tr2=", (ftnlen)5);
-	 //   do_lio(&c__3, &c__1, (char *)&nosoar[*noar * nosoar_dim1 + 5], (
-		//    ftnlen)sizeof(integer));
-	 //   e_wsle();
-	 //   io___497.ciunit = unites_1.imprim;
-	 //   s_wsle(&io___497);
-	 //   do_lio(&c__9, &c__1, "chainages=", (ftnlen)10);
-	 //   i__1 = *mosoar;
-	 //   for (i__ = 6; i__ <= i__1; ++i__) {
-		//do_lio(&c__3, &c__1, (char *)&nosoar[i__ + *noar * 
-		//	nosoar_dim1], (ftnlen)sizeof(integer));
-	 //   }
-	 //   e_wsle();
+	    io___495.ciunit = unites_1.imprim;
+	    s_wsle(&io___495);
+	    do_lio(&c__9, &c__1, "erreur sasoar:arete non dans le chainage ", 
+		    (ftnlen)41);
+	    do_lio(&c__3, &c__1, (char *)&(*noar), (ftnlen)sizeof(integer));
+	    e_wsle();
+	    io___496.ciunit = unites_1.imprim;
+	    s_wsle(&io___496);
+	    do_lio(&c__9, &c__1, "arete de st1=", (ftnlen)13);
+	    do_lio(&c__3, &c__1, (char *)&nosoar[*noar * nosoar_dim1 + 1], (
+		    ftnlen)sizeof(integer));
+	    do_lio(&c__9, &c__1, " st2=", (ftnlen)5);
+	    do_lio(&c__3, &c__1, (char *)&nosoar[*noar * nosoar_dim1 + 2], (
+		    ftnlen)sizeof(integer));
+	    do_lio(&c__9, &c__1, " ligne=", (ftnlen)7);
+	    do_lio(&c__3, &c__1, (char *)&nosoar[*noar * nosoar_dim1 + 3], (
+		    ftnlen)sizeof(integer));
+	    do_lio(&c__9, &c__1, " tr1=", (ftnlen)5);
+	    do_lio(&c__3, &c__1, (char *)&nosoar[*noar * nosoar_dim1 + 4], (
+		    ftnlen)sizeof(integer));
+	    do_lio(&c__9, &c__1, " tr2=", (ftnlen)5);
+	    do_lio(&c__3, &c__1, (char *)&nosoar[*noar * nosoar_dim1 + 5], (
+		    ftnlen)sizeof(integer));
+	    e_wsle();
+	    io___497.ciunit = unites_1.imprim;
+	    s_wsle(&io___497);
+	    do_lio(&c__9, &c__1, "chainages=", (ftnlen)10);
+	    i__1 = *mosoar;
+	    for (i__ = 6; i__ <= i__1; ++i__) {
+		do_lio(&c__3, &c__1, (char *)&nosoar[i__ + *noar * 
+			nosoar_dim1], (ftnlen)sizeof(integer));
+	    }
+	    e_wsle();
 /* cc            pause */
 /*           l'arete n'est pas detruite */
 	    return 0;
@@ -9173,8 +8965,8 @@ L10:
     integer nosoar_dim1, nosoar_offset;
 
     /* Builtin functions */
-    //integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
-	   // e_wsle(void);
+    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
+	    e_wsle(void);
 
     /* Local variables */
     static integer na, na0, nbpass;
@@ -9255,11 +9047,11 @@ L10:
 	    }
 	    ++nbpass;
 	    if (nbpass > 512) {
-		//io___501.ciunit = unites_1.imprim;
-		//s_wsle(&io___501);
-		//do_lio(&c__9, &c__1, "Pb dans caetoi: boucle infinie evitee", 
-		//	(ftnlen)37);
-		//e_wsle();
+		io___501.ciunit = unites_1.imprim;
+		s_wsle(&io___501);
+		do_lio(&c__9, &c__1, "Pb dans caetoi: boucle infinie evitee", 
+			(ftnlen)37);
+		e_wsle();
 		*nbtrar = 0;
 		return 0;
 	    }
@@ -9298,8 +9090,8 @@ L10:
 	    i__2;
 
     /* Builtin functions */
-    //integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
-	   // e_wsle(void);
+    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
+	    e_wsle(void);
 
     /* Local variables */
     static integer i__, j, k, n, kk, nt, na0, na1, ns0, ns1, ns2, nt0, noar, 
@@ -9440,12 +9232,12 @@ L3:
 	    caetoi_(&noar, mosoar, mxsoar, n1soar, &nosoar[nosoar_offset], &
 		    noarst[1], &n1aeoc, &nbtrar);
 	    if (nbtrar <= 0) {
-		//io___511.ciunit = unites_1.imprim;
-		//s_wsle(&io___511);
-		//do_lio(&c__9, &c__1, "focftr: erreur dans caetoi noar=", (
-		//	ftnlen)32);
-		//do_lio(&c__3, &c__1, (char *)&noar, (ftnlen)sizeof(integer));
-		//e_wsle();
+		io___511.ciunit = unites_1.imprim;
+		s_wsle(&io___511);
+		do_lio(&c__9, &c__1, "focftr: erreur dans caetoi noar=", (
+			ftnlen)32);
+		do_lio(&c__3, &c__1, (char *)&noar, (ftnlen)sizeof(integer));
+		e_wsle();
 		*ierr = 17;
 		return 0;
 	    }
@@ -9458,28 +9250,28 @@ L3:
 		} else if (nosoar[noar * nosoar_dim1 + 5] == nt) {
 		    nosoar[noar * nosoar_dim1 + 5] = -1;
 		} else {
-		 //   io___512.ciunit = unites_1.imprim;
-		 //   s_wsle(&io___512);
-		 //   do_lio(&c__9, &c__1, "focftr: anomalie arete", (ftnlen)22)
-			//    ;
-		 //   do_lio(&c__3, &c__1, (char *)&noar, (ftnlen)sizeof(
-			//    integer));
-		 //   do_lio(&c__9, &c__1, " sans triangle", (ftnlen)14);
-		 //   do_lio(&c__3, &c__1, (char *)&nt, (ftnlen)sizeof(integer))
-			//    ;
-		 //   e_wsle();
-		 //   io___513.ciunit = unites_1.imprim;
-		 //   s_wsle(&io___513);
-		 //   do_lio(&c__9, &c__1, "focftr: nosoar(", (ftnlen)15);
-		 //   do_lio(&c__3, &c__1, (char *)&noar, (ftnlen)sizeof(
-			//    integer));
-		 //   do_lio(&c__9, &c__1, ")=", (ftnlen)2);
-		 //   i__2 = *mosoar;
-		 //   for (kk = 1; kk <= i__2; ++kk) {
-			//do_lio(&c__3, &c__1, (char *)&nosoar[kk + noar * 
-			//	nosoar_dim1], (ftnlen)sizeof(integer));
-		 //   }
-		 //   e_wsle();
+		    io___512.ciunit = unites_1.imprim;
+		    s_wsle(&io___512);
+		    do_lio(&c__9, &c__1, "focftr: anomalie arete", (ftnlen)22)
+			    ;
+		    do_lio(&c__3, &c__1, (char *)&noar, (ftnlen)sizeof(
+			    integer));
+		    do_lio(&c__9, &c__1, " sans triangle", (ftnlen)14);
+		    do_lio(&c__3, &c__1, (char *)&nt, (ftnlen)sizeof(integer))
+			    ;
+		    e_wsle();
+		    io___513.ciunit = unites_1.imprim;
+		    s_wsle(&io___513);
+		    do_lio(&c__9, &c__1, "focftr: nosoar(", (ftnlen)15);
+		    do_lio(&c__3, &c__1, (char *)&noar, (ftnlen)sizeof(
+			    integer));
+		    do_lio(&c__9, &c__1, ")=", (ftnlen)2);
+		    i__2 = *mosoar;
+		    for (kk = 1; kk <= i__2; ++kk) {
+			do_lio(&c__3, &c__1, (char *)&nosoar[kk + noar * 
+				nosoar_dim1], (ftnlen)sizeof(integer));
+		    }
+		    e_wsle();
 		    nosoar[noar * nosoar_dim1 + 5] = -1;
 		}
 /*           else */
@@ -9518,11 +9310,11 @@ L12:
 /*           attention: boucle infinie si toutes les aretes simples */
 /*           de la boule sont frontalieres!... arretee par ce test */
 	    *ierr = 16;
-	    //io___519.ciunit = unites_1.imprim;
-	    //s_wsle(&io___519);
-	    //do_lio(&c__9, &c__1, "focftr: boucle dans les aretes de l etoile",
-		   //  (ftnlen)42);
-	    //e_wsle();
+	    io___519.ciunit = unites_1.imprim;
+	    s_wsle(&io___519);
+	    do_lio(&c__9, &c__1, "focftr: boucle dans les aretes de l etoile",
+		     (ftnlen)42);
+	    e_wsle();
 	    return 0;
 	}
 	noar = n1aeoc;
@@ -9537,11 +9329,11 @@ L14:
 	if (na0 <= 0) {
 /*           une seule arete simple frontaliere */
 	    *ierr = 15;
-	    //io___521.ciunit = unites_1.imprim;
-	    //s_wsle(&io___521);
-	    //do_lio(&c__9, &c__1, "focftr: 1 arete seule pour l etoile", (
-		   // ftnlen)35);
-	    //e_wsle();
+	    io___521.ciunit = unites_1.imprim;
+	    s_wsle(&io___521);
+	    do_lio(&c__9, &c__1, "focftr: 1 arete seule pour l etoile", (
+		    ftnlen)35);
+	    e_wsle();
 	    return 0;
 	}
 /*        le suivant de l'ancien dernier est l'ancien premier */
@@ -9641,21 +9433,21 @@ L25:
 /*     verification */
     if (ns1 != ns0) {
 /*        arete non retrouvee : l'etoile ne se referme pas */
-	//io___523.ciunit = unites_1.imprim;
-	//s_wsle(&io___523);
-	//do_lio(&c__9, &c__1, "focftr: revoyez vos donnees du bord", (ftnlen)
-	//	35);
-	//e_wsle();
-	//io___524.ciunit = unites_1.imprim;
-	//s_wsle(&io___524);
-	//do_lio(&c__9, &c__1, "les lignes fermees doivent etre disjointes", (
-	//	ftnlen)42);
-	//e_wsle();
-	//io___525.ciunit = unites_1.imprim;
-	//s_wsle(&io___525);
-	//do_lio(&c__9, &c__1, "verifiez si elles ne se coupent pas", (ftnlen)
-	//	35);
-	//e_wsle();
+	io___523.ciunit = unites_1.imprim;
+	s_wsle(&io___523);
+	do_lio(&c__9, &c__1, "focftr: revoyez vos donnees du bord", (ftnlen)
+		35);
+	e_wsle();
+	io___524.ciunit = unites_1.imprim;
+	s_wsle(&io___524);
+	do_lio(&c__9, &c__1, "les lignes fermees doivent etre disjointes", (
+		ftnlen)42);
+	e_wsle();
+	io___525.ciunit = unites_1.imprim;
+	s_wsle(&io___525);
+	do_lio(&c__9, &c__1, "verifiez si elles ne se coupent pas", (ftnlen)
+		35);
+	e_wsle();
 	*ierr = 14;
 	return 0;
     }
@@ -9668,13 +9460,13 @@ L25:
 /*     existe t il des sommets perdus? */
 /*     ------------------------------- */
     if (nbst > 512) {
-	//io___526.ciunit = unites_1.imprim;
-	//s_wsle(&io___526);
-	//do_lio(&c__9, &c__1, "focftr: tableau nostfe(", (ftnlen)23);
-	//do_lio(&c__3, &c__1, (char *)&c__512, (ftnlen)sizeof(integer));
-	//do_lio(&c__9, &c__1, ") a augmenter", (ftnlen)13);
-	//e_wsle();
-	//*ierr = 15;
+	io___526.ciunit = unites_1.imprim;
+	s_wsle(&io___526);
+	do_lio(&c__9, &c__1, "focftr: tableau nostfe(", (ftnlen)23);
+	do_lio(&c__3, &c__1, (char *)&c__512, (ftnlen)sizeof(integer));
+	do_lio(&c__9, &c__1, ") a augmenter", (ftnlen)13);
+	e_wsle();
+	*ierr = 15;
 	return 0;
     }
 /*     le nombre de sommets perdus */
@@ -9859,8 +9651,8 @@ L40:
     static integer equiv_1[2];
 
     /* Builtin functions */
-    //integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
-	   // e_wsle(void), s_rsle(cilist *), e_rsle(void);
+    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
+	    e_wsle(void), s_rsle(cilist *), e_rsle();
     double sqrt(doublereal);
 
     /* Local variables */
@@ -10020,23 +9812,23 @@ L40:
 /*     le sommet ns2 est il correct? */
     na = noarst[ns2];
     if (na <= 0) {
-	//io___548.ciunit = unites_2.imprim;
-	//s_wsle(&io___548);
-	//do_lio(&c__9, &c__1, "tefoar: erreur sommet ", (ftnlen)22);
-	//do_lio(&c__3, &c__1, (char *)&ns2, (ftnlen)sizeof(integer));
-	//do_lio(&c__9, &c__1, " sans arete", (ftnlen)11);
-	//e_wsle();
+	io___548.ciunit = unites_2.imprim;
+	s_wsle(&io___548);
+	do_lio(&c__9, &c__1, "tefoar: erreur sommet ", (ftnlen)22);
+	do_lio(&c__3, &c__1, (char *)&ns2, (ftnlen)sizeof(integer));
+	do_lio(&c__9, &c__1, " sans arete", (ftnlen)11);
+	e_wsle();
 	*ierr = 8;
 /* cc         pause */
 	return 0;
     }
     if (nosoar[na * nosoar_dim1 + 4] <= 0) {
-	//io___549.ciunit = unites_2.imprim;
-	//s_wsle(&io___549);
-	//do_lio(&c__9, &c__1, "tefoar: erreur sommet ", (ftnlen)22);
-	//do_lio(&c__3, &c__1, (char *)&ns2, (ftnlen)sizeof(integer));
-	//do_lio(&c__9, &c__1, " dans aucun triangle", (ftnlen)20);
-	//e_wsle();
+	io___549.ciunit = unites_2.imprim;
+	s_wsle(&io___549);
+	do_lio(&c__9, &c__1, "tefoar: erreur sommet ", (ftnlen)22);
+	do_lio(&c__3, &c__1, (char *)&ns2, (ftnlen)sizeof(integer));
+	do_lio(&c__9, &c__1, " dans aucun triangle", (ftnlen)20);
+	e_wsle();
 	*ierr = 8;
 /* cc         pause */
 	return 0;
@@ -10065,24 +9857,24 @@ L3:
 L10:
     na01 = noarst[ns1];
     if (na01 <= 0) {
-	//io___558.ciunit = unites_2.imprim;
-	//s_wsle(&io___558);
-	//do_lio(&c__9, &c__1, "tefoar: sommet ", (ftnlen)15);
-	//do_lio(&c__3, &c__1, (char *)&ns1, (ftnlen)sizeof(integer));
-	//do_lio(&c__9, &c__1, " sans arete", (ftnlen)11);
-	//e_wsle();
+	io___558.ciunit = unites_2.imprim;
+	s_wsle(&io___558);
+	do_lio(&c__9, &c__1, "tefoar: sommet ", (ftnlen)15);
+	do_lio(&c__3, &c__1, (char *)&ns1, (ftnlen)sizeof(integer));
+	do_lio(&c__9, &c__1, " sans arete", (ftnlen)11);
+	e_wsle();
 	*ierr = 8;
 /* cc         pause */
 	return 0;
     }
     nt0 = nosoar[na01 * nosoar_dim1 + 4];
     if (nt0 <= 0) {
-	//io___560.ciunit = unites_2.imprim;
-	//s_wsle(&io___560);
-	//do_lio(&c__9, &c__1, "tefoar: sommet ", (ftnlen)15);
-	//do_lio(&c__3, &c__1, (char *)&ns1, (ftnlen)sizeof(integer));
-	//do_lio(&c__9, &c__1, " dans aucun triangle", (ftnlen)20);
-	//e_wsle();
+	io___560.ciunit = unites_2.imprim;
+	s_wsle(&io___560);
+	do_lio(&c__9, &c__1, "tefoar: sommet ", (ftnlen)15);
+	do_lio(&c__3, &c__1, (char *)&ns1, (ftnlen)sizeof(integer));
+	do_lio(&c__9, &c__1, " dans aucun triangle", (ftnlen)20);
+	e_wsle();
 	*ierr = 8;
 /* cc         pause */
 	return 0;
@@ -10110,24 +9902,24 @@ L25:
 	goto L3;
     } else {
 /*        les sens ns1->ns2 et ns2->ns1 ne donne pas de solution! */
-	//io___563.ciunit = unites_2.imprim;
-	//s_wsle(&io___563);
-	//do_lio(&c__9, &c__1, "tefoar:arete ", (ftnlen)13);
-	//do_lio(&c__3, &c__1, (char *)&ns1, (ftnlen)sizeof(integer));
-	//do_lio(&c__9, &c__1, " - ", (ftnlen)3);
-	//do_lio(&c__3, &c__1, (char *)&ns2, (ftnlen)sizeof(integer));
-	//do_lio(&c__9, &c__1, " a imposer", (ftnlen)10);
-	//e_wsle();
-	//io___564.ciunit = unites_2.imprim;
-	//s_wsle(&io___564);
-	//do_lio(&c__9, &c__1, "tefoar:anomalie sommet ", (ftnlen)23);
-	//do_lio(&c__3, &c__1, (char *)&ns1, (ftnlen)sizeof(integer));
-	//do_lio(&c__9, &c__1, "non dans le triangle de sommets ", (ftnlen)32);
-	//for (i__ = 1; i__ <= 3; ++i__) {
-	//    do_lio(&c__3, &c__1, (char *)&nosotr[i__ - 1], (ftnlen)sizeof(
-	//	    integer));
-	//}
-	//e_wsle();
+	io___563.ciunit = unites_2.imprim;
+	s_wsle(&io___563);
+	do_lio(&c__9, &c__1, "tefoar:arete ", (ftnlen)13);
+	do_lio(&c__3, &c__1, (char *)&ns1, (ftnlen)sizeof(integer));
+	do_lio(&c__9, &c__1, " - ", (ftnlen)3);
+	do_lio(&c__3, &c__1, (char *)&ns2, (ftnlen)sizeof(integer));
+	do_lio(&c__9, &c__1, " a imposer", (ftnlen)10);
+	e_wsle();
+	io___564.ciunit = unites_2.imprim;
+	s_wsle(&io___564);
+	do_lio(&c__9, &c__1, "tefoar:anomalie sommet ", (ftnlen)23);
+	do_lio(&c__3, &c__1, (char *)&ns1, (ftnlen)sizeof(integer));
+	do_lio(&c__9, &c__1, "non dans le triangle de sommets ", (ftnlen)32);
+	for (i__ = 1; i__ <= 3; ++i__) {
+	    do_lio(&c__3, &c__1, (char *)&nosotr[i__ - 1], (ftnlen)sizeof(
+		    integer));
+	}
+	e_wsle();
 	*ierr = 11;
 /* cc         pause */
 	return 0;
@@ -10176,19 +9968,19 @@ L26:
 	if (ipas == 0) {
 	    goto L25;
 	}
-	//io___571.ciunit = unites_2.imprim;
-	//s_wsle(&io___571);
-	//do_lio(&c__9, &c__1, "tefoar: arete ", (ftnlen)14);
-	//do_lio(&c__3, &c__1, (char *)&ns1, (ftnlen)sizeof(integer));
-	//do_lio(&c__9, &c__1, " ", (ftnlen)1);
-	//do_lio(&c__3, &c__1, (char *)&ns2, (ftnlen)sizeof(integer));
-	//do_lio(&c__9, &c__1, " sans intersection avec les triangles actuels", 
-	//	(ftnlen)45);
-	//e_wsle();
-	//io___572.ciunit = unites_2.imprim;
-	//s_wsle(&io___572);
-	//do_lio(&c__9, &c__1, "revoyez les lignes du contour", (ftnlen)29);
-	//e_wsle();
+	io___571.ciunit = unites_2.imprim;
+	s_wsle(&io___571);
+	do_lio(&c__9, &c__1, "tefoar: arete ", (ftnlen)14);
+	do_lio(&c__3, &c__1, (char *)&ns1, (ftnlen)sizeof(integer));
+	do_lio(&c__9, &c__1, " ", (ftnlen)1);
+	do_lio(&c__3, &c__1, (char *)&ns2, (ftnlen)sizeof(integer));
+	do_lio(&c__9, &c__1, " sans intersection avec les triangles actuels", 
+		(ftnlen)45);
+	e_wsle();
+	io___572.ciunit = unites_2.imprim;
+	s_wsle(&io___572);
+	do_lio(&c__9, &c__1, "revoyez les lignes du contour", (ftnlen)29);
+	e_wsle();
 	*ierr = 12;
 /* cc         pause */
 	return 0;
@@ -10209,15 +10001,15 @@ L30:
 	nt1 = nosoar[noar * nosoar_dim1 + 4];
     }
     if (nt1 <= 0) {
-	//io___576.ciunit = unites_2.imprim;
-	//s_wsle(&io___576);
-	//do_lio(&c__9, &c__1, "erreur dans tefoar nt1=", (ftnlen)23);
-	//do_lio(&c__3, &c__1, (char *)&nt1, (ftnlen)sizeof(integer));
-	//e_wsle();
-	//io___577.ciunit = unites_2.lecteu;
-	//s_rsle(&io___577);
-	//do_lio(&c__3, &c__1, (char *)&j, (ftnlen)sizeof(integer));
-	//e_rsle();
+	io___576.ciunit = unites_2.imprim;
+	s_wsle(&io___576);
+	do_lio(&c__9, &c__1, "erreur dans tefoar nt1=", (ftnlen)23);
+	do_lio(&c__3, &c__1, (char *)&nt1, (ftnlen)sizeof(integer));
+	e_wsle();
+	io___577.ciunit = unites_2.lecteu;
+	s_rsle(&io___577);
+	do_lio(&c__3, &c__1, (char *)&j, (ftnlen)sizeof(integer));
+	e_rsle();
     }
 
 /*     le numero des 3 sommets du triangle nt1 dans le sens direct */
@@ -10285,108 +10077,108 @@ L35:
 /*           ici le sommet nsp est trop proche de l'arete perdue ns1-ns2 */
 	    if (nsp <= *nbarpi) {
 /*              point utilisateur ou frontalier donc non supprimable */
-		//io___587.ciunit = unites_2.imprim;
-		//s_wsle(&io___587);
-		//do_lio(&c__9, &c__1, "tefoar: sommet nsp=", (ftnlen)19);
-		//do_lio(&c__3, &c__1, (char *)&nsp, (ftnlen)sizeof(integer));
-		//do_lio(&c__9, &c__1, " frontalier trop proche de l'arete per"
-		//	"due ns1=", (ftnlen)46);
-		//do_lio(&c__3, &c__1, (char *)&ns1, (ftnlen)sizeof(integer));
-		//do_lio(&c__9, &c__1, "-ns2=", (ftnlen)5);
-		//do_lio(&c__3, &c__1, (char *)&ns2, (ftnlen)sizeof(integer));
-		//e_wsle();
-		//io___588.ciunit = unites_2.imprim;
-		//s_wsle(&io___588);
-		//do_lio(&c__9, &c__1, "s", (ftnlen)1);
-		//do_lio(&c__3, &c__1, (char *)&nsp, (ftnlen)sizeof(integer));
-		//do_lio(&c__9, &c__1, ": x=", (ftnlen)4);
-		//do_lio(&c__5, &c__1, (char *)&pxyd[nsp * 3 + 1], (ftnlen)
-		//	sizeof(doublereal));
-		//do_lio(&c__9, &c__1, " y=", (ftnlen)3);
-		//do_lio(&c__5, &c__1, (char *)&pxyd[nsp * 3 + 2], (ftnlen)
-		//	sizeof(doublereal));
-		//e_wsle();
-		//io___589.ciunit = unites_2.imprim;
-		//s_wsle(&io___589);
-		//do_lio(&c__9, &c__1, "s", (ftnlen)1);
-		//do_lio(&c__3, &c__1, (char *)&ns1, (ftnlen)sizeof(integer));
-		//do_lio(&c__9, &c__1, ": x=", (ftnlen)4);
-		//do_lio(&c__5, &c__1, (char *)&pxyd[ns1 * 3 + 1], (ftnlen)
-		//	sizeof(doublereal));
-		//do_lio(&c__9, &c__1, " y=", (ftnlen)3);
-		//do_lio(&c__5, &c__1, (char *)&pxyd[ns1 * 3 + 2], (ftnlen)
-		//	sizeof(doublereal));
-		//e_wsle();
-		//io___590.ciunit = unites_2.imprim;
-		//s_wsle(&io___590);
-		//do_lio(&c__9, &c__1, "s", (ftnlen)1);
-		//do_lio(&c__3, &c__1, (char *)&ns2, (ftnlen)sizeof(integer));
-		//do_lio(&c__9, &c__1, ": x=", (ftnlen)4);
-		//do_lio(&c__5, &c__1, (char *)&pxyd[ns2 * 3 + 1], (ftnlen)
-		//	sizeof(doublereal));
-		//do_lio(&c__9, &c__1, " y=", (ftnlen)3);
-		//do_lio(&c__5, &c__1, (char *)&pxyd[ns2 * 3 + 2], (ftnlen)
-		//	sizeof(doublereal));
-		//e_wsle();
-		//io___591.ciunit = unites_2.imprim;
-		//s_wsle(&io___591);
-		//do_lio(&c__9, &c__1, "arete s", (ftnlen)7);
-		//do_lio(&c__3, &c__1, (char *)&ns1, (ftnlen)sizeof(integer));
-		//do_lio(&c__9, &c__1, "-s", (ftnlen)2);
-		//do_lio(&c__3, &c__1, (char *)&ns2, (ftnlen)sizeof(integer));
-		//do_lio(&c__9, &c__1, " coupe arete s", (ftnlen)14);
-		//do_lio(&c__3, &c__1, (char *)&ns3, (ftnlen)sizeof(integer));
-		//do_lio(&c__9, &c__1, "-s", (ftnlen)2);
-		//do_lio(&c__3, &c__1, (char *)&ns4, (ftnlen)sizeof(integer));
-		//do_lio(&c__9, &c__1, " en (x,y)", (ftnlen)9);
-		//e_wsle();
-		//io___592.ciunit = unites_2.imprim;
-		//s_wsle(&io___592);
-		//do_lio(&c__9, &c__1, "s", (ftnlen)1);
-		//do_lio(&c__3, &c__1, (char *)&ns3, (ftnlen)sizeof(integer));
-		//do_lio(&c__9, &c__1, ": x=", (ftnlen)4);
-		//do_lio(&c__5, &c__1, (char *)&pxyd[ns3 * 3 + 1], (ftnlen)
-		//	sizeof(doublereal));
-		//do_lio(&c__9, &c__1, " y=", (ftnlen)3);
-		//do_lio(&c__5, &c__1, (char *)&pxyd[ns3 * 3 + 2], (ftnlen)
-		//	sizeof(doublereal));
-		//e_wsle();
-		//io___593.ciunit = unites_2.imprim;
-		//s_wsle(&io___593);
-		//do_lio(&c__9, &c__1, "s", (ftnlen)1);
-		//do_lio(&c__3, &c__1, (char *)&ns4, (ftnlen)sizeof(integer));
-		//do_lio(&c__9, &c__1, ": x=", (ftnlen)4);
-		//do_lio(&c__5, &c__1, (char *)&pxyd[ns4 * 3 + 1], (ftnlen)
-		//	sizeof(doublereal));
-		//do_lio(&c__9, &c__1, " y=", (ftnlen)3);
-		//do_lio(&c__5, &c__1, (char *)&pxyd[ns4 * 3 + 2], (ftnlen)
-		//	sizeof(doublereal));
-		//e_wsle();
-		//io___594.ciunit = unites_2.imprim;
-		//s_wsle(&io___594);
-		//do_lio(&c__9, &c__1, "intersection en: x=", (ftnlen)19);
-		//do_lio(&c__5, &c__1, (char *)&x, (ftnlen)sizeof(doublereal));
-		//do_lio(&c__9, &c__1, " y=", (ftnlen)3);
-		//do_lio(&c__5, &c__1, (char *)&y, (ftnlen)sizeof(doublereal));
-		//e_wsle();
-		//io___595.ciunit = unites_2.imprim;
-		//s_wsle(&io___595);
-		//do_lio(&c__9, &c__1, "distance ns1-ns2=", (ftnlen)17);
-		//d__1 = sqrt(d12);
-		//do_lio(&c__5, &c__1, (char *)&d__1, (ftnlen)sizeof(doublereal)
-		//	);
-		//e_wsle();
-		//io___596.ciunit = unites_2.imprim;
-		//s_wsle(&io___596);
-		//do_lio(&c__9, &c__1, "distance (x,y) au plus proche", (ftnlen)
-		//	29);
-		//do_lio(&c__3, &c__1, (char *)&ns3, (ftnlen)sizeof(integer));
-		//do_lio(&c__3, &c__1, (char *)&ns4, (ftnlen)sizeof(integer));
-		//do_lio(&c__9, &c__1, "=", (ftnlen)1);
-		//d__1 = sqrt(d__);
-		//do_lio(&c__5, &c__1, (char *)&d__1, (ftnlen)sizeof(doublereal)
-		//	);
-		//e_wsle();
+		io___587.ciunit = unites_2.imprim;
+		s_wsle(&io___587);
+		do_lio(&c__9, &c__1, "tefoar: sommet nsp=", (ftnlen)19);
+		do_lio(&c__3, &c__1, (char *)&nsp, (ftnlen)sizeof(integer));
+		do_lio(&c__9, &c__1, " frontalier trop proche de l'arete per"
+			"due ns1=", (ftnlen)46);
+		do_lio(&c__3, &c__1, (char *)&ns1, (ftnlen)sizeof(integer));
+		do_lio(&c__9, &c__1, "-ns2=", (ftnlen)5);
+		do_lio(&c__3, &c__1, (char *)&ns2, (ftnlen)sizeof(integer));
+		e_wsle();
+		io___588.ciunit = unites_2.imprim;
+		s_wsle(&io___588);
+		do_lio(&c__9, &c__1, "s", (ftnlen)1);
+		do_lio(&c__3, &c__1, (char *)&nsp, (ftnlen)sizeof(integer));
+		do_lio(&c__9, &c__1, ": x=", (ftnlen)4);
+		do_lio(&c__5, &c__1, (char *)&pxyd[nsp * 3 + 1], (ftnlen)
+			sizeof(doublereal));
+		do_lio(&c__9, &c__1, " y=", (ftnlen)3);
+		do_lio(&c__5, &c__1, (char *)&pxyd[nsp * 3 + 2], (ftnlen)
+			sizeof(doublereal));
+		e_wsle();
+		io___589.ciunit = unites_2.imprim;
+		s_wsle(&io___589);
+		do_lio(&c__9, &c__1, "s", (ftnlen)1);
+		do_lio(&c__3, &c__1, (char *)&ns1, (ftnlen)sizeof(integer));
+		do_lio(&c__9, &c__1, ": x=", (ftnlen)4);
+		do_lio(&c__5, &c__1, (char *)&pxyd[ns1 * 3 + 1], (ftnlen)
+			sizeof(doublereal));
+		do_lio(&c__9, &c__1, " y=", (ftnlen)3);
+		do_lio(&c__5, &c__1, (char *)&pxyd[ns1 * 3 + 2], (ftnlen)
+			sizeof(doublereal));
+		e_wsle();
+		io___590.ciunit = unites_2.imprim;
+		s_wsle(&io___590);
+		do_lio(&c__9, &c__1, "s", (ftnlen)1);
+		do_lio(&c__3, &c__1, (char *)&ns2, (ftnlen)sizeof(integer));
+		do_lio(&c__9, &c__1, ": x=", (ftnlen)4);
+		do_lio(&c__5, &c__1, (char *)&pxyd[ns2 * 3 + 1], (ftnlen)
+			sizeof(doublereal));
+		do_lio(&c__9, &c__1, " y=", (ftnlen)3);
+		do_lio(&c__5, &c__1, (char *)&pxyd[ns2 * 3 + 2], (ftnlen)
+			sizeof(doublereal));
+		e_wsle();
+		io___591.ciunit = unites_2.imprim;
+		s_wsle(&io___591);
+		do_lio(&c__9, &c__1, "arete s", (ftnlen)7);
+		do_lio(&c__3, &c__1, (char *)&ns1, (ftnlen)sizeof(integer));
+		do_lio(&c__9, &c__1, "-s", (ftnlen)2);
+		do_lio(&c__3, &c__1, (char *)&ns2, (ftnlen)sizeof(integer));
+		do_lio(&c__9, &c__1, " coupe arete s", (ftnlen)14);
+		do_lio(&c__3, &c__1, (char *)&ns3, (ftnlen)sizeof(integer));
+		do_lio(&c__9, &c__1, "-s", (ftnlen)2);
+		do_lio(&c__3, &c__1, (char *)&ns4, (ftnlen)sizeof(integer));
+		do_lio(&c__9, &c__1, " en (x,y)", (ftnlen)9);
+		e_wsle();
+		io___592.ciunit = unites_2.imprim;
+		s_wsle(&io___592);
+		do_lio(&c__9, &c__1, "s", (ftnlen)1);
+		do_lio(&c__3, &c__1, (char *)&ns3, (ftnlen)sizeof(integer));
+		do_lio(&c__9, &c__1, ": x=", (ftnlen)4);
+		do_lio(&c__5, &c__1, (char *)&pxyd[ns3 * 3 + 1], (ftnlen)
+			sizeof(doublereal));
+		do_lio(&c__9, &c__1, " y=", (ftnlen)3);
+		do_lio(&c__5, &c__1, (char *)&pxyd[ns3 * 3 + 2], (ftnlen)
+			sizeof(doublereal));
+		e_wsle();
+		io___593.ciunit = unites_2.imprim;
+		s_wsle(&io___593);
+		do_lio(&c__9, &c__1, "s", (ftnlen)1);
+		do_lio(&c__3, &c__1, (char *)&ns4, (ftnlen)sizeof(integer));
+		do_lio(&c__9, &c__1, ": x=", (ftnlen)4);
+		do_lio(&c__5, &c__1, (char *)&pxyd[ns4 * 3 + 1], (ftnlen)
+			sizeof(doublereal));
+		do_lio(&c__9, &c__1, " y=", (ftnlen)3);
+		do_lio(&c__5, &c__1, (char *)&pxyd[ns4 * 3 + 2], (ftnlen)
+			sizeof(doublereal));
+		e_wsle();
+		io___594.ciunit = unites_2.imprim;
+		s_wsle(&io___594);
+		do_lio(&c__9, &c__1, "intersection en: x=", (ftnlen)19);
+		do_lio(&c__5, &c__1, (char *)&x, (ftnlen)sizeof(doublereal));
+		do_lio(&c__9, &c__1, " y=", (ftnlen)3);
+		do_lio(&c__5, &c__1, (char *)&y, (ftnlen)sizeof(doublereal));
+		e_wsle();
+		io___595.ciunit = unites_2.imprim;
+		s_wsle(&io___595);
+		do_lio(&c__9, &c__1, "distance ns1-ns2=", (ftnlen)17);
+		d__1 = sqrt(d12);
+		do_lio(&c__5, &c__1, (char *)&d__1, (ftnlen)sizeof(doublereal)
+			);
+		e_wsle();
+		io___596.ciunit = unites_2.imprim;
+		s_wsle(&io___596);
+		do_lio(&c__9, &c__1, "distance (x,y) au plus proche", (ftnlen)
+			29);
+		do_lio(&c__3, &c__1, (char *)&ns3, (ftnlen)sizeof(integer));
+		do_lio(&c__3, &c__1, (char *)&ns4, (ftnlen)sizeof(integer));
+		do_lio(&c__9, &c__1, "=", (ftnlen)1);
+		d__1 = sqrt(d__);
+		do_lio(&c__5, &c__1, (char *)&d__1, (ftnlen)sizeof(doublereal)
+			);
+		e_wsle();
 		*ierr = 13;
 /* cc               pause */
 		return 0;
@@ -10402,13 +10194,13 @@ L35:
 	    if (nbt <= 0) {
 /*              les triangles de sommet nsp ne forme pas une "boule" */
 /*              avec ce sommet nsp pour "centre" */
-		//io___599.ciunit = unites_2.imprim;
-		//s_wsle(&io___599);
-		//do_lio(&c__9, &c__1, "tefoar: les triangles autour du sommet "
-		//	, (ftnlen)39);
-		//do_lio(&c__3, &c__1, (char *)&nsp, (ftnlen)sizeof(integer));
-		//do_lio(&c__9, &c__1, " ne forme pas une etoile", (ftnlen)24);
-		//e_wsle();
+		io___599.ciunit = unites_2.imprim;
+		s_wsle(&io___599);
+		do_lio(&c__9, &c__1, "tefoar: les triangles autour du sommet "
+			, (ftnlen)39);
+		do_lio(&c__3, &c__1, (char *)&nsp, (ftnlen)sizeof(integer));
+		do_lio(&c__9, &c__1, " ne forme pas une etoile", (ftnlen)24);
+		e_wsle();
 		nbt = -nbt;
 	    }
 
@@ -10495,10 +10287,10 @@ L38:
 		goto L30;
 	    }
 
-	    //io___604.ciunit = unites_2.imprim;
-	    //s_wsle(&io___604);
-	    //do_lio(&c__9, &c__1, "tefoar: algorithme defaillant", (ftnlen)29);
-	    //e_wsle();
+	    io___604.ciunit = unites_2.imprim;
+	    s_wsle(&io___604);
+	    do_lio(&c__9, &c__1, "tefoar: algorithme defaillant", (ftnlen)29);
+	    e_wsle();
 	    *ierr = 14;
 /* cc            pause */
 	    return 0;
@@ -10511,22 +10303,22 @@ L38:
     if (ipas == 0) {
 	goto L25;
     }
-    //io___605.ciunit = unites_2.imprim;
-    //s_wsle(&io___605);
-    //e_wsle();
-    //io___606.ciunit = unites_2.imprim;
-    //s_wsle(&io___606);
-    //do_lio(&c__9, &c__1, "tefoar 50: revoyez vos donnees", (ftnlen)30);
-    //e_wsle();
-    //io___607.ciunit = unites_2.imprim;
-    //s_wsle(&io___607);
-    //do_lio(&c__9, &c__1, "les lignes fermees doivent etre disjointes", (
-	   // ftnlen)42);
-    //e_wsle();
-    //io___608.ciunit = unites_2.imprim;
-    //s_wsle(&io___608);
-    //do_lio(&c__9, &c__1, "verifiez si elles ne se coupent pas", (ftnlen)35);
-    //e_wsle();
+    io___605.ciunit = unites_2.imprim;
+    s_wsle(&io___605);
+    e_wsle();
+    io___606.ciunit = unites_2.imprim;
+    s_wsle(&io___606);
+    do_lio(&c__9, &c__1, "tefoar 50: revoyez vos donnees", (ftnlen)30);
+    e_wsle();
+    io___607.ciunit = unites_2.imprim;
+    s_wsle(&io___607);
+    do_lio(&c__9, &c__1, "les lignes fermees doivent etre disjointes", (
+	    ftnlen)42);
+    e_wsle();
+    io___608.ciunit = unites_2.imprim;
+    s_wsle(&io___608);
+    do_lio(&c__9, &c__1, "verifiez si elles ne se coupent pas", (ftnlen)35);
+    e_wsle();
     *ierr = 15;
 /* cc      pause */
     return 0;
@@ -10556,10 +10348,10 @@ L70:
 /*     ============================================================= */
 L80:
     if (nbtrcf * 3 > *mxarcf) {
-	//io___609.ciunit = unites_2.imprim;
-	//s_wsle(&io___609);
-	//do_lio(&c__9, &c__1, "saturation du tableau noarcf", (ftnlen)28);
-	//e_wsle();
+	io___609.ciunit = unites_2.imprim;
+	s_wsle(&io___609);
+	do_lio(&c__9, &c__1, "saturation du tableau noarcf", (ftnlen)28);
+	e_wsle();
 	*ierr = 10;
 /* cc         pause */
 	return 0;
@@ -10673,8 +10465,8 @@ L130:
 	pxyd, integer *ntrp, integer *letree, integer *ierr)
 {
     /* Builtin functions */
-    //integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
-	   // e_wsle(void);
+    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
+	    e_wsle(void);
 
     /* Local variables */
     static integer i__, i1, i2, np[4], ns1, ns2, nsot;
@@ -10755,13 +10547,13 @@ L130:
 	++(*nbsomm);
 	if (*nbsomm > *mxsomm) {
 /*           plus assez de place dans pxyd */
-	    //io___625.ciunit = unites_1.imprim;
-	    //s_wsle(&io___625);
-	    //do_lio(&c__9, &c__1, "te4ste: saturation pxyd", (ftnlen)23);
-	    //e_wsle();
-	    //io___626.ciunit = unites_1.imprim;
-	    //s_wsle(&io___626);
-	    //e_wsle();
+	    io___625.ciunit = unites_1.imprim;
+	    s_wsle(&io___625);
+	    do_lio(&c__9, &c__1, "te4ste: saturation pxyd", (ftnlen)23);
+	    e_wsle();
+	    io___626.ciunit = unites_1.imprim;
+	    s_wsle(&io___626);
+	    e_wsle();
 	    *ierr = 52;
 	    return 0;
 	}
@@ -10788,13 +10580,13 @@ L25:
 	if (nsot <= 0) {
 /*           manque de place. saturation letree */
 	    *ierr = 51;
-	    //io___629.ciunit = unites_1.imprim;
-	    //s_wsle(&io___629);
-	    //do_lio(&c__9, &c__1, "te4ste: saturation letree", (ftnlen)25);
-	    //e_wsle();
-	    //io___630.ciunit = unites_1.imprim;
-	    //s_wsle(&io___630);
-	    //e_wsle();
+	    io___629.ciunit = unites_1.imprim;
+	    s_wsle(&io___629);
+	    do_lio(&c__9, &c__1, "te4ste: saturation letree", (ftnlen)25);
+	    e_wsle();
+	    io___630.ciunit = unites_1.imprim;
+	    s_wsle(&io___630);
+	    e_wsle();
 	    return 0;
 	}
 

@@ -16,5 +16,9 @@ ninja
 if errorlevel 1 exit 1
 
 REM Install step
-ninja install
+ninja install > installed_files.txt
+if errorlevel 1 exit 1
+
+REM Test step
+ninja test
 if errorlevel 1 exit 1

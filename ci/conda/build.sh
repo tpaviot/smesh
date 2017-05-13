@@ -1,7 +1,6 @@
 # Configure step
 cmake -G Ninja -DCMAKE_INSTALL_PREFIX=$PREFIX \
  -DCMAKE_BUILD_TYPE=RelWithDebInfo \
- -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-O2 -g -DNDEBUG -D_DEBUG_" \
  -DSMESH_EXTRA_WARNINGS=ON \
  -DCMAKE_PREFIX_PATH=$PREFIX \
  -DCMAKE_SYSTEM_PREFIX_PATH=$PREFIX \
@@ -13,7 +12,7 @@ cmake -G Ninja -DCMAKE_INSTALL_PREFIX=$PREFIX \
 ninja
 
 # Install step
-ninja install
+ninja install > installed_files.txt
 
 # test
 ninja test

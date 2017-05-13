@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 2.8)
 
 set(SMESH_VERSION_MAJOR 6)
 set(SMESH_VERSION_MINOR 7)
-set(SMESH_VERSION_PATCH 2)
+set(SMESH_VERSION_PATCH 3)
 set(SMESH_VERSION_TWEAK)
 
 
@@ -32,7 +32,7 @@ option(SMESH_EXTRA_WARNINGS "Enable Maximum Warnings Level" OFF)
 # Enable Extra warnings for each compiler
 if(SMESH_EXTRA_WARNINGS)
     if(MSVC)
-        add_definitions("/W4 /wd9025")
+        add_definitions("/W4")
     endif(MSVC)
     if(CMAKE_COMPILER_IS_GNUCXX)
         add_definitions("-Wall -Wextra")

@@ -6,6 +6,8 @@
 #include <SMESH_Gen.hxx>
 #include <StdMeshers_AutomaticLength.hxx>
 #include <StdMeshers_TrianglePreference.hxx>
+#include <StdMeshers_NumberOfSegments.hxx>
+#include <StdMeshers_Regular_1D.hxx>
 #include <StdMeshers_MEFISTO_2D.hxx>
 #include <gtest/gtest.h>
 
@@ -26,10 +28,15 @@ TEST(MeshBasicGeometriesSuite, testMeshBox)
     ASSERT_GT(diagonal_size, 17.320508);
     ASSERT_LT(diagonal_size, 17.320509);
     // create and add hypothesis
-    StdMeshers_AutomaticLength* hyp1d = new StdMeshers_AutomaticLength(0,0,meshgen);
-    StdMeshers_TrianglePreference* hyp2d = new StdMeshers_TrianglePreference(1,0,meshgen);
+    StdMeshers_AutomaticLength* hyp1d_0 = new StdMeshers_AutomaticLength(0,0,meshgen);
+    StdMeshers_NumberOfSegments* hyp1d_1 = new StdMeshers_NumberOfSegments(1,0,meshgen);
+    hyp1d_1->SetNumberOfSegments(1);
+    StdMeshers_Regular_1D* hyp1d_2 = new StdMeshers_Regular_1D(2,0,meshgen);
+    StdMeshers_TrianglePreference* hyp2d = new StdMeshers_TrianglePreference(3,0,meshgen);
     mesh->AddHypothesis(mesh->GetShapeToMesh(), 0);
     mesh->AddHypothesis(mesh->GetShapeToMesh(), 1);
+    mesh->AddHypothesis(mesh->GetShapeToMesh(), 2);
+    mesh->AddHypothesis(mesh->GetShapeToMesh(), 3);
     // compute the mesh
     meshgen->Compute(*mesh, mesh->GetShapeToMesh());
     // free memory
