@@ -1,4 +1,4 @@
-version: smesh-6.7.2.{build}
+version: smesh-6.7.4.{build}
 
 environment:
   global:
