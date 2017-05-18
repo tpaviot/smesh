@@ -5,10 +5,13 @@
 #include <BRepPrimAPI_MakeTorus.hxx>
 #include <SMESH_Gen.hxx>
 #include <StdMeshers_AutomaticLength.hxx>
+#include <StdMeshers_Arithmetic1D.hxx>
 #include <StdMeshers_TrianglePreference.hxx>
 #include <StdMeshers_NumberOfSegments.hxx>
 #include <StdMeshers_Regular_1D.hxx>
 #include <StdMeshers_MEFISTO_2D.hxx>
+#include <StdMeshers_Quadrangle_2D.hxx>
+
 #include <gtest/gtest.h>
 
 TEST(MeshBasicGeometriesSuite, testMeshBox)
@@ -61,12 +64,16 @@ TEST(MeshBasicGeometriesSuite, testMeshBoxMEFISTO2)
     ASSERT_GT(diagonal_size, 17.320508);
     ASSERT_LT(diagonal_size, 17.320509);
     // create and add hypothesis
-    StdMeshers_AutomaticLength* hyp1d = new StdMeshers_AutomaticLength(0,0,meshgen);
-    StdMeshers_TrianglePreference* hyp2d = new StdMeshers_TrianglePreference(1,0,meshgen);
-    StdMeshers_MEFISTO_2D* mef2d = new StdMeshers_MEFISTO_2D(2,0,meshgen) ;
+    StdMeshers_Arithmetic1D* hyp1d = new StdMeshers_Arithmetic1D(0,0,meshgen);
+    hyp1d->SetLength(0.1, false); // the smallest distance between 2 points
+    hyp1d->SetLength(0.5, true);  // the longest distance between 2 points
+    StdMeshers_Regular_1D* an1DAlgo = new StdMeshers_Regular_1D(1, 0, meshgen); // interpolation
+    StdMeshers_TrianglePreference* hyp2d = new StdMeshers_TrianglePreference(2,0,meshgen);
+    StdMeshers_MEFISTO_2D* mef2d = new StdMeshers_MEFISTO_2D(3,0,meshgen) ;
     mesh->AddHypothesis(mesh->GetShapeToMesh(), 0);
     mesh->AddHypothesis(mesh->GetShapeToMesh(), 1);
     mesh->AddHypothesis(mesh->GetShapeToMesh(), 2);
+    mesh->AddHypothesis(mesh->GetShapeToMesh(), 3);
     // compute the mesh
     meshgen->Compute(*mesh, mesh->GetShapeToMesh());
     // free memory
@@ -93,7 +100,7 @@ TEST(MeshBasicGeometriesSuite, testMeshSphere)
     delete mesh;
 }
 
-TEST(MeshBasicGeometriesSuite, testMeshTorus)
+TEST(MeshBasicGeometriesSuite, testMeshQuadrangleTorus)
 {
     // the same as the previous test, but with a sphere
     BRepPrimAPI_MakeTorus my_torus(10., 20.);
@@ -102,6 +109,16 @@ TEST(MeshBasicGeometriesSuite, testMeshTorus)
     // create the Mesh
     SMESH_Gen* meshgen = new SMESH_Gen();
     SMESH_Mesh* mesh = meshgen->CreateMesh(0, true);
+    // 1D
+    StdMeshers_Arithmetic1D* hyp1d = new StdMeshers_Arithmetic1D(0,0,meshgen);
+    hyp1d->SetLength(0.1, false); // the smallest distance between 2 points
+    hyp1d->SetLength(0.5, true);  // the longest distance between 2 points
+    StdMeshers_Regular_1D* an1DAlgo = new StdMeshers_Regular_1D(1, 0, meshgen); // interpolation
+    StdMeshers_Quadrangle_2D *a2dAlgo = new StdMeshers_Quadrangle_2D(2, 0, meshgen);
+    // add hypothesis
+    mesh->AddHypothesis(mesh->GetShapeToMesh(), 0);
+    mesh->AddHypothesis(mesh->GetShapeToMesh(), 1);
+    mesh->AddHypothesis(mesh->GetShapeToMesh(), 2);
     // set geometry to be meshed
     mesh->ShapeToMesh(my_torus.Shape());
     ASSERT_TRUE(mesh->HasShapeToMesh());
