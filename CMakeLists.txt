@@ -60,17 +60,22 @@ endif(SMESH_TESTING)
 # OCE include and lib location #
 ################################
 set(OCE_REQUIRED_LIBS TKernel TKMath TKBRep TKG2d TKG3d TKMeshVS TKPrim TKGeomBase TKGeomAlgo TKTopAlgo TKShHealing)
-find_package(OCE
-    COMPONENTS ${OCE_REQUIRED_LIBS}
-    CONFIG)
+if(MSVC)
+    message(STATUS "Don't look for installed OCE, use provided paths")
+else(MSVC)
+    message(STATUS "Looking for OCE ...")
+    find_package(OCE
+          COMPONENTS ${OCE_REQUIRED_LIBS}
+          CONFIG)
+endif(MSVC)
 if(OCE_FOUND)
-    message(STATUS "OpenCASCADE Community Edition found.")
+    message(STATUS "OCE found.")
     include_directories(${OCE_INCLUDE_DIRS})
     set(OCE_LIBRARIES ${OCE_REQUIRED_LIBS})
 else()
-    set( OCE_INCLUDE_PATH /usr/local/include/oce CACHE
+    set(OCE_INCLUDE_PATH /usr/local/include/oce CACHE
         PATH "OCE headers location" )
-    set( OCE_LIB_PATH /usr/local/lib CACHE
+    set(OCE_LIB_PATH /usr/local/lib CACHE
         PATH "OCE libraries location" )
     set(OCE_LIBRARIES TKernel TKMath TKBRep TKG2d TKG3d TKMeshVS TKPrim TKGeomBase TKGeomAlgo TKTopAlgo TKShHealing)
     # Tells CMake where are the required headers
