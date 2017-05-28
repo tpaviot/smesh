@@ -17,7 +17,7 @@ language: cpp
 # after that, copy/paste the secure on the following line
 env:
   global:
-    - secure: "ZoNtkNLbQj3G3uXIxpLvbJi4snanooQBGLD2D5/43toqz1IIBZUsBz+06YtHeGMxHP+07fwg50lwcgxx+9Nio5HX7EBF7adCoTG+GRSbLj7ROP9Lndm1kJvCyCfHXT5jxzTOvtXer0YP2VWp3XvtwJ+aQQUbdoUdnRoq41gSN3XDze07tmGWMBTMIO8cyJ3T8l2cAfQMY18q9tyC37JnI+Fix+4q4oKvKb/jLHmWtGW0S7axI6rxkbsd5osss2txg8ZaZIbn1N67k7pH/9BGLjJAXKn8cRVxPlRYCf1p2D18bpFsrvcPu5JDWqoAdyEuOeYCAA7PCEMfkbGAKyumkLbmBSF2AZDZlPC79509QUr6+Bg9xrp9ysg4fekX9pXIgo1lzb1ugohPRAVI1exCDHuHIo0z2CpcYSJ7uQEk/vZYKUPcFeHSwhaltpW3Ac6lMk6UKJuN5jC6Qo4uPEx8r5joWtH6K4VhUYYFASNNAVhOcJgWpvKReyPLODx68dLF79Bjp+AJS9sj9NUsIwghE9gehxIKFlkkpfOTFwWDJI58NLDNG2C/OAzAfoPWSUOTk3zTKH3h+F0GMKD4TMBoAxNCI/pIxEEAgg75/3jbh8++k8+NRu7WBg2bCaL8ezBsDJ1le1BDM+a2W4ZoHX8/+awCKWwEFkEnto+LZJo4iJg="
+    - secure: "Q809gaR2XvFRsaZiuIm2VPB1lI6exjwlwcgvrg+oBRHdrcULKkE+cz1jN7aaC4owArzozE84+BPgRp0EbyL9JxibqXh+okBmz5dHtSscBZoE7X5V+vBVxfqcHQE7YADOqbUiSrbqlkFzXC7UedKGSmsdXSqipsWMyjblKKnyxd8="
 
 matrix:
   include:
@@ -47,7 +47,6 @@ before_install:
   # Useful for debugging any issues with conda
   - conda info -a
   # Add dlr-sc channel for third part libraries
-  # necessary because of gl2ps
   - conda config --add channels https://conda.anaconda.org/conda-forge
   - conda config --add channels https://conda.anaconda.org/dlr-sc
   - conda config --add channels https://conda.anaconda.org/oce
@@ -55,7 +54,11 @@ before_install:
   - conda install conda-build anaconda-client
 
 script:
-  - conda build ci/conda
+  - conda build ci/conda --no-remove-work-dir
+
+after_success:
+  - python ci/move-conda-package.py
+  - anaconda -t $BINSTAR_TOKEN upload *.bz2 --force;
 
 branches:
   only:
