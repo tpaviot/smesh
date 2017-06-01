@@ -1,5 +1,31 @@
+Version 6.7.4 - June 2017
+=========================
+This version is binary compatible with smesh-6.7.3
+
+* fixed Macosx rpath
+
+* fixed example
+
+* fixed conda build
+
+Users who contributed to this release:
+  Thomas Paviot
+
+Version 6.7.3 - May 2017
+=========================
+This version is not binary compatible with smesh-6.7.2
+
+* port to oce-0.18.1
+
+* fixed compiler warnings
+
+* support for more verbose messages in MEFISTO2 mesher
+
+Users who contributed to this release:
+  Thomas Paviot
+
 Version 6.7.2 - March 2017
-=============================
+==========================
 This version is binary compatible with smesh-6.6
 
 * fixed compiler warnings

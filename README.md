@@ -37,7 +37,7 @@ How to stay up to date with latest developements?
 Install with conda
 ------------------
 
-$ conda install -c pythonocc smesh=6.7.2
+$ conda install -c pythonocc -c dlr-sc -c oce smesh=6.7.4
 
 Build - Install
 ---------------
@@ -50,7 +50,7 @@ Requirements
 
   * cmake 2.8 or higher
 
-  * oce 0.17.1 or oce-0.17.2
+  * oce 0.18 or oce-0.18.1
 
 Build
 -----
@@ -65,8 +65,3 @@ Build with conda
 ----------------
 
     $ conda build ci/conda
-
-Install with conda
-------------------
-
-    $ conda install -c pythonocc smesh
