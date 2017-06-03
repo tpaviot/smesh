@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 2.8)
 
 set(SMESH_VERSION_MAJOR 6)
 set(SMESH_VERSION_MINOR 7)
-set(SMESH_VERSION_PATCH 4)
+set(SMESH_VERSION_PATCH 5)
 set(SMESH_VERSION_TWEAK)
 
 
@@ -24,6 +24,7 @@ include_directories(inc)
 #################
 option(SMESH_TESTING "Enable unittest" ON)
 option(SMESH_EXTRA_WARNINGS "Enable Maximum Warnings Level" OFF)
+option(SMESH_USE_BUNDLED_BOOST "Use boost-1.52 headers bundled with SMESH" OFF)
 #option(SMESH_BUILD_NETGENPLUGIN "NETGEN support" OFF)
 
 ##################
@@ -96,13 +97,18 @@ message(STATUS "Built type will be ${CMAKE_BUILD_TYPE}")
 ##############################
 # Boost headers are required #
 ##############################
-find_package(Boost)
-if(Boost_FOUND)
-    include_directories(${Boost_INCLUDE_DIRS})
-else()
-    message(STATUS "Boost not found, using bundled headers.")
-    include_directories(./boost-1.52.0)
-endif()
+if(SMESH_USE_BUNDLED_BOOST)
+    message(STATUS "Using bundled 1.52.0 headers.")
+    include_directories(${CMAKE_SOURCE_DIR}/boost-1.52.0)
+else(SMESH_USE_BUNDLED_BOOST)
+    find_package(Boost)
+    if(Boost_FOUND)
+        include_directories(${Boost_INCLUDE_DIRS})
+    else()
+        message(STATUS "Boost not found, using bundled 1.52.0 headers.")
+        include_directories(${CMAKE_SOURCE_DIR}/boost-1.52.0)
+    endif(Boost_FOUND)
+endif(SMESH_USE_BUNDLED_BOOST)
 
 ############################
 # Check 32/64 bit platform #
@@ -139,20 +145,22 @@ endif(UNIX)
 ##############################
 # Specific Appe OSX settings #
 ##############################
-# use, i.e. don't skip the full RPATH for the build tree
-SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
-# when building, don't use the install RPATH already
-# (but later on when installing)
-SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE) 
-SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
-# add the automatically determined parts of the RPATH
-# which point to directories outside the build tree to the install RPATH
-SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-# the RPATH to be used when installing, but only if it's not a system directory
-LIST(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/lib" isSystemDir)
-IF("${isSystemDir}" STREQUAL "-1")
-   SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
-ENDIF("${isSystemDir}" STREQUAL "-1")
+if(APPLE)
+    # use, i.e. don't skip the full RPATH for the build tree
+    SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
+    # when building, don't use the install RPATH already
+    # (but later on when installing)
+    SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+    SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+    # add the automatically determined parts of the RPATH
+    # which point to directories outside the build tree to the install RPATH
+    SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+    # the RPATH to be used when installing, but only if it's not a system directory
+    LIST(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/lib" isSystemDir)
+    IF("${isSystemDir}" STREQUAL "-1")
+       SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+    ENDIF("${isSystemDir}" STREQUAL "-1")
+endif(APPLE)
 
 #################
 # SMESH library #
