@@ -25,6 +25,17 @@ TEST(STL2MeshTestSuite, testSTLBinary)
     delete mesh;
 }
 
+TEST(STL2MeshTestSuite, testHugeSTLBinary)
+{
+    SMESH_Gen* meshgen = new SMESH_Gen();
+    SMESH_Mesh* mesh = meshgen->CreateMesh(0, true);
+    mesh->STLToMesh(huge_stl_binary);
+    ASSERT_EQ(mesh->NbNodes(), 297527); 
+    ASSERT_EQ(mesh->NbFaces(), 554060);
+    delete meshgen;
+    delete mesh;
+}
+
 int main(int argc, char **argv){
   testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
