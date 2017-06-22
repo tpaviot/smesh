@@ -1,0 +1,235 @@
+--> Branche V6_main
+
+Problemes en cours
+==================
+- a faire
++ en cours, OK mais perfectible
+* OK
+
++ visualisation de groupe (type d'element): on voit tout le maillage, mais le groupe est OK
+  creation d'une structure vtkUnstructuredGrid locale : iteration un peu lourde, et pas de partage avec la structure du maillage (pas evident)
+- inversion d'un volume (tetra): exception
+- script de creation de noeuds et d'elements: OK, mais pas compatible avec version precedente (numerotation noeuds differente)
++ affichage numeros noeuds: numeros en trop sur (O,0,0) pas systematique, trouver la condition (enlever dans vtkUnstructuredGrid ?)
+  ==> purge systematique noeuds et cellules en trop dans compactage grid.
++ gestion du mode embedded mal faite lors d'un script python : journal commandes intempestif
+- affichage des noeuds apres changement lineaire <--> quadratique à l'IHM : pas pris en compte, alors que maillage OK,
+  mais script OK
+  ==> cassé apres mode embedded ou elimination noeuds en trop ?
+- extrusion elements 2D along a path : affichage apres calcul pas toujours OK (filaire)
+- branche git a ouvrir pour merge avec V5_1_4_BR tag V5_1_4rc1
+
+A tester, non pris en compte
+============================
+- engine standalone
+- polyedres (attendre vtk)
+
+
+=============================== Hypothese de refonte de l'API de SMDS
+
+n'utiliser que vtkUnstructuredGrid, ne pas avor d'objets SMDS_MeshElement mais seulement des index de vtkUnstructuredGrid.
+2987 usages de SMDS_MeshNodes
+810            SMDS_MeshElement
+...
+==> en dernier ressort, lourd
+================================================================================
+
+Essai a API SMDS a peu pres constante
+=====================================
+
+SMDS_Mesh
+  static vector<SMDS_Mesh*> _meshList;     --> retrouver un SMDS_Mesh
+  vtkUnstructuredGrid*      myGrid;
+
+  vector<SMDS_MeshNode *>   myNodes;       --> meme index que dans le pointSet de myGrid
+  vector<SMDS_MeshCell *>   myCells;       --> index = ID client, pas le meme index que dans le cellTypes de myGrid (ID vtk)
+
+
+
+SMDS_MeshElement
+  int myID;                                --> index dans la structure geree par SMDS_Mesh
+  int myMeshId;                            --> pour retrouver SMDS_Mesh* dans _meshList
+  int myShapeId;                           --> pour retrouver la subShape
+                                                         
+
+SMDS_MeshNode: SMDS_MeshElement
+  SMDS_PositionPtr myPosition;             -->  A REVOIR : objet position dans la shape geom
+  ##vector<int> myInverseElements;         -->  SUPPRIME : pour retrouver les elements, vtkCellLinks
+
+
+SMDS_MeshCell: SMDS_MeshElement            --> generique pour tous les elements (cells)
+  int myVtkID                              --> A SUPPRIMER
+
+SMDS_MeshVolume: SMDS_MeshCell
+
+SMDS_VolumeOfNodes: SMDS_MeshVolume        --> Garder temporairement, utilisation dans StdMesher et SMDS_VolumeTool
+  const SMDS_MeshNode **myNodes;           --> Couteux
+  int                 myNbNodes;           -->  ""
+
+SMDS_VolumeVtkNodes: SMDS_MeshVolume       --> Utiliser systematiquement dans SMDS,
+                                           --> IMPLEMENTER.
+
+
+SMDS_MeshElementIDFactory: SMDS_MeshNodeIDFactory
+  vector<int> myIDElements; // index = ID client, value = ID vtk  --> A SUPPRIMER, ne sert que dans SMDS_MeshElementIDFactory
+  vector<int> myVtkIndex;   // index = ID vtk, value = ID client  --> A REPORTER dans SMDS_Mesh
+
+
+
+
+========= TODO ============
+
+enlever vtkId de SMDS_MeshCell, utiliser SMDS_MeshElementIDFactory.
+
+ajouter ID dans SMDS_Mesh::createTriangle 
+verifier ID dans SMDS_Mesh::Find*OrCreate
+
+===================================================
+occupation memoire cube 100*100*100 sans affichage
+NOTES:
+- sur Debian Sarge 64 bits, les mesures malloc_stat() semblent coherentes
+  avec une mesure externe globale(recherche du passage en swap du process).
+- sur Ubuntu 9.10 64 bits, les mesures malloc_stat() donnent des resultats bizarres (surestimation ?),
+  mais la mesure avec l'outil KDE de surveillance systeme est OK avec la recherche du swap.
+
+
+Reference : V513 Debian Sarge 64 bits: --> 463 - 33 = 430 Mo
+-------------------------------------
+Total (incl. mmap):
+system bytes     =   43757568
+in use bytes     =   32909584 = 33M
+max mmap regions =         41
+max mmap bytes   =   16371712
+----
+Total (incl. mmap):
+system bytes     =  464670720
+in use bytes     =  463105120 = 463M
+max mmap regions =         47
+max mmap bytes   =   28188672
+
+Debian Sarge 64 bits, vtkUnstructuredGrid nodes et hexa, 4 janvier 2010 --> 512 - 41 = 471M
+-----------------------------------
+
+Total (incl. mmap):
+system bytes     =   52133888
+in use bytes     =   41340320 : 41M
+max mmap regions =         72
+max mmap bytes   =   24625152
+----
+Total (incl. mmap):
+system bytes     =  520560640
+in use bytes     =  518735584 : 512M
+max mmap regions =         88
+max mmap bytes   =  198385664
+
+idem avec pool SMDS_MeshNodes --> 483 -33 = 450M
+-----------------------------
+Total (incl. mmap):
+system bytes     =   43696128
+in use bytes     =   32915184 : 33M 
+max mmap regions =         41
+max mmap bytes   =   16371712
+----
+Total (incl. mmap):
+system bytes     =  484806656
+in use bytes     =  482980992 : 483M
+max mmap regions =         58
+max mmap bytes   =  184557568
+
+idem ci-dessus + pool SMDS_VolumeVtkNodes --> 475 -33 = 442M (git: add ObjectPool.hxx)
+-----------------------------------------
+
+Total (incl. mmap):
+system bytes     =   43200512
+in use bytes     =   32908576 : 33M
+max mmap regions =         41
+max mmap bytes   =   16371712
+----
+Total (incl. mmap):
+system bytes     =  478068736
+in use bytes     =  475144400 : 475M
+max mmap regions =         59
+max mmap bytes   =  184692736
+
+remplacement SMDS_PositionPtr: (boost::shared_ptr<SMDS_Position> --> SMDS_Position*) --> 436 - 35 = 401M (git SMDS_Position)
+------------------------------------------------------------------------------------
+Total (incl. mmap):
+system bytes     =   45408256
+in use bytes     =   35097680 : 35M
+max mmap regions =         47
+max mmap bytes   =   18116608
+----
+Total (incl. mmap):
+system bytes     =  438935552
+in use bytes     =  436116560 : 436M
+max mmap regions =         65
+max mmap bytes   =  186437632
+
+simplification SMDS_SpacePosition (pas de double[3]) --> 418 -33 = 385M (git SMDS_SpacePosition)
+----------------------------------------------------
+Total (incl. mmap):
+system bytes     =   42582016
+in use bytes     =   32883552 : 33M
+max mmap regions =         41
+max mmap bytes   =   16371712
+----
+Total (incl. mmap):
+system bytes     =  421728256
+in use bytes     =  418378000 : 418M
+max mmap regions =         58
+max mmap bytes   =  183640064
+
+sizeof(SMDS_MeshElement) 16
+sizeof(SMDS_MeshNode) 24
+sizeof(SMDS_MeshCell) 24
+sizeof(SMDS_VolumeVtkNodes) 24
+sizeof(SMDS_Position) 16
+sizeof(SMDS_SpacePosition) 16
+
+impact d'un int en plus dans SMDS_MeshElement --> 426 - 33 = 393M
+---------------------------------------------
+
+sizeof(SMDS_MeshElement) 24
+sizeof(SMDS_MeshNode) 32       --> on retrouve bien les 8M
+sizeof(SMDS_MeshCell) 24
+sizeof(SMDS_VolumeVtkNodes) 24
+sizeof(SMDS_Position) 16
+sizeof(SMDS_SpacePosition) 16
+
+Total (incl. mmap):
+system bytes     =   43192320
+in use bytes     =   32681088 : 33M
+max mmap regions =         41
+max mmap bytes   =   16371712
+----
+Total (incl. mmap):
+system bytes     =  429334528
+in use bytes     =  426424576 : 426M
+max mmap regions =         59
+max mmap bytes   =  184692736
+
+remplacement std::set par std::vector dans SMESHDS_SubMesh --> 347 - 35 = 312M
+----------------------------------------------------------
+sizeof(SMDS_MeshElement) 24
+sizeof(SMDS_MeshNode) 32
+sizeof(SMDS_MeshCell) 24
+sizeof(SMDS_VolumeVtkNodes) 24
+sizeof(SMDS_Position) 16
+sizeof(SMDS_SpacePosition) 16
+
+Total (incl. mmap):
+system bytes     =   45404160
+in use bytes     =   35132160 --> 35M
+max mmap regions =         49
+max mmap bytes   =   17723392
+----
+Total (incl. mmap):
+system bytes     =  349831168
+in use bytes     =  346885424 --> 347M
+max mmap regions =         73
+max mmap bytes   =  204148736
+
+Ce resultat est coherent avec une recherche de swap sur une machine a 8Go de memoire:
+Cube a 270**3 mailles (~20M mailles) --> 6.2 Go (idem Debian Sarge et Ubuntu 9.10, 64 bits)
+Le meme avec V5.1.3 --> 14 Go (swap)
+

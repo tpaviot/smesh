@@ -2,10 +2,10 @@ project(SMESH CXX C)
 
 cmake_minimum_required(VERSION 2.8)
 
-set(SMESH_VERSION_MAJOR 6)
-set(SMESH_VERSION_MINOR 8)
+set(SMESH_VERSION_MAJOR 8)
+set(SMESH_VERSION_MINOR 2)
 set(SMESH_VERSION_PATCH 0)
-set(SMESH_VERSION_TWEAK)
+set(SMESH_VERSION_TWEAK -dev)
 
 
 #####################
