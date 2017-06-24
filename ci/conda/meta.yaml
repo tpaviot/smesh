@@ -1,6 +1,6 @@
 ﻿package:
   name: smesh
-  version: 6.8.0
+  version: 8.2.0
 
 source:
   path: ../..
@@ -23,10 +23,14 @@ requirements:
   build:
     - oce ==0.18.1
     - ninja
+    - vtk
     - cmake
+    - boost
 
   run:
     - oce ==0.18.1
+    - vtk
+    - boost
 
 about:
   home: https://github.com/tpaviot/smesh
