@@ -44,8 +44,10 @@
 #include "DriverDAT_W_SMDS_Mesh.h"
 #include "DriverGMF_Read.hxx"
 #include "DriverGMF_Write.hxx"
+#ifdef WITH_MED
 #include "DriverMED_R_SMESHDS_Mesh.h"
 #include "DriverMED_W_SMESHDS_Mesh.h"
+#endif
 #include "DriverSTL_R_SMDS_Mesh.h"
 #include "DriverSTL_W_SMDS_Mesh.h"
 #include "DriverUNV_R_SMDS_Mesh.h"
@@ -521,6 +523,7 @@ int SMESH_Mesh::UNVToMesh(const char* theFileName)
 
 int SMESH_Mesh::MEDToMesh(const char* theFileName, const char* theMeshName)
 {
+#ifdef WITH_MED
   if ( _isShapeToMesh )
     throw SALOME_Exception(LOCALIZED("a shape to mesh has already been defined"));
   _isShapeToMesh = false;
@@ -552,6 +555,7 @@ int SMESH_Mesh::MEDToMesh(const char* theFileName, const char* theMeshName)
     }
   }
   return (int) status;
+#endif
 }
 
 //=======================================================================
@@ -1387,7 +1391,6 @@ bool SMESH_Mesh::HasDuplicatedGroupNamesMED()
  *  \return int - mesh index in the file
  */
 //================================================================================
-
 void SMESH_Mesh::ExportMED(const char *        file, 
                            const char*         theMeshName, 
                            bool                theAutoGroups,
@@ -1397,6 +1400,7 @@ void SMESH_Mesh::ExportMED(const char *        file,
                            bool                theAddODOnVertices)
   throw(SALOME_Exception)
 {
+#ifdef WITH_MED
   SMESH_TRY;
 
   DriverMED_W_SMESHDS_Mesh myWriter;
@@ -1447,6 +1451,7 @@ void SMESH_Mesh::ExportMED(const char *        file,
   myWriter.Perform();
 
   SMESH_CATCH( SMESH::throwSalomeEx );
+#endif
 }
 
 //================================================================================
@@ -1460,6 +1465,7 @@ void SMESH_Mesh::ExportSAUV(const char *file,
                             bool theAutoGroups)
   throw(SALOME_Exception)
 {
+#ifdef WITH_MED
   std::string medfilename(file);
   medfilename += ".med";
   std::string cmd;
@@ -1491,6 +1497,7 @@ void SMESH_Mesh::ExportSAUV(const char *file,
   cmd += "from medutilities import my_remove ; my_remove(r'" + medfilename + "')";
   cmd += "\"";
   system(cmd.c_str());
+#endif
 }
 
 //================================================================================
