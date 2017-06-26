@@ -2803,9 +2803,10 @@ namespace {
   template <typename ELEM=const SMDS_MeshElement*>
   class IdSortedIterator : public SMDS_Iterator<ELEM>
   {
-    SMDS_MeshElementIDFactory&       myIDFact;
-    int                              myID, myMaxID, myNbFound, myTotalNb;
-    SMDSAbs_ElementType              myType;
+    const SMDS_MeshElementIDFactory&       myIDFact;
+    int                              myID, myMaxID, myNbFound;
+    const int myTotalNb;
+    const SMDSAbs_ElementType              myType;
     ELEM                             myElem;
 
   public:
