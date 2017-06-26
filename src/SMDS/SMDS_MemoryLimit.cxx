@@ -25,7 +25,8 @@
 // This is not done inside a function of SALOME because allocated memory is not always
 // returned to the system. (PAL16631)
 //
-#ifndef WIN32
+
+#if !defined(WIN32) && !defined(__APPLE__)
 #include <sys/sysinfo.h>
 #endif
 
@@ -36,7 +37,7 @@
 int main (int argc, char ** argv)
 {
   // To better understand what is going on here, consult bug [SALOME platform 0019911]
-#ifndef WIN32
+#if !defined(WIN32) && !defined(__APPLE__)
   struct sysinfo si;
   int err = sysinfo( &si );
   if ( err )
