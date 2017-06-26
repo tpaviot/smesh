@@ -269,7 +269,7 @@ bool SMESH_Pattern::Load (const char* theFileContents)
 {
   MESSAGE("Load( file ) ");
 
-  Kernel_Utils::Localizer loc;
+  //Kernel_Utils::Localizer loc;
   
   // file structure:
 
@@ -415,7 +415,7 @@ bool SMESH_Pattern::Save (ostream& theFile)
 {
   MESSAGE(" ::Save(file) " );
   
-  Kernel_Utils::Localizer loc;
+  //Kernel_Utils::Localizer loc;
     
   if ( !IsLoaded() ) {
     MESSAGE(" Pattern not loaded ");

@@ -46,7 +46,7 @@ using namespace UNV;
 
 Driver_Mesh::Status DriverUNV_W_SMDS_Mesh::Perform()
 {
-  Kernel_Utils::Localizer loc;
+  //Kernel_Utils::Localizer loc;
   Status aResult = DRS_OK;
   std::ofstream out_stream(myFile.c_str());
   try{

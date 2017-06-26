@@ -61,7 +61,7 @@ void DriverSTL_W_SMDS_Mesh::SetIsAscii( const bool theIsAscii )
 
 Driver_Mesh::Status DriverSTL_W_SMDS_Mesh::Perform()
 {
-  Kernel_Utils::Localizer loc;
+  //Kernel_Utils::Localizer loc;
 
   Status aResult = DRS_OK;
 

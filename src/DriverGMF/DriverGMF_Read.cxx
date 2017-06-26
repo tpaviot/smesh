@@ -59,7 +59,7 @@ DriverGMF_Read::~DriverGMF_Read()
 
 Driver_Mesh::Status DriverGMF_Read::Perform()
 {
-  Kernel_Utils::Localizer loc;
+  //Kernel_Utils::Localizer loc;
 
   Status status = DRS_OK;
 

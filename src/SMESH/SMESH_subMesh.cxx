@@ -1495,7 +1495,7 @@ bool SMESH_subMesh::ComputeStateEngine(compute_event event)
 
           MemoryReserve aMemoryReserve;
           SMDS_Mesh::CheckMemory();
-          Kernel_Utils::Localizer loc;
+          //Kernel_Utils::Localizer loc;
           if ( !_father->HasShapeToMesh() ) // no shape
           {
             SMESH_MesherHelper helper( *_father );

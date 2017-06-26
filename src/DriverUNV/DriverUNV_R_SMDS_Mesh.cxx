@@ -100,7 +100,7 @@ DriverUNV_R_SMDS_Mesh::~DriverUNV_R_SMDS_Mesh()
 
 Driver_Mesh::Status DriverUNV_R_SMDS_Mesh::Perform()
 {
-  Kernel_Utils::Localizer loc;
+  //Kernel_Utils::Localizer loc;
   Status aResult = DRS_OK;
   std::ifstream in_stream(myFile.c_str());
   try

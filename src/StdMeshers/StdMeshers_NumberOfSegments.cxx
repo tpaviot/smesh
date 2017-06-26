@@ -330,7 +330,7 @@ bool process( const TCollection_AsciiString& str, int convMode,
               bool& non_neg, bool& non_zero,
               bool& singulars, double& sing_point )
 {
-  Kernel_Utils::Localizer loc;
+  //Kernel_Utils::Localizer loc;
 
   bool parsed_ok = true;
   Handle( ExprIntrp_GenExp ) myExpr;

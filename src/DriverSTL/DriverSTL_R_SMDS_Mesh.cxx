@@ -102,7 +102,7 @@ void DriverSTL_R_SMDS_Mesh::SetIsCreateFaces( const bool theIsCreate )
 
 Driver_Mesh::Status DriverSTL_R_SMDS_Mesh::Perform()
 {
-  Kernel_Utils::Localizer loc;
+  //Kernel_Utils::Localizer loc;
 
   Status aResult = DRS_OK;
 
