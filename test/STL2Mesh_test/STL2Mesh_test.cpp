@@ -1,4 +1,6 @@
+#include <SMESH_Mesh.hxx>
 #include <SMESH_Gen.hxx>
+
 #include <gtest/gtest.h>
 
 #include "STL2Mesh_test_config.h"

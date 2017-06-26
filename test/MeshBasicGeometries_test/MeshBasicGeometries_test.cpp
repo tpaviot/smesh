@@ -3,10 +3,10 @@
 #include <BRepPrimAPI_MakeBox.hxx>
 #include <BRepPrimAPI_MakeSphere.hxx>
 #include <BRepPrimAPI_MakeTorus.hxx>
+#include <SMESH_Mesh.hxx>
 #include <SMESH_Gen.hxx>
 #include <StdMeshers_AutomaticLength.hxx>
 #include <StdMeshers_Arithmetic1D.hxx>
-#include <StdMeshers_TrianglePreference.hxx>
 #include <StdMeshers_NumberOfSegments.hxx>
 #include <StdMeshers_Regular_1D.hxx>
 #include <StdMeshers_MEFISTO_2D.hxx>
@@ -35,15 +35,12 @@ TEST(MeshBasicGeometriesSuite, testMeshBox)
     StdMeshers_NumberOfSegments* hyp1d_1 = new StdMeshers_NumberOfSegments(1,0,meshgen);
     hyp1d_1->SetNumberOfSegments(1);
     StdMeshers_Regular_1D* hyp1d_2 = new StdMeshers_Regular_1D(2,0,meshgen);
-    StdMeshers_TrianglePreference* hyp2d = new StdMeshers_TrianglePreference(3,0,meshgen);
     mesh->AddHypothesis(mesh->GetShapeToMesh(), 0);
     mesh->AddHypothesis(mesh->GetShapeToMesh(), 1);
     mesh->AddHypothesis(mesh->GetShapeToMesh(), 2);
-    mesh->AddHypothesis(mesh->GetShapeToMesh(), 3);
     // compute the mesh
     meshgen->Compute(*mesh, mesh->GetShapeToMesh());
     // free memory
-    delete meshgen;
     delete mesh;
 }
 
@@ -68,16 +65,13 @@ TEST(MeshBasicGeometriesSuite, testMeshBoxMEFISTO2)
     hyp1d->SetLength(0.1, false); // the smallest distance between 2 points
     hyp1d->SetLength(0.5, true);  // the longest distance between 2 points
     StdMeshers_Regular_1D* an1DAlgo = new StdMeshers_Regular_1D(1, 0, meshgen); // interpolation
-    StdMeshers_TrianglePreference* hyp2d = new StdMeshers_TrianglePreference(2,0,meshgen);
-    StdMeshers_MEFISTO_2D* mef2d = new StdMeshers_MEFISTO_2D(3,0,meshgen) ;
+    StdMeshers_MEFISTO_2D* mef2d = new StdMeshers_MEFISTO_2D(2,0,meshgen) ;
     mesh->AddHypothesis(mesh->GetShapeToMesh(), 0);
     mesh->AddHypothesis(mesh->GetShapeToMesh(), 1);
     mesh->AddHypothesis(mesh->GetShapeToMesh(), 2);
-    mesh->AddHypothesis(mesh->GetShapeToMesh(), 3);
     // compute the mesh
     meshgen->Compute(*mesh, mesh->GetShapeToMesh());
     // free memory
-    delete meshgen;
     delete mesh;
 }
 
@@ -96,7 +90,6 @@ TEST(MeshBasicGeometriesSuite, testMeshSphere)
     // compute the mesh
     meshgen->Compute(*mesh, mesh->GetShapeToMesh());
     // free memory
-    delete meshgen;
     delete mesh;
 }
 
@@ -125,7 +118,6 @@ TEST(MeshBasicGeometriesSuite, testMeshQuadrangleTorus)
     // compute the mesh
     meshgen->Compute(*mesh, mesh->GetShapeToMesh());
     // free memory
-    delete meshgen;
     delete mesh;
 }
 
