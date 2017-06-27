@@ -20,16 +20,18 @@
 #ifndef _MEMOIRE_H_
 #define _MEMOIRE_H_
 
-#include <malloc.h>
-#include <iostream>
+#if !defined(WIN32) && !defined(__APPLE__)
+  #include <malloc.h>
+  #include <stdlib.h>
+  #include <iostream>
+#endif
 
 void memostat(const char* f, int l);
 
 void memostat(const char* f, int l)
 {
-#ifdef WIN32
-        //rnv: TODO: find alternative of the malloc_stats() on windows platform
-#else
+
+#if !defined(WIN32) && !defined(__APPLE__)
   struct mallinfo mem = mallinfo();
   std::cerr << f << ":"<< l << " " << mem.arena << " " << mem.ordblks << " " << mem.hblks << " " << mem.hblkhd << " "  << mem.uordblks << " "  << mem.fordblks << " " << mem.keepcost << std::endl;
   std::cerr << f << ":" << l << " --------------------------" << std::endl;
