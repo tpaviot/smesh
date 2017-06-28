@@ -109,9 +109,9 @@ if(SMESH_USE_BUNDLED_BOOST)
     message(STATUS "Using bundled 1.52.0 headers.")
     include_directories(${CMAKE_SOURCE_DIR}/boost-1.52.0)
 else(SMESH_USE_BUNDLED_BOOST)
-    set(Boost_USE_STATIC_LIBS        OFF)  # I've already tried ON
+    set(Boost_USE_STATIC_LIBS        ON)  # I've already tried ON
     set(Boost_USE_MULTITHREADED      ON)
-    set(Boost_USE_STATIC_RUNTIME    OFF)
+    set(Boost_USE_STATIC_RUNTIME    ON)
     find_package(Boost COMPONENTS filesystem thread)
     if(Boost_FOUND)
         include_directories(${Boost_INCLUDE_DIRS})
