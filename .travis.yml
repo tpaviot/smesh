@@ -23,8 +23,12 @@ matrix:
   include:
     - env: ARCH="x86_64"
       os: linux
+      dist: trusty
     - env: ARCH="x86_64"
       os: osx
+    - env: ARCH="x86_64"
+      os: osx
+      osx_image: xcode8.3
 
 # Use miniconda to install binary versions of numpy etc. from continuum
 # analytic's repository. Follows an approach described by Dan Blanchard:
