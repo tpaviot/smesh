@@ -60,7 +60,8 @@ endif(SMESH_TESTING)
 ################################
 # OCE include and lib location #
 ################################
-set(OCE_REQUIRED_LIBS TKernel TKMath TKBRep TKG2d TKG3d TKMeshVS TKPrim TKGeomBase TKGeomAlgo TKTopAlgo TKShHealing TKCDF TKBO TKOffset)
+set(OCE_REQUIRED_LIBS TKernel TKMath TKBRep TKG2d TKG3d TKMeshVS TKPrim TKGeomBase TKGeomAlgo TKTopAlgo TKShHealing TKCDF TKBO TKOffset
+ TKMesh TKV3d)
 if(MSVC)
     message(STATUS "Don't look for installed OCE, use provided paths")
 else(MSVC)
@@ -78,7 +79,8 @@ else()
         PATH "OCE headers location" )
     set(OCE_LIB_PATH /usr/local/lib CACHE
         PATH "OCE libraries location" )
-    set(OCE_LIBRARIES TKernel TKMath TKBRep TKG2d TKG3d TKMeshVS TKPrim TKGeomBase TKGeomAlgo TKTopAlgo TKShHealing TKCDF TKBO TKOffset)
+    set(OCE_LIBRARIES TKernel TKMath TKBRep TKG2d TKG3d TKMeshVS TKPrim TKGeomBase TKGeomAlgo TKTopAlgo TKShHealing TKCDF TKBO TKOffset
+    TKMesh TKV3d)
     # Tells CMake where are the required headers
     include_directories(${OCE_INCLUDE_PATH})
     LINK_DIRECTORIES(${OCE_LIB_PATH})
