@@ -42,8 +42,10 @@
 #include "utilities.h"
 
 #include "DriverDAT_W_SMDS_Mesh.h"
-#include "DriverGMF_Read.hxx"
-#include "DriverGMF_Write.hxx"
+#ifdef WITH_GMF
+  #include "DriverGMF_Read.hxx"
+  #include "DriverGMF_Write.hxx"
+#endif
 #ifdef WITH_MED
 #include "DriverMED_R_SMESHDS_Mesh.h"
 #include "DriverMED_W_SMESHDS_Mesh.h"
@@ -616,6 +618,7 @@ int SMESH_Mesh::CGNSToMesh(const char*  theFileName,
 SMESH_ComputeErrorPtr SMESH_Mesh::GMFToMesh(const char* theFileName,
                                             bool        theMakeRequiredGroups)
 {
+#ifdef WITH_GMF
   DriverGMF_Read myReader;
   myReader.SetMesh(_myMeshDS);
   myReader.SetFile(theFileName);
@@ -627,6 +630,7 @@ SMESH_ComputeErrorPtr SMESH_Mesh::GMFToMesh(const char* theFileName,
   SynchronizeGroups();
 
   return myReader.GetError();
+#endif
 }
 
 //=============================================================================
@@ -1601,12 +1605,14 @@ void SMESH_Mesh::ExportGMF(const char *        file,
                            const SMESHDS_Mesh* meshDS,
                            bool                withRequiredGroups)
 {
+#ifdef WITH_GMF
   DriverGMF_Write myWriter;
   myWriter.SetFile( file );
   myWriter.SetMesh( const_cast<SMESHDS_Mesh*>( meshDS ));
   myWriter.SetExportRequiredGroups( withRequiredGroups );
 
   myWriter.Perform();
+#endif
 }
 
 //================================================================================
