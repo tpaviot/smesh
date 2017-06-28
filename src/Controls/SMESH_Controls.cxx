@@ -4127,6 +4127,7 @@ bool ElementsOnSurface::isOnSurface( const SMDS_MeshNode* theNode )
 //  ElementsOnShape
 //================================================================================
 
+/*
 namespace {
   const int theIsCheckedFlag = 0x0000100;
 }
@@ -4164,7 +4165,8 @@ private:
   double                       myTol;
   int                          myFlags;
 };
-
+*/
+/*
 struct ElementsOnShape::OctreeClassifier : public SMESH_Octree
 {
   OctreeClassifier( const std::vector< ElementsOnShape::Classifier* >& classifiers );
@@ -4181,7 +4183,7 @@ protected:
 
   std::vector< ElementsOnShape::Classifier* > myClassifiers;
 };
-
+*/
 
 ElementsOnShape::ElementsOnShape():
   myOctree(0),

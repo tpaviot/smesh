@@ -557,6 +557,8 @@ int SMESH_Mesh::MEDToMesh(const char* theFileName, const char* theMeshName)
     }
   }
   return (int) status;
+#else
+  return 1; // for msvc to compiles
 #endif
 }
 
@@ -630,6 +632,8 @@ SMESH_ComputeErrorPtr SMESH_Mesh::GMFToMesh(const char* theFileName,
   SynchronizeGroups();
 
   return myReader.GetError();
+#else
+  return SMESH_ComputeError::New(); // for msvc to compile
 #endif
 }
 

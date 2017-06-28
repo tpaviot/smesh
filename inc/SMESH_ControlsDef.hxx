@@ -26,6 +26,7 @@
 #include "SMESH_Controls.hxx"
 
 #include "SMESH_TypeDefs.hxx"
+#include "SMESH_OctreeNode.hxx"
 
 #include <BRepClass3d_SolidClassifier.hxx>
 #include <Bnd_B3d.hxx>
@@ -904,10 +905,55 @@ namespace SMESH{
                         const SMDSAbs_ElementType theType);
 
     private:
+      struct Classifier
+          {
+            Classifier() { mySolidClfr = 0; myFlags = 0; }
+            ~Classifier();
+            void Init(const TopoDS_Shape& s, double tol, const Bnd_B3d* box = 0 );
+            bool IsOut(const gp_Pnt& p)        { return SetChecked( true ), (this->*myIsOutFun)( p ); }
+            TopAbs_ShapeEnum ShapeType() const { return myShape.ShapeType(); }
+            const TopoDS_Shape& Shape() const  { return myShape; }
+            const Bnd_B3d* GetBndBox() const   { return & myBox; }
+            bool IsChecked()                   { return myFlags & 0x0000100; }//{ return myFlags & theIsCheckedFlag; }
+            bool IsSetFlag( int flag ) const   { return myFlags & flag; }
+            void SetChecked( bool is ) { is ? SetFlag( 0x0000100 ) : UnsetFlag( 0x0000100 ); }//{ is ? SetFlag( theIsCheckedFlag ) : UnsetFlag( theIsCheckedFlag ); }
+            void SetFlag  ( int flag ) { myFlags |= flag; }
+            void UnsetFlag( int flag ) { myFlags &= ~flag; }
 
-      struct Classifier;
-      struct OctreeClassifier;
+          private:
+            bool isOutOfSolid (const gp_Pnt& p);
+            bool isOutOfBox   (const gp_Pnt& p);
+            bool isOutOfFace  (const gp_Pnt& p);
+            bool isOutOfEdge  (const gp_Pnt& p);
+            bool isOutOfVertex(const gp_Pnt& p);
+            bool isBox        (const TopoDS_Shape& s);
 
+            bool (Classifier::*          myIsOutFun)(const gp_Pnt& p);
+            BRepClass3d_SolidClassifier* mySolidClfr; // ptr because of a run-time forbidden copy-constructor
+            Bnd_B3d                      myBox;
+            GeomAPI_ProjectPointOnSurf   myProjFace;
+            GeomAPI_ProjectPointOnCurve  myProjEdge;
+            gp_Pnt                       myVertexXYZ;
+            TopoDS_Shape                 myShape;
+            double                       myTol;
+            int                          myFlags;
+          };
+      struct OctreeClassifier : public SMESH_Octree
+        {
+          OctreeClassifier( const std::vector< ElementsOnShape::Classifier* >& classifiers );
+          OctreeClassifier( const OctreeClassifier*                           otherTree,
+                            const std::vector< ElementsOnShape::Classifier >& clsOther,
+                            std::vector< ElementsOnShape::Classifier >&       cls );
+          void GetClassifiersAtPoint( const gp_XYZ& p,
+                                      std::vector< ElementsOnShape::Classifier* >& classifiers );
+        protected:
+          OctreeClassifier() {}
+          SMESH_Octree* newChild() const { return new OctreeClassifier; }
+          void          buildChildrenData();
+          Bnd_B3d*      buildRootBox();
+
+          std::vector< ElementsOnShape::Classifier* > myClassifiers;
+        };
       void clearClassifiers();
       bool getNodeIsOut( const SMDS_MeshNode* n, bool& isOut );
       void setNodeIsOut( const SMDS_MeshNode* n, bool  isOut );
