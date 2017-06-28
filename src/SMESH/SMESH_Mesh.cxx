@@ -75,12 +75,12 @@
 
 #include "Utils_ExceptHandlers.hxx"
 
-#ifndef WIN32
+//#ifndef WIN32
 #include <boost/thread/thread.hpp>
 #include <boost/bind.hpp>
-#else 
-#include <pthread.h>
-#endif
+//#else
+//#include <pthread.h>
+//#endif
 
 using namespace std;
 
@@ -219,12 +219,12 @@ SMESH_Mesh::~SMESH_Mesh()
 
   if ( _myMeshDS ) {
     // delete _myMeshDS, in a thread in order not to block closing a study with large meshes
-#ifndef WIN32
+//#ifndef WIN32
     boost::thread aThread(boost::bind( & deleteMeshDS, _myMeshDS ));
-#else
-    pthread_t thread;
-    int result=pthread_create(&thread, NULL, deleteMeshDS, (void*)_myMeshDS);
-#endif
+//#else
+//    pthread_t thread;
+//    int result=pthread_create(&thread, NULL, deleteMeshDS, (void*)_myMeshDS);
+//#endif
   }
 }
 
