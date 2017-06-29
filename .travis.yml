@@ -1,4 +1,4 @@
-sudo: false
+sudo: required
 
 language: cpp
 
@@ -24,9 +24,13 @@ matrix:
     - env: ARCH="x86_64"
       os: linux
       dist: trusty
-    - env: ARCH="x86_64"
+    - env: >
+        ARCH="x86_64"
       os: osx
-    - env: ARCH="x86_64"
+      osx_image: xcode7.3
+    - env: >
+        ARCH="x86_64"
+        MACOSX_DEPLOYMENT_TARGET=10.9
       os: osx
       osx_image: xcode8.3
 
@@ -34,6 +38,14 @@ matrix:
 # analytic's repository. Follows an approach described by Dan Blanchard:
 # https://gist.github.com/dan-blanchard/7045057
 before_install:
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+      sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test;
+      sudo apt-get update -qq;
+      sudo apt-get install -qq g++-5;
+      sudo apt-get install -qq gcc-5;
+      sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 90;
+      sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 90;
+    fi;
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
       wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O miniconda.sh;
     else
