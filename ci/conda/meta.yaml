@@ -25,12 +25,11 @@ requirements:
     - ninja
     - vtk
     - cmake
-    - boost ==1.61.0
+    - boost ==1.64.0
 
   run:
     - oce ==0.18.1
     - vtk
-    - boost
 
 about:
   home: https://github.com/tpaviot/smesh
