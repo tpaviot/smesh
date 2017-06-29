@@ -174,7 +174,7 @@ if(APPLE)
        SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
     ENDIF("${isSystemDir}" STREQUAL "-1")
     # link to libc++
-    add_definitions("-stdlib=libc++ -lc++")
+    add_definitions("-stdlib=libc++")
 endif(APPLE)
 
 #################
