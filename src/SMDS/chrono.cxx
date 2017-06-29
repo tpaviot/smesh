@@ -20,7 +20,7 @@
 #include "chrono.hxx"
 #include "utilities.h"
 
-using namespace std;
+//using namespace std;
 
 cntStruct* counters::_ctrs = 0;
 int counters::_nbChrono = 0;
@@ -63,7 +63,7 @@ chrono::chrono(int i) :
   _run(true), _ctr(i)
 {
   //MESSAGE("chrono::chrono " << _ctr << " " << _run);
-  _start = clock();
+  _start = std::clock();
 }
 
 chrono::~chrono()
@@ -78,7 +78,7 @@ void chrono::stop()
   if (_run)
     {
       _run = false;
-      _end = clock();
+      _end = std::clock();
       double elapse = double(_end - _start) / double(CLOCKS_PER_SEC);
       counters::_ctrs[_ctr]._ctrOccur++;
       counters::_ctrs[_ctr]._ctrCumul += elapse;
