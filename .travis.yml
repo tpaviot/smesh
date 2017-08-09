@@ -1,5 +1,3 @@
-sudo: false
-
 language: cpp
 
 # the secure below is the binstar token
@@ -23,18 +21,25 @@ matrix:
   include:
     - env: ARCH="x86_64"
       os: linux
+      compiler: gcc
     - env: ARCH="x86_64"
       os: osx
+      compiler: clang
 
 # Use miniconda to install binary versions of numpy etc. from continuum
 # analytic's repository. Follows an approach described by Dan Blanchard:
 # https://gist.github.com/dan-blanchard/7045057
 before_install:
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+      sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test;
+      sudo apt-get update -q;
+      sudo apt-get install -qq gcc-5 g++-5;
+      sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 60 --slave /usr/bin/g++ g++ /usr/bin/g++-5;
       wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O miniconda.sh;
-    else
+    fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
       wget https://repo.continuum.io/miniconda/Miniconda2-latest-MacOSX-x86_64.sh -O miniconda.sh;
-    fi;
+    fi
   - chmod +x miniconda.sh
   # When we are installing the 32 Bit conda on a 64 Bit system, the miniconda
   # installer will ask for a "yes" despite the -b flag, so we pipe in a yes
