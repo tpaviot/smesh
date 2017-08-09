@@ -157,7 +157,7 @@ Driver_Mesh::Status DriverSTL_R_SMDS_Mesh::Perform()
 
 // static methods
 
-static Standard_Real readFloat(OSD_File& theFile)
+static Standard_Real readFloat(FILE* theFile)
 {
   union {
     Standard_Integer i;
@@ -165,10 +165,9 @@ static Standard_Real readFloat(OSD_File& theFile)
   }u;
 
   char c[4];
-  Standard_Address adr;
-  adr = (Standard_Address)c;
-  Standard_Integer lread;
-  theFile.Read(adr,4,lread);
+  if (fread(c,sizeof(char), 4, theFile) !=4) {
+    Standard_NoMoreObject::Raise("DriverSTL_R_SMDS_MESH::readBinary (reading float)");
+  }
   u.i  =  c[0] & 0xFF;
   u.i |= (c[1] & 0xFF) << 0x08;
   u.i |= (c[2] & 0xFF) << 0x10;
@@ -198,13 +197,15 @@ static SMDS_MeshNode* readNode(FILE* file,
 {
   Standard_ShortReal coord[3];
   // reading vertex
-  fscanf(file,"%*s %f %f %f\n",&coord[0],&coord[1],&coord[2]);
+  if (fscanf(file,"%*s %f %f %f\n",&coord[0],&coord[1],&coord[2]) !=3) {
+    fprintf(stderr, ">> ERROR : reading vertex in function readNode");
+  }
 
   gp_Pnt P(coord[0],coord[1],coord[2]);
   return addNode( P, uniqnodes, theMesh );
 }
 
-static SMDS_MeshNode* readNode(OSD_File& theFile,
+static SMDS_MeshNode* readNodeBinary(FILE* theFile,
                                DriverSTL_DataMapOfPntNodePtr& uniqnodes,
                                SMDS_Mesh* theMesh)
 {
@@ -228,24 +229,22 @@ Driver_Mesh::Status DriverSTL_R_SMDS_Mesh::readAscii() const
   long ipos;
   Standard_Integer nbLines = 0;
 
-  // Open the file 
+  // Open the file
   TCollection_AsciiString aFileName( (char *)myFile.c_str() );
   FILE* file = fopen(aFileName.ToCString(),"r");
-  fseek(file,0L,SEEK_END);
-  // get the file size
-  long filesize = ftell(file);
-  fclose(file);
-  file = fopen(aFileName.ToCString(),"r");
-  
-  // count the number of lines
-  for (ipos = 0; ipos < filesize; ++ipos) {
-    if (getc(file) == '\n')
-      nbLines++;
+  if (file == NULL) {
+    fprintf(stderr, ">> ERROR : opening file %s \n", aFileName.ToCString());
+    return DRS_FAIL;
   }
-
+  // count the number of lines
+  while(!feof(file))
+  {
+    if(fgetc(file) == '\n')
+    {
+      nbLines++;
+    }
+  }
   // go back to the beginning of the file
-//  fclose(file);
-//  file = fopen(aFileName.ToCString(),"r");
   rewind(file);
   
   Standard_Integer nbTri = (nbLines / ASCII_LINES_PER_FACET);
@@ -259,10 +258,19 @@ Driver_Mesh::Status DriverSTL_R_SMDS_Mesh::readAscii() const
 
     // skipping the facet normal
     Standard_ShortReal normal[3];
-    fscanf(file,"%*s %*s %f %f %f\n",&normal[0],&normal[1],&normal[2]);
+    if (fscanf(file,"%*s %*s %f %f %f\n",&normal[0],&normal[1],&normal[2]) !=3) {
+      fprintf(stderr, ">> ERROR : reading file %s normals\n", aFileName.ToCString());
+      fclose(file);
+      return DRS_FAIL;
+    }
 
     // skip the keywords "outer loop"
-    fscanf(file,"%*s %*s");
+    char outer_str[5], loop_str[4];
+    if (fscanf(file,"%s %s",outer_str,loop_str) !=2) {
+      fprintf(stderr, ">> ERROR : reading file %s skipping outer loop string\n", aFileName.ToCString());
+      fclose(file);
+      return DRS_FAIL;
+    }
 
     // reading nodes
     SMDS_MeshNode* node1 = readNode( file, uniqnodes, myMesh );
@@ -273,10 +281,22 @@ Driver_Mesh::Status DriverSTL_R_SMDS_Mesh::readAscii() const
       myMesh->AddFace(node1,node2,node3);
 
     // skip the keywords "endloop"
-    fscanf(file,"%*s");
+    char endloop_str[7];
+    if (fscanf(file,"%s", endloop_str) !=1 ) {
+      fprintf(stderr, ">> ERROR : reading file %s skipping endloop string\n", aFileName.ToCString());
+      fclose(file);
+      return DRS_FAIL;
+    }
 
     // skip the keywords "endfacet"
-    fscanf(file,"%*s");
+    fscanf(file,"%*s");/*
+    char endfacet_str[8];
+    if (fscanf(file,"%s", endfacet_str) != 1) {
+      fprintf(stderr, ">> ERROR : reading file %s skipping endfacet string\n", aFileName.ToCString());
+      fclose(file);
+      return DRS_FAIL;
+    }
+    */
   }
 
   fclose(file);
@@ -292,52 +312,52 @@ Driver_Mesh::Status DriverSTL_R_SMDS_Mesh::readBinary() const
 {
   Status aResult = DRS_OK;
 
-  char buftest[5];
-  Standard_Address adr;
-  adr = (Standard_Address)buftest;
-
   TCollection_AsciiString aFileName( (char *)myFile.c_str() );
-  OSD_File aFile = OSD_File(OSD_Path( aFileName ));
-  aFile.Open(OSD_ReadOnly,OSD_Protection(OSD_RWD,OSD_RWD,OSD_RWD,OSD_RWD));
-
+  FILE* file = fopen(aFileName.ToCString(),"rb");
+  if (file < 0) {
+    fprintf(stderr, ">> ERROR : opening file %s \n", aFileName.ToCString());
+    return DRS_FAIL;
+  }
   // the size of the file (minus the header size)
   // must be a multiple of SIZEOF_STL_FACET
 
   // compute file size
-  Standard_Integer filesize = aFile.Size();
-
+  fseek(file,0L,SEEK_END);
+  Standard_Integer filesize = ftell(file);
+  rewind (file);
+  fprintf(stdout, "Filesize %i\n", filesize);
   if ( (filesize - HEADER_SIZE) % SIZEOF_STL_FACET !=0 
       // Commented to allow reading small files (ex: 1 face)
       /*|| (filesize < STL_MIN_FILE_SIZE)*/) {
     Standard_NoMoreObject::Raise("DriverSTL_R_SMDS_MESH::readBinary (wrong file size)");
   }
 
-  // don't trust the number of triangles which is coded in the file
-  // sometimes it is wrong, and with this technique we don't need to swap endians for integer
+  // // don't trust the number of triangles which is coded in the file
+  // // sometimes it is wrong, and with this technique we don't need to swap endians for integer
   Standard_Integer nbTri = ((filesize - HEADER_SIZE) / SIZEOF_STL_FACET);
 
-  // skip the header
-  aFile.Seek(HEADER_SIZE,OSD_FromBeginning);
-
+  // // skip the header
+  fseek(file, HEADER_SIZE, SEEK_SET);
   DriverSTL_DataMapOfPntNodePtr uniqnodes;
   Standard_Integer lread;
   
   for (Standard_Integer iTri = 0; iTri < nbTri; ++iTri) {
 
-    // ignore normals
-    aFile.Read(adr,12,lread); // 3 floats, 4 bytes per float
-
+     // ignore normals
+     fseek(file, 12, SEEK_CUR);  // 3 floats, 4 bytes per float
+     
     // read vertices
-    SMDS_MeshNode* node1 = readNode( aFile, uniqnodes, myMesh );
-    SMDS_MeshNode* node2 = readNode( aFile, uniqnodes, myMesh );
-    SMDS_MeshNode* node3 = readNode( aFile, uniqnodes, myMesh );
+    SMDS_MeshNode* node1 = readNodeBinary( file, uniqnodes, myMesh );
+    SMDS_MeshNode* node2 = readNodeBinary( file, uniqnodes, myMesh );
+    SMDS_MeshNode* node3 = readNodeBinary( file, uniqnodes, myMesh );
 
-    if (myIsCreateFaces)
-      myMesh->AddFace(node1,node2,node3);
+     if (myIsCreateFaces)
+         myMesh->AddFace(node1,node2,node3);
 
     // skip extra bytes
-    aFile.Read(adr,2,lread);
+    fseek(file, 2, SEEK_CUR); 
   }
-  aFile.Close();
+
+  fclose(file);
   return aResult;
 }
