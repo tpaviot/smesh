@@ -6966,7 +6966,7 @@ SMESH_MeshEditor::SewFreeBorder (const SMDS_MeshNode* theBordFirstNode,
   // ============================
 
   int nbNodes[]  = { nSide[0].size(), nSide[1].size() };
-  int maxNbNodes = Max( nbNodes[0], nbNodes[1] );
+  int maxNbNodes = (int)Max( nbNodes[0], nbNodes[1] );
 
   TListOfListOfNodes nodeGroupsToMerge;
   if ( nbNodes[0] == nbNodes[1] ||
