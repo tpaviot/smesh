@@ -15,4 +15,5 @@ ninja
 ninja install > installed_files.txt
 
 # test
-ninja test
+#ninja test
+ctest --verbose
