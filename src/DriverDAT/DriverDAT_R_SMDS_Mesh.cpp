@@ -53,12 +53,16 @@ Driver_Mesh::Status DriverDAT_R_SMDS_Mesh::Perform()
   char *file2Read = (char *)myFile.c_str();
   FILE* aFileId = fopen(file2Read, "r");
   if (aFileId < 0) {
-    fprintf(stderr, ">> ERREUR : ouverture du fichier %s \n", file2Read);
+    fprintf(stderr, ">> ERROR : opening file %s \n", file2Read);
     return DRS_FAIL;
   }
   
-  fscanf(aFileId, "%d %d\n", &nbNodes, &nbCells);
-  
+  if (fscanf(aFileId, "%d %d\n", &nbNodes, &nbCells) != 2) {
+    fprintf(stderr, ">> ERROR : reading file %s number of nodes/number of cells\n", file2Read);
+    fclose(aFileId);
+    return DRS_FAIL;
+  }
+
   /****************************************************************************
    *                       LECTURE DES NOEUDS                                  *
    ****************************************************************************/
@@ -67,28 +71,40 @@ Driver_Mesh::Status DriverDAT_R_SMDS_Mesh::Perform()
   fprintf(stdout, "(************************)\n");
   
   for (i = 0; i < nbNodes; i++){
-    fscanf(aFileId, "%d %e %e %e\n", &intNumPoint, &coordX, &coordY, &coordZ);
+    if (fscanf(aFileId, "%d %e %e %e\n", &intNumPoint, &coordX, &coordY, &coordZ) !=4) {
+      fprintf(stderr, ">> ERROR : reading file %s point coordinates\n", file2Read);
+      fclose(aFileId);
+      return DRS_FAIL;
+    }
     ok = myMesh->AddNodeWithID(coordX, coordY, coordZ, intNumPoint);
   }
   
-  fprintf(stdout, "%d noeuds\n", myMesh->NbNodes());
+  fprintf(stdout, "%d nodes\n", myMesh->NbNodes());
   /****************************************************************************
    *                       LECTURE DES ELEMENTS                                *
    ****************************************************************************/
   fprintf(stdout, "\n(**************************)\n");
-  fprintf(stdout, "(* ELEMENTS DU MAILLAGE : *)\n");
+  fprintf(stdout, "(* MESH ELEMENTS : *)\n");
   fprintf(stdout, "(**************************)");
   
   fprintf(stdout, "%d elements\n", nbCells);
   
   for (i = 0; i < nbCells; i++) {
-    fscanf(aFileId, "%d %d", &intNumMaille, &ValElement);
+    if (fscanf(aFileId, "%d %d", &intNumMaille, &ValElement) !=2) {
+      fprintf(stderr, ">> ERROR : reading file %s element value\n", file2Read);
+      fclose(aFileId);
+      return DRS_FAIL;
+    }
     Degre = abs(ValElement / 100);
     nbNoeuds = ValElement - (Degre * 100);
     
     // Recuperation des noeuds de la maille
     for (j = 0; j < nbNoeuds; j++) {
-      fscanf(aFileId, "%d", &NoeudMaille);
+      if (fscanf(aFileId, "%d", &NoeudMaille) != 1) {
+        fprintf(stderr, ">> ERROR : reading file %s node\n", file2Read);
+        fclose(aFileId);
+        return DRS_FAIL;
+      }
       NoeudsMaille[j] = NoeudMaille;
     }
     
