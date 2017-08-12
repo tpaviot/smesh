@@ -145,6 +145,7 @@ endif(UNIX)
 ##############################
 # Specific Appe OSX settings #
 ##############################
+# RPATH
 if(APPLE)
     SET(CMAKE_MACOSX_RPATH ON)
     # use, i.e. don't skip the full RPATH for the build tree
@@ -161,6 +162,17 @@ if(APPLE)
     IF("${isSystemDir}" STREQUAL "-1")
        SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
     ENDIF("${isSystemDir}" STREQUAL "-1")
+endif(APPLE)
+
+# MACOSX_DEPLOYEMENT_TARGET
+if(APPLE)
+    if(DEFINED ENV{MACOSX_DEPLOYMENT_TARGET})
+      message(STATUS "MACOSX_DEPLOYMENT_TARGET set to: " $ENV{MACOSX_DEPLOYMENT_TARGET})
+      if($ENV{MACOSX_DEPLOYMENT_TARGET} MATCHES "10.9")
+          message(STATUS "Link to libc++")
+          add_definitions(-stdlib=libc++)
+      endif($ENV{MACOSX_DEPLOYMENT_TARGET} MATCHES "10.9")
+    endif(DEFINED ENV{MACOSX_DEPLOYMENT_TARGET})
 endif(APPLE)
 
 #################

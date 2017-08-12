@@ -227,6 +227,7 @@ Driver_Mesh::Status DriverSTL_R_SMDS_Mesh::readAscii() const
 {
   Status aResult = DRS_OK;
   long ipos;
+  char mystring[100];
   Standard_Integer nbLines = 0;
 
   // Open the file
@@ -257,20 +258,10 @@ Driver_Mesh::Status DriverSTL_R_SMDS_Mesh::readAscii() const
   for (Standard_Integer iTri = 0; iTri < nbTri; ++iTri) {
 
     // skipping the facet normal
-    Standard_ShortReal normal[3];
-    if (fscanf(file,"%*s %*s %f %f %f\n",&normal[0],&normal[1],&normal[2]) !=3) {
-      fprintf(stderr, ">> ERROR : reading file %s normals\n", aFileName.ToCString());
-      fclose(file);
-      return DRS_FAIL;
-    }
+    while (getc(file) != '\n');
 
     // skip the keywords "outer loop"
-    char outer_str[5], loop_str[4];
-    if (fscanf(file,"%s %s",outer_str,loop_str) !=2) {
-      fprintf(stderr, ">> ERROR : reading file %s skipping outer loop string\n", aFileName.ToCString());
-      fclose(file);
-      return DRS_FAIL;
-    }
+    while (getc(file) != '\n');
 
     // reading nodes
     SMDS_MeshNode* node1 = readNode( file, uniqnodes, myMesh );
@@ -280,25 +271,12 @@ Driver_Mesh::Status DriverSTL_R_SMDS_Mesh::readAscii() const
     if (myIsCreateFaces)
       myMesh->AddFace(node1,node2,node3);
 
-    // skip the keywords "endloop"
-    char endloop_str[7];
-    if (fscanf(file,"%s", endloop_str) !=1 ) {
-      fprintf(stderr, ">> ERROR : reading file %s skipping endloop string\n", aFileName.ToCString());
-      fclose(file);
-      return DRS_FAIL;
-    }
+    // skip the line "endloop"
+    while (getc(file) != '\n');
 
-    // skip the keywords "endfacet"
-    fscanf(file,"%*s");/*
-    char endfacet_str[8];
-    if (fscanf(file,"%s", endfacet_str) != 1) {
-      fprintf(stderr, ">> ERROR : reading file %s skipping endfacet string\n", aFileName.ToCString());
-      fclose(file);
-      return DRS_FAIL;
-    }
-    */
+    // skip the line "endfacet"
+    while (getc(file) != '\n');
   }
-
   fclose(file);
   return aResult;
 }
