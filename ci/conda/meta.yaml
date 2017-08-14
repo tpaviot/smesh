@@ -21,12 +21,12 @@ build:
 
 requirements:
   build:
-    - oce ==0.18.1
+    - oce ==0.18.2
     - ninja
     - cmake
 
   run:
-    - oce ==0.18.1
+    - oce ==0.18.2
 
 about:
   home: https://github.com/tpaviot/smesh
