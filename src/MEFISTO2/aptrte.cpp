@@ -184,10 +184,10 @@ void  aptrte( Z   nutysu, R      aretmx,
   // majoration empirique du nombre de sommets de la triangulation
   i = 4*nbarfr/10;
   mxsomm = Max( 20000, 64*nbpti+i*i );
-  MESSAGE( "APTRTE: Debut de la triangulation plane avec " );
+  MESSAGE( "APTRTE: Starting plane triangulation with " );
   MESSAGE( "nutysu=" << nutysu << "  aretmx=" << aretmx
            << "  mxsomm=" << mxsomm );
-  MESSAGE( nbarfr << " sommets sur la frontiere et " << nbpti << " points internes");
+  MESSAGE( nbarfr << " vertices on boundary and  " << nbpti << " internal points");
 
  NEWDEPART:
   //mnpxyd( 3, mxsomm ) les coordonnees UV des sommets et la taille d'arete aux sommets
@@ -368,9 +368,9 @@ void  aptrte( Z   nutysu, R      aretmx,
 //fin  ajout 9/11/2006  .................................................
 
 
-  MESSAGE("Sur  le  bord: arete min=" << aremin << " arete max=" << aremax );
+  MESSAGE("On boundary: edge min=" << aremin << " edge max=" << aremax );
   MESSAGE("Triangulation: arete mx=" << aretmx
-          << " triangle aire mx=" << airemx );
+          << " triangle area mx=" << airemx );
 
   //chainage des aretes frontalieres : la derniere arete frontaliere
   mnsoar[ mosoar * noar - mosoar + 5 ] = 0;
@@ -410,7 +410,7 @@ void  aptrte( Z   nutysu, R      aretmx,
   mxtree = 2 * mxsomm;
 
  NEWTREE:  //en cas de saturation de l'un des tableaux, on boucle
-  MESSAGE( "Debut triangulation avec mxsomm=" << mxsomm );
+  MESSAGE( "Starting triangulation with mxsomm=" << mxsomm );
   if( mntree != NULL ) delete [] mntree;
   nbsomm = nbarpi;
   mntree = new Z[motree*(1+mxtree)];
@@ -428,13 +428,13 @@ void  aptrte( Z   nutysu, R      aretmx,
     //saturation de letree => sa taille est augmentee et relance
     mxtree = mxtree * 2;
     ierr   = 0;
-    MESSAGE( "Nouvelle valeur de mxtree=" << mxtree );
+    MESSAGE( "New maxtree value, mxtree=" << mxtree );
     goto NEWTREE;
   }
 
   deltacpu_( d );
   tcpu += d;
-  MESSAGE( "Temps de l'ajout arbre-4 des Triangles Equilateraux=" << d << " secondes" );
+  MESSAGE( "Time to add tree-4 of Equilateral Triangles =" << d << " seconds" );
   if( ierr != 0 ) goto ERREUR;
   //ici le tableau mnpxyd contient les sommets des te et les points frontaliers et internes
 
@@ -454,8 +454,8 @@ void  aptrte( Z   nutysu, R      aretmx,
 
   deltacpu_( d );
   tcpu += d;
-  MESSAGE("Temps de l'adaptation et l'homogeneisation de l'arbre-4 des TE="
-       << d << " secondes");
+  MESSAGE("Adaptation and homogenization time of the tree-4 of TE="
+       << d << " seconds");
   if( ierr != 0 )
   {
     //destruction du tableau auxiliaire et de l'arbre
@@ -463,7 +463,7 @@ void  aptrte( Z   nutysu, R      aretmx,
     {
       //letree sature
       mxtree = mxtree * 2;
-      MESSAGE( "Redemarrage avec la valeur de mxtree=" << mxtree );
+      MESSAGE( "Start again with mxtree=" << mxtree );
       ierr = 0;
       goto NEWTREE;
     }
@@ -486,7 +486,7 @@ void  aptrte( Z   nutysu, R      aretmx,
   //Temps calcul
   deltacpu_( d );
   tcpu += d;
-  MESSAGE( "Temps de la triangulation des TE=" << d << " secondes" );
+  MESSAGE( "Time for triangulation of TH=" << d << " seconds" );
 
   // ierr =0 si pas d'erreur
   //      =1 si le tableau mnsoar est sature
@@ -508,11 +508,11 @@ void  aptrte( Z   nutysu, R      aretmx,
            mosoar, mxsoar, n1soar, mnsoar, na,
            moartr, mxartr, n1artr, mnartr, n );
 
-  MESSAGE( "Nombre d'echanges des diagonales de 2 triangles=" << n );
+  MESSAGE( "Number of diagonals swap for 2 triangles=" << n );
   deltacpu_( d );
   tcpu += d;
-  MESSAGE("Temps de la triangulation Delaunay par echange des diagonales="
-       << d << " secondes");
+  MESSAGE("Delaunay triangulation time by diagonals swap="
+       << d << " seconds");
 
   //qualites de la triangulation actuelle
   qualitetrte( mnpxyd, mosoar, mxsoar, mnsoar, moartr, mxartr, mnartr,
@@ -541,11 +541,11 @@ void  aptrte( Z   nutysu, R      aretmx,
            mxarcf, mn1arcf, mnarcf, mnarcf1, mnarcf2,
            n, ierr );
 
-  MESSAGE( "Restauration de " << n << " aretes perdues de la frontiere  ierr=" << ierr );
+  MESSAGE( "Restoring " << n << " lost edges for boundary  ierr=" << ierr );
   deltacpu_( d );
   tcpu += d;
-  MESSAGE("Temps de la recuperation des aretes perdues de la frontiere="
-       << d << " secondes");
+  MESSAGE("Lost edges recovery time="
+       << d << " seconds");
 
   if( ierr != 0 ) goto ERREUR;
 
@@ -587,7 +587,7 @@ void  aptrte( Z   nutysu, R      aretmx,
 
   deltacpu_( d );
   tcpu += d;
-  MESSAGE( "Temps de la suppression des triangles externes=" << d << "ierr=" << ierr );
+  MESSAGE( "External triangles removing time=" << d << "ierr=" << ierr );
   if( ierr != 0 ) goto ERREUR;
 
   //qualites de la triangulation actuelle
@@ -603,7 +603,7 @@ void  aptrte( Z   nutysu, R      aretmx,
   mnarcf3 = new Z[mxarcf];
   if( mnarcf3 == NULL )
   {
-    MESSAGE ( "aptrte: MC saturee mnarcf3=" << mnarcf3 );
+    MESSAGE ( "aptrte: MC saturated mnarcf3=" << mnarcf3 );
     goto ERREUR;
   }
   teamqt( nutysu,  aretmx,  airemx,
@@ -621,7 +621,7 @@ void  aptrte( Z   nutysu, R      aretmx,
 
   deltacpu_( d );
   tcpu += d;
-  MESSAGE( "Temps de l'amelioration de la qualite de la triangulation=" << d );
+  MESSAGE( "Time for triangulation quality improvement=" << d );
   if( ierr == -13 ) ierr=0; //6/10/2006 arret de l'amelioration apres boucle infinie dans caetoi
   if( ierr !=   0 ) goto ERREUR;
 
@@ -715,11 +715,11 @@ void  aptrte( Z   nutysu, R      aretmx,
     }
   }
   nbt /= nbsttria;  //le nombre final de triangles de la surface
-  MESSAGE( "APTRTE: Fin de la triangulation plane avec "<<nbst<<" sommets et "
+  MESSAGE( "APTRTE: End of plane triangulation with "<<nbst<<" vertices and "
            << nbt << " triangles" );
   deltacpu_( d );
   tcpu += d;
-  MESSAGE( "APTRTE: Temps total de la triangulation plane=" << tcpu << " secondes" );
+  MESSAGE( "APTRTE: Total time for plane triangulation=" << tcpu << " seconds" );
 
   // destruction des tableaux auxiliaires
   // ------------------------------------
@@ -755,7 +755,7 @@ void  aptrte( Z   nutysu, R      aretmx,
   }
   else
   {
-    MESSAGE( "APTRTE: Triangulation NON REALISEE  avec erreur=" << ierr );
+    MESSAGE( "APTRTE: Triangulation NOT DONE with error=" << ierr );
     if( ierr == 0 ) ierr=1;
     goto NETTOYAGE;
   }
@@ -842,9 +842,9 @@ void
       {
         //un triangle d'aire negative de plus
         nbtrianeg++;
-        MESSAGE("ATTENTION: le triangle " << nt << " de sommets:"
+        MESSAGE("WARNING: the triangle " << nt << " with vertices:"
              << nosotr[0] << " " << nosotr[1] << " " << nosotr[2]
-             << " a une aire " << d <<"<=0");
+             << " has an area " << d <<"<=0");
       }
 
       //aire des triangles actuels
@@ -854,24 +854,24 @@ void
 
   //les affichages
   quamoy /= nbtria;
-  MESSAGE("Qualite moyenne=" << quamoy
-       << "  Qualite minimale=" << quamin
-       << " des " << nbtria << " triangles de surface plane totale="
+  MESSAGE("Average quality=" << quamoy
+       << "  Min quality=" << quamin
+       << " of " << nbtria << " triangles with total plane area="
        << aire);
 
   if( quamin<0.3 )
   {
     //le numero des 3 sommets du triangle ntqmin de qualite minimale
     nusotr(ntqmin, mosoar, mnsoar, moartr, mnartr,  nosotr );
-    MESSAGE("Triangle de qualite minimale "<<quamin<<" de sommets:"
+    MESSAGE("Min quality triangle "<<quamin<<" with vertices:"
             <<nosotr[0]<<" "<<nosotr[1]<<" "<<nosotr[2]<<" ");
     for (int i=0;i<3;i++)
-      MESSAGE("Sommet "<<nosotr[i]<<": x="<< mnpxyd[nosotr[i]-1].x
+      MESSAGE("Vertex "<<nosotr[i]<<": x="<< mnpxyd[nosotr[i]-1].x
               <<" y="<< mnpxyd[nosotr[i]-1].y);
   }
 
   if( nbtrianeg>0 )
-    MESSAGE( "ATTENTION: "<< nbtrianeg << " TRIANGLES d'AIRE NEGATIVE" );
+    MESSAGE( "WARNING: "<< nbtrianeg << " TRIANGLES WITH NEGATVIE AREA" );
 
   MESSAGE(" ");
   return;
