@@ -1,3 +1,14 @@
+Version 6.7.5 - August 2017
+===========================
+This version is binary compatible with smesh-6.7.3 and smesh-6.7.4
+
+* fixed english translations
+
+* fixed STL binary importer
+
+Users who contributed to this release:
+  Thomas Paviot
+
 Version 6.7.4 - June 2017
 =========================
 This version is binary compatible with smesh-6.7.3
