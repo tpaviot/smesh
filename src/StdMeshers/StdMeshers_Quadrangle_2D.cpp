@@ -772,7 +772,7 @@ static bool twoEdgesMeatAtVertex(const TopoDS_Edge& e1,
 
 FaceQuadStruct* StdMeshers_Quadrangle_2D::CheckNbEdges(SMESH_Mesh &         aMesh,
                                                        const TopoDS_Shape & aShape)
-  //throw(SALOME_Exception)
+  //int 
 {
   const TopoDS_Face & F = TopoDS::Face(aShape);
   const bool ignoreMediumNodes = _quadraticMesh;
@@ -1107,7 +1107,7 @@ bool StdMeshers_Quadrangle_2D::CheckNbEdgesForEvaluate(SMESH_Mesh& aMesh,
 FaceQuadStruct *StdMeshers_Quadrangle_2D::CheckAnd2Dcompute
                            (SMESH_Mesh &         aMesh,
                             const TopoDS_Shape & aShape,
-                            const bool           CreateQuadratic) //throw(SALOME_Exception)
+                            const bool           CreateQuadratic) //int 
 {
   _quadraticMesh = CreateQuadratic;
 

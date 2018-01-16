@@ -116,7 +116,7 @@ StdMeshers_NumberOfSegments::BuildDistributionTab( const vector<double>& tab,
 //=============================================================================
 
 void StdMeshers_NumberOfSegments::SetNumberOfSegments(int segmentsNumber)
-throw(SALOME_Exception)
+int 
 {
   int oldNumberOfSegments = _numberOfSegments;
   if (segmentsNumber <= 0)
@@ -145,7 +145,7 @@ int StdMeshers_NumberOfSegments::GetNumberOfSegments() const
 //================================================================================
 
 void StdMeshers_NumberOfSegments::SetDistrType(DistrType typ)
-  throw(SALOME_Exception)
+  int 
 {
   if (typ < DT_Regular || typ > DT_ExprFunc)
     throw SALOME_Exception(LOCALIZED("distribution type is out of range"));
@@ -175,7 +175,7 @@ StdMeshers_NumberOfSegments::DistrType StdMeshers_NumberOfSegments::GetDistrType
 //================================================================================
 
 void StdMeshers_NumberOfSegments::SetScaleFactor(double scaleFactor)
-  throw(SALOME_Exception)
+  int 
 {
   if (_distrType != DT_Scale)
     _distrType = DT_Scale;
@@ -199,7 +199,7 @@ void StdMeshers_NumberOfSegments::SetScaleFactor(double scaleFactor)
 //================================================================================
 
 double StdMeshers_NumberOfSegments::GetScaleFactor() const
-  throw(SALOME_Exception)
+  int 
 {
   if (_distrType != DT_Scale)
     throw SALOME_Exception(LOCALIZED("not a scale distribution"));
@@ -213,7 +213,7 @@ double StdMeshers_NumberOfSegments::GetScaleFactor() const
 //================================================================================
 
 void StdMeshers_NumberOfSegments::SetTableFunction(const vector<double>& table)
-  throw(SALOME_Exception)
+  int 
 {
   if (_distrType != DT_TabFunc)
     _distrType = DT_TabFunc;
@@ -280,7 +280,7 @@ void StdMeshers_NumberOfSegments::SetTableFunction(const vector<double>& table)
 //================================================================================
 
 const vector<double>& StdMeshers_NumberOfSegments::GetTableFunction() const
-  throw(SALOME_Exception)
+  int 
 {
   if (_distrType != DT_TabFunc)
     throw SALOME_Exception(LOCALIZED("not a table function distribution"));
@@ -387,7 +387,7 @@ bool process( const TCollection_AsciiString& str, int convMode,
 //================================================================================
 
 void StdMeshers_NumberOfSegments::SetExpressionFunction(const char* expr)
-  throw(SALOME_Exception)
+  int 
 {
   if (_distrType != DT_ExprFunc)
     _distrType = DT_ExprFunc;
@@ -438,7 +438,7 @@ void StdMeshers_NumberOfSegments::SetExpressionFunction(const char* expr)
 //================================================================================
 
 const char* StdMeshers_NumberOfSegments::GetExpressionFunction() const
-  throw(SALOME_Exception)
+  int 
 {
   if (_distrType != DT_ExprFunc)
     throw SALOME_Exception(LOCALIZED("not an expression function distribution"));
@@ -452,7 +452,7 @@ const char* StdMeshers_NumberOfSegments::GetExpressionFunction() const
 //================================================================================
 
 void StdMeshers_NumberOfSegments::SetConversionMode( int conv )
-  throw(SALOME_Exception)
+  int 
 {
 //   if (_distrType != DT_TabFunc && _distrType != DT_ExprFunc)
 //     throw SALOME_Exception(LOCALIZED("not a functional distribution"));
@@ -471,7 +471,7 @@ void StdMeshers_NumberOfSegments::SetConversionMode( int conv )
 //================================================================================
 
 int StdMeshers_NumberOfSegments::ConversionMode() const
-  throw(SALOME_Exception)
+  int 
 {
 //   if (_distrType != DT_TabFunc && _distrType != DT_ExprFunc)
 //     throw SALOME_Exception(LOCALIZED("not a functional distribution"));

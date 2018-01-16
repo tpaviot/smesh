@@ -110,15 +110,15 @@ public:
 
   SMESH_Hypothesis::Hypothesis_Status
   AddHypothesis(const TopoDS_Shape & aSubShape, int anHypId)
-    throw(SALOME_Exception);
+    ;
   
   SMESH_Hypothesis::Hypothesis_Status
   RemoveHypothesis(const TopoDS_Shape & aSubShape, int anHypId)
-    throw(SALOME_Exception);
+    ;
   
   const std::list <const SMESHDS_Hypothesis * >&
   GetHypothesisList(const TopoDS_Shape & aSubShape) const
-    throw(SALOME_Exception);
+    ;
 
   const SMESH_Hypothesis * GetHypothesis(const TopoDS_Shape &    aSubShape,
                                          const SMESH_HypoFilter& aFilter,
@@ -130,9 +130,9 @@ public:
                     std::list <const SMESHDS_Hypothesis * >& aHypList,
                     const bool                               andAncestors) const;
 
-  const std::list<SMESHDS_Command*> & GetLog() throw(SALOME_Exception);
+  const std::list<SMESHDS_Command*> & GetLog() ;
   
-  void ClearLog() throw(SALOME_Exception);
+  void ClearLog() ;
   
   int GetId()                { return _id; }
   
@@ -141,25 +141,25 @@ public:
   SMESH_Gen *GetGen()        { return _gen; }
   
   SMESH_subMesh *GetSubMesh(const TopoDS_Shape & aSubShape)
-    throw(SALOME_Exception);
+    ;
   
   SMESH_subMesh *GetSubMeshContaining(const TopoDS_Shape & aSubShape) const
-    throw(SALOME_Exception);
+    ;
   
   SMESH_subMesh *GetSubMeshContaining(const int aShapeID) const
-    throw(SALOME_Exception);
+    ;
   /*!
    * \brief Return submeshes of groups containing the given subshape
    */
   std::list<SMESH_subMesh*> GetGroupSubMeshesContaining(const TopoDS_Shape & shape) const
-    throw(SALOME_Exception);
+    ;
   /*!
    * \brief Say all submeshes that theChangedHyp has been modified
    */
   void NotifySubMeshesHypothesisModification(const SMESH_Hypothesis* theChangedHyp);
 
   const std::list < SMESH_subMesh * >&
-  GetSubMeshUsingHypothesis(SMESHDS_Hypothesis * anHyp) throw(SALOME_Exception);
+  GetSubMeshUsingHypothesis(SMESHDS_Hypothesis * anHyp) ;
   /*!
    * \brief Return True if anHyp is used to mesh aSubShape
    */
@@ -177,9 +177,9 @@ public:
    */
   const TopTools_ListOfShape& GetAncestors(const TopoDS_Shape& theSubShape) const;
 
-  void SetAutoColor(bool theAutoColor) throw(SALOME_Exception);
+  void SetAutoColor(bool theAutoColor) ;
 
-  bool GetAutoColor() throw(SALOME_Exception);
+  bool GetAutoColor() ;
 
   /*!
    * \brief Return data map of descendant to ancestor shapes
@@ -196,39 +196,39 @@ public:
                  const char* theMeshName = NULL, 
                  bool theAutoGroups = true, 
                  int theVersion = 0) 
-    throw(SALOME_Exception);
+    ;
 
-  void ExportDAT(const char *file) throw(SALOME_Exception);
-  void ExportUNV(const char *file) throw(SALOME_Exception);
-  void ExportSTL(const char *file, const bool isascii) throw(SALOME_Exception);
+  void ExportDAT(const char *file) ;
+  void ExportUNV(const char *file) ;
+  void ExportSTL(const char *file, const bool isascii) ;
   
-  int NbNodes() throw(SALOME_Exception);
+  int NbNodes() ;
   
-  int Nb0DElements() throw(SALOME_Exception);
+  int Nb0DElements() ;
   
-  int NbEdges(SMDSAbs_ElementOrder order = ORDER_ANY) throw(SALOME_Exception);
+  int NbEdges(SMDSAbs_ElementOrder order = ORDER_ANY) ;
   
-  int NbFaces(SMDSAbs_ElementOrder order = ORDER_ANY) throw(SALOME_Exception);
+  int NbFaces(SMDSAbs_ElementOrder order = ORDER_ANY) ;
   
-  int NbTriangles(SMDSAbs_ElementOrder order = ORDER_ANY) throw(SALOME_Exception);
+  int NbTriangles(SMDSAbs_ElementOrder order = ORDER_ANY) ;
   
-  int NbQuadrangles(SMDSAbs_ElementOrder order = ORDER_ANY) throw(SALOME_Exception);
+  int NbQuadrangles(SMDSAbs_ElementOrder order = ORDER_ANY) ;
 
-  int NbPolygons() throw(SALOME_Exception);
+  int NbPolygons() ;
   
-  int NbVolumes(SMDSAbs_ElementOrder order = ORDER_ANY) throw(SALOME_Exception);
+  int NbVolumes(SMDSAbs_ElementOrder order = ORDER_ANY) ;
   
-  int NbTetras(SMDSAbs_ElementOrder order = ORDER_ANY) throw(SALOME_Exception);
+  int NbTetras(SMDSAbs_ElementOrder order = ORDER_ANY) ;
   
-  int NbHexas(SMDSAbs_ElementOrder order = ORDER_ANY) throw(SALOME_Exception);
+  int NbHexas(SMDSAbs_ElementOrder order = ORDER_ANY) ;
   
-  int NbPyramids(SMDSAbs_ElementOrder order = ORDER_ANY) throw(SALOME_Exception);
+  int NbPyramids(SMDSAbs_ElementOrder order = ORDER_ANY) ;
 
-  int NbPrisms(SMDSAbs_ElementOrder order = ORDER_ANY) throw(SALOME_Exception);
+  int NbPrisms(SMDSAbs_ElementOrder order = ORDER_ANY) ;
   
-  int NbPolyhedrons() throw(SALOME_Exception);
+  int NbPolyhedrons() ;
   
-  int NbSubMesh() throw(SALOME_Exception);
+  int NbSubMesh() ;
   
   int NbGroup() const { return _mapGroup.size(); }
   

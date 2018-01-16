@@ -66,7 +66,7 @@ public:
   ~SMESH_Gen();
 
   SMESH_Mesh* CreateMesh(int theStudyId, bool theIsEmbeddedMode)
-    throw(SALOME_Exception);
+    ;
 
   /*!
    * \brief Computes aMesh on aShape 

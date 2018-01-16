@@ -214,7 +214,7 @@ static bool findIJ (const SMDS_MeshNode* node, const FaceQuadStruct * quad, int&
 //=============================================================================
 
 bool StdMeshers_Hexa_3D::Compute(SMESH_Mesh &         aMesh,
-                                 const TopoDS_Shape & aShape)// throw(SALOME_Exception)
+                                 const TopoDS_Shape & aShape)// int 
 {
   // PAL14921. Enable catching std::bad_alloc and Standard_OutOfMemory outside
   //Unexpect aCatch(SalomeException);

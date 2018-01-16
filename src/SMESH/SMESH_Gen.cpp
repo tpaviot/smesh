@@ -74,7 +74,7 @@ SMESH_Gen::~SMESH_Gen()
 //=============================================================================
 
 /*SMESH_Hypothesis *SMESH_Gen::CreateHypothesis(const char *anHyp, int studyId)
-        throw(SALOME_Exception)
+        int 
 {
 
         MESSAGE("CreateHypothesis("<<anHyp<<","<<studyId<<")");
@@ -103,7 +103,7 @@ SMESH_Gen::~SMESH_Gen()
 //=============================================================================
 
 SMESH_Mesh* SMESH_Gen::CreateMesh(int theStudyId, bool theIsEmbeddedMode)
-  throw(SALOME_Exception)
+  int 
 {
   Unexpect aCatch(SalomeException);
   MESSAGE("SMESH_Gen::CreateMesh");

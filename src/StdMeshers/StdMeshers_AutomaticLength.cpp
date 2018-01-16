@@ -83,7 +83,7 @@ const double theCoarseConst = 0.5;
 const double theFineConst   = 4.5;
 
 void StdMeshers_AutomaticLength::SetFineness(double theFineness)
-  throw(SALOME_Exception)
+  int 
 {
   if ( theFineness < 0.0 || theFineness > 1.0 )
     throw SALOME_Exception(LOCALIZED("theFineness is out of range [0.0-1.0]"));
@@ -210,7 +210,7 @@ namespace {
 
 double StdMeshers_AutomaticLength::GetLength(const SMESH_Mesh* theMesh,
                                              const double      theEdgeLength)
-  throw(SALOME_Exception)
+  int 
 {
   if ( !theMesh ) throw SALOME_Exception(LOCALIZED("NULL Mesh"));
 
@@ -232,7 +232,7 @@ double StdMeshers_AutomaticLength::GetLength(const SMESH_Mesh* theMesh,
 
 double StdMeshers_AutomaticLength::GetLength(const SMESH_Mesh*   theMesh,
                                              const TopoDS_Shape& anEdge)
-  throw(SALOME_Exception)
+  int 
 {
   if ( !theMesh ) throw SALOME_Exception(LOCALIZED("NULL Mesh"));
 

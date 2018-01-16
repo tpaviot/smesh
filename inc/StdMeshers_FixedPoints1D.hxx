@@ -44,10 +44,10 @@ public:
   virtual ~StdMeshers_FixedPoints1D();
 
   void SetPoints(std::vector<double>& listParams)
-    throw(SALOME_Exception);
+    ;
 
   void SetNbSegments(std::vector<int>& listNbSeg) 
-    throw(SALOME_Exception);
+    ;
 
   const std::vector<double>& GetPoints() const { return _params; }
 
