@@ -1,5 +1,15 @@
 language: cpp
 
+cache:
+ apt: true
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-7
+
 # the secure below is the binstar token
 # to genrate this secure
 # first create an anconda cloud token
@@ -31,11 +41,9 @@ matrix:
 # https://gist.github.com/dan-blanchard/7045057
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-      sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test;
-      sudo apt-get update -q;
-      sudo apt-get install -qq gcc-5 g++-5;
-      sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 60 --slave /usr/bin/g++ g++ /usr/bin/g++-5;
-      wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O miniconda.sh;
+      export CXX=g++-7;
+      export CC=gcc-7;
+      wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
     fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
       wget https://repo.continuum.io/miniconda/Miniconda2-latest-MacOSX-x86_64.sh -O miniconda.sh;
@@ -56,10 +64,10 @@ before_install:
   - conda config --add channels https://conda.anaconda.org/dlr-sc
   - conda config --add channels https://conda.anaconda.org/oce
   # install everything required to build the receipe
-  - conda install conda-build anaconda-client
+  - conda install conda-build=3.0.28 anaconda-client
 
 script:
-  - conda build ci/conda --no-remove-work-dir
+  - conda build ci/conda  --dirty --no-remove-work-dir
 
 after_success:
   - python ci/move-conda-package.py
