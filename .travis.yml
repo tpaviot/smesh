@@ -1,41 +1,51 @@
 language: cpp
 
-# the secure below is the binstar token
-# to genrate this secure
-# first create an anconda cloud token
-# $ anaconda auth -n the_token_name -o oce -c --scopes api
-# the token is return as something like "oc-6654-12334_111225"
-# then encrypt the token
-# You have to be in the directory where you installed the local copy of the repository
-# $ cd [your_dev_dir]/oce-conda
-# $ travis encrypt BINSTAR_TOKEN="oc-6654-12334_11122"
-# !!be careful about the typo BINSTAR_TOKEN with the proper case. Otherwise
-# !!the $BINSTAR_TOKEN env var value will be null and the line
-# !!anaconda -t $BINSTAR_TOKEN upload *.bz2 will not be run properly
-# after that, copy/paste the secure on the following line
-env:
-  global:
-    - secure: "Q809gaR2XvFRsaZiuIm2VPB1lI6exjwlwcgvrg+oBRHdrcULKkE+cz1jN7aaC4owArzozE84+BPgRp0EbyL9JxibqXh+okBmz5dHtSscBZoE7X5V+vBVxfqcHQE7YADOqbUiSrbqlkFzXC7UedKGSmsdXSqipsWMyjblKKnyxd8="
+cache:
+ apt: true
 
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+      - llvm-toolchain-trusty-4.0
+    packages:
+      - g++-5
+      - g++-6
+      - g++-7
+      - clang-4.0
 matrix:
   include:
-    - env: ARCH="x86_64"
-      os: linux
-      dist: trusty
-    - env: ARCH="x86_64" MACOSX_DEPLOYMENT_TARGET="10.9"
-      os: osx
-      osx_image: xcode8.3
+  - os: linux
+    compiler: gcc
+    env: MATRIX_EVAL="CC=gcc && CXX=g++"
+    dist: trusty
+  - os: linux
+    compiler: gcc
+    env: MATRIX_EVAL="CC=gcc-5 && CXX=g++-5"
+    dist: trusty
+  - os: linux
+    compiler: gcc
+    env: MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
+    dist: trusty
+  - os: linux
+    compiler: gcc
+    env: MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+    dist: trusty
+  - os: linux
+    compiler: clang
+    env: MATRIX_EVAL="CC=clang-4.0 && CXX=clang++-4.0"
+    dist: trusty
+  - env: ARCH="x86_64" MACOSX_DEPLOYMENT_TARGET="10.9"
+    os: osx
+    osx_image: xcode8.3
 
 # Use miniconda to install binary versions of numpy etc. from continuum
 # analytic's repository. Follows an approach described by Dan Blanchard:
 # https://gist.github.com/dan-blanchard/7045057
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-      sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test;
-      sudo apt-get update -q;
-      sudo apt-get install -qq gcc-5 g++-5;
-      sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 60 --slave /usr/bin/g++ g++ /usr/bin/g++-5;
-      wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O miniconda.sh;
+      eval "${MATRIX_EVAL}";
+      wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
     fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
       wget https://repo.continuum.io/miniconda/Miniconda2-latest-MacOSX-x86_64.sh -O miniconda.sh;
@@ -49,17 +59,17 @@ before_install:
   - hash -r
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
+  # install everything required to build the receipe
+  - conda install conda-build anaconda-client
   # Useful for debugging any issues with conda
   - conda info -a
   # Add dlr-sc channel for third part libraries
   - conda config --add channels https://conda.anaconda.org/conda-forge
   - conda config --add channels https://conda.anaconda.org/dlr-sc
   - conda config --add channels https://conda.anaconda.org/oce
-  # install everything required to build the receipe
-  - conda install conda-build anaconda-client
-
+  
 script:
-  - conda build ci/conda --no-remove-work-dir
+  - conda build ci/conda  --dirty --no-remove-work-dir
 
 after_success:
   - python ci/move-conda-package.py

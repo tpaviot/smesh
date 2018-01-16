@@ -1,6 +1,6 @@
 ﻿package:
   name: smesh
-  version: 6.7.5
+  version: 6.7.6
 
 source:
   path: ../..
@@ -21,12 +21,12 @@ build:
 
 requirements:
   build:
-    - oce ==0.18.2
-    - ninja
-    - cmake
+    - oce ==0.18.3
+    - ninja ==1.8.2
+    - cmake ==3.8.0
 
   run:
-    - oce ==0.18.2
+    - oce ==0.18.3
 
 about:
   home: https://github.com/tpaviot/smesh
