@@ -38,8 +38,8 @@ Driver_Mesh::Status DriverDAT_W_SMDS_Mesh::Perform()
   
   char *file2Read = (char *)myFile.c_str();
   FILE* aFileId = fopen(file2Read, "w+");
-  if (aFileId < 0) {
-    fprintf(stderr, ">> ERREUR : ouverture du fichier %s \n", file2Read);
+  if (!aFileId ) {
+    fprintf(stderr, ">> ERROR : opening file %s \n", file2Read);
     return DRS_FAIL;
   }
   SCRUTE(myMesh);
@@ -47,7 +47,7 @@ Driver_Mesh::Status DriverDAT_W_SMDS_Mesh::Perform()
    *                       NOMBRES D'OBJETS                                    *
    ****************************************************************************/
   fprintf(stdout, "\n(****************************)\n");
-  fprintf(stdout, "(* INFORMATIONS GENERALES : *)\n");
+  fprintf(stdout, "(* GENERAL INFORMATION : *)\n");
   fprintf(stdout, "(****************************)\n");
   
   /* Combien de noeuds ? */
@@ -70,7 +70,7 @@ Driver_Mesh::Status DriverDAT_W_SMDS_Mesh::Perform()
    *                       ECRITURE DES NOEUDS                                 *
    ****************************************************************************/
   fprintf(stdout, "\n(************************)\n");
-  fprintf(stdout, "(* NOEUDS DU MAILLAGE : *)\n");
+  fprintf(stdout, "(* MESH NODES : *)\n");
   fprintf(stdout, "(************************)\n");
   
   SMDS_NodeIteratorPtr itNodes=myMesh->nodesIterator();
@@ -83,7 +83,7 @@ Driver_Mesh::Status DriverDAT_W_SMDS_Mesh::Perform()
    *                       ECRITURE DES ELEMENTS                                *
    ****************************************************************************/
   fprintf(stdout, "\n(**************************)\n");
-  fprintf(stdout, "(* ELEMENTS DU MAILLAGE : *)\n");
+  fprintf(stdout, "(* MESH ELEMENTS : *)\n");
   fprintf(stdout, "(**************************)");
   /* Ecriture des connectivites, noms, numeros des mailles */
   

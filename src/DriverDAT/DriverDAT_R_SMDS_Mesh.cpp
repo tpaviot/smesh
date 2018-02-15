@@ -52,7 +52,7 @@ Driver_Mesh::Status DriverDAT_R_SMDS_Mesh::Perform()
    ****************************************************************************/
   char *file2Read = (char *)myFile.c_str();
   FILE* aFileId = fopen(file2Read, "r");
-  if (aFileId < 0) {
+  if ( !aFileId ) {
     fprintf(stderr, ">> ERROR : opening file %s \n", file2Read);
     return DRS_FAIL;
   }
@@ -67,7 +67,7 @@ Driver_Mesh::Status DriverDAT_R_SMDS_Mesh::Perform()
    *                       LECTURE DES NOEUDS                                  *
    ****************************************************************************/
   fprintf(stdout, "\n(************************)\n");
-  fprintf(stdout, "(* NOEUDS DU MAILLAGE : *)\n");
+  fprintf(stdout, "(* MESH NODES : *)\n");
   fprintf(stdout, "(************************)\n");
   
   for (i = 0; i < nbNodes; i++){
