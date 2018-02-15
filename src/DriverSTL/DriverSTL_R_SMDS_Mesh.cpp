@@ -292,7 +292,7 @@ Driver_Mesh::Status DriverSTL_R_SMDS_Mesh::readBinary() const
 
   TCollection_AsciiString aFileName( (char *)myFile.c_str() );
   FILE* file = fopen(aFileName.ToCString(),"rb");
-  if (file < 0) {
+  if ( !file ) {
     fprintf(stderr, ">> ERROR : opening file %s \n", aFileName.ToCString());
     return DRS_FAIL;
   }
