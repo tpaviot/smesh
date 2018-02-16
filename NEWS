@@ -1,3 +1,14 @@
+Version 6.7.6 - February 2018
+=============================
+This version is binary compatible with smesh-6.7.3, smesh-6.7.4 and smesh-6.7.5
+
+* [clang-error-fix] ordered comparison between pointer and zero
+
+* improved ci travis/appveyor
+
+Users who contributed to this release:
+  Thomas Paviot
+
 Version 6.7.5 - August 2017
 ===========================
 This version is binary compatible with smesh-6.7.3 and smesh-6.7.4

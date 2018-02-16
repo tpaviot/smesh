@@ -37,12 +37,12 @@ How to stay up to date with latest developements?
 Install with conda
 ------------------
 
-$ conda install -c pythonocc -c dlr-sc -c oce smesh=6.7.4
+$ conda install -c pythonocc -c dlr-sc -c oce smesh=6.7.6
 
 Build - Install
 ---------------
 
-For both OSX, Linux and Windows (please use Mingw on Windows), the instructions are the same.
+For both OSX, Linux and Windows, the instructions are the same.
 
 Requirements
 ------------
@@ -50,7 +50,7 @@ Requirements
 
   * cmake 2.8 or higher
 
-  * oce 0.18 or oce-0.18.1
+  * oce 0.18.x
 
 Build
 -----
