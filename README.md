@@ -1,6 +1,5 @@
-
-[![License](https://binstar.org/jf/smesh/badges/license.svg)](https://github.com/tpaviot/smesh/blob/master/LICENCE.lgpl.txt)
 [![Build Status](https://travis-ci.org/tpaviot/smesh.png?branch=master)](https://travis-ci.org/tpaviot/smesh)
+[![Build status](https://ci.appveyor.com/api/projects/status/github/tpaviot/smesh?branch=master&svg=true)](https://ci.appveyor.com/project/tpaviot/smesh)
 
 Description
 -----------
@@ -37,7 +36,7 @@ How to stay up to date with latest developements?
 Install with conda
 ------------------
 
-$ conda install -c pythonocc -c dlr-sc -c oce smesh=6.7.6
+    conda install -c pythonocc -c dlr-sc -c oce smesh=6.7.6
 
 Build - Install
 ---------------
