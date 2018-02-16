@@ -3,14 +3,18 @@ language: cpp
 cache:
  apt: true
 
+env:
+  global:
+    secure: "QNmikTCQbLuClaVFWUI+PTDBTZfcJyXgYnfbPe3WWHGf7Cm1oX+2J31duoGOHMOESNXElg2wXdT9Qby3EFRGyrAMCflJc6m3iQY703F+7vfG6hL2Sn7xKfyDQgk5gkNtORdpwyjgiMdieNu6GvzTvXjwgzcUvAvqxsTPc+erF10="
+
 matrix:
   include:
   - os: linux
     compiler: gcc
-    env: MATRIX_EVAL="CC=gcc && CXX=g++"
+    env: MATRIX_EVAL="CC=gcc && CXX=g++" CONDA_UPLOAD="ON"
   - os: linux
     compiler: gcc
-    env: MATRIX_EVAL="CC=gcc-5 && CXX=g++-5"
+    env: MATRIX_EVAL="CC=gcc-5 && CXX=g++-5" CONDA_UPLOAD="OFF"
     addons:
       apt:
         sources:
@@ -19,7 +23,7 @@ matrix:
           - g++-5
   - os: linux
     compiler: gcc
-    env: MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
+    env: MATRIX_EVAL="CC=gcc-6 && CXX=g++-6" CONDA_UPLOAD="OFF"
     addons:
       apt:
         sources:
@@ -28,7 +32,7 @@ matrix:
           - g++-6
   - os: linux
     compiler: gcc
-    env: MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+    env: MATRIX_EVAL="CC=gcc-7 && CXX=g++-7" CONDA_UPLOAD="OFF"
     addons:
       apt:
         sources:
@@ -37,14 +41,14 @@ matrix:
           - g++-7
   - os: linux
     compiler: clang
-    env: MATRIX_EVAL="CC=clang-4.0 && CXX=clang++-4.0"
+    env: MATRIX_EVAL="CC=clang-4.0 && CXX=clang++-4.0" CONDA_UPLOAD="OFF"
     addons:
       apt:
         sources:
           - llvm-toolchain-trusty-4.0
         packages:
           - clang-4.0
-  - env: ARCH="x86_64" MACOSX_DEPLOYMENT_TARGET="10.9"
+  - env: ARCH="x86_64" MACOSX_DEPLOYMENT_TARGET="10.9" CONDA_UPLOAD="ON"
     os: osx
     osx_image: xcode8.3
 
@@ -78,11 +82,13 @@ before_install:
   - conda config --add channels https://conda.anaconda.org/oce
   
 script:
-  - conda build ci/conda  --dirty --no-remove-work-dir
+  - conda build ci/conda --dirty --no-remove-work-dir
 
 after_success:
-  - python ci/move-conda-package.py
-  - anaconda -t $BINSTAR_TOKEN upload *.bz2 --force;
+  - if [[ "$CONDA_UPLOAD" == "ON" ]]; then
+      python ci/move-conda-package.py;
+      anaconda -t $BINSTAR_TOKEN upload *.bz2 --force;
+    fi
 
 branches:
   only:
